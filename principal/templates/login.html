@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+<!-- form -->
+<div class="login-form">
+    <div class="login">
+        <h2>Inicia Sesión</h2>
+        <div class="inputbox">
+            <input type="text" placeholder="Nombre de Usuario" required>
+        </div>
+        <div class="inputbox">
+            <input type="password" placeholder="Contraseña" required>
+        </div>
+        <div class="inputbox">
+            <input type="submit" value="Iniciar Sesión" id="btn-login" required>
+        </div>
+        <div class="bottom-content">
+            <a href="#">¿Olvidaste tu Contraseña?</a>
+            <a href="#">Registrate</a>
+        </div>
+    </div>
+</div>
+<!-- form -->
+
+{% endblock %}
