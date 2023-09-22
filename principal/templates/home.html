@@ -1,0 +1,22 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<div class="contenedor mx-auto">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <img src="{% static 'img/logo_registrar_junta.png' %}" class="img-fluid card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Título de la tarjeta</h5>
+                    <p class="card-text">Un texto de ejemplo rápido para colocal cerca del título de la tarjeta y componer la mayor parte del contenido de la tarjeta.</p>
+                    <a href="#" class="btn btn-primary">Ir a algún lugar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

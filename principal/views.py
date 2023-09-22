@@ -10,3 +10,6 @@ def verLogin(request):
 
 def registrarMiembro(request):
     return render(request, "registroMiembro.html")
+
+def verHome(request):
+    return render(request, "home.html")
