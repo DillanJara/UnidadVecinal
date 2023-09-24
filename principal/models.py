@@ -58,6 +58,9 @@ class Comuna(models.Model):
     com_nombre = models.CharField(max_length=30)
     region_reg = models.ForeignKey('Region', on_delete=models.PROTECT, db_column='REGION_reg_id')  # Field name made lowercase.
 
+    def __str__(self) -> str:
+        return self.com_nombre
+
     class Meta:
         managed = False
         db_table = 'comuna'

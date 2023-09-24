@@ -23,5 +23,6 @@ urlpatterns = [
     path('', verHome, name="home"),
     path('index/', verIndex, name="index"),
     path('login/', verLogin, name="login"), 
-    path('registrarMiembro', registrarMiembro, name="registrarMiembro")
+    path('registrarMiembro/', registrarMiembro, name="registrarMiembro"), 
+    path('registrarJuntaVecinos/', registrarJunta, name="registrarJuntaVecinos")
 ]

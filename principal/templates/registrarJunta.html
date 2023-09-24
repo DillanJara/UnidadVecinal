@@ -1,0 +1,16 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p}}
+
+    <div class="text-end">
+        <button type="submit" id="form-btn">Registrar</button>
+    </div>
+</form>
+
+{% endblock %}
