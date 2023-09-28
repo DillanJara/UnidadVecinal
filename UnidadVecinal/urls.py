@@ -20,7 +20,10 @@ from principal.views import *
 urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('admin/', admin.site.urls),
+    path('', verHome, name="home"),
     path('index/', verIndex, name="index"),
     path('login/', verLogin, name="login"), 
-    path('registrarMiembro', registrarMiembro, name="registrarMiembro")
+    path('registrarMiembro/', registrarMiembro, name="registrarMiembro"), 
+    path('registrarJuntaVecinos/', registrarJunta, name="registrarJuntaVecinos"), 
+    path('registrarPresidente/<int:jun_id>', registrarPresidente, name="registrarPresidente")
 ]
