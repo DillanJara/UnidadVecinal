@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .forms import *
+import hashlib
 
 # Create your views here.
 
@@ -37,6 +38,8 @@ def registrarPresidente(request, jun_id):
     cargo        = Cargo.objects.get(car_id = 1)
 
     if form.is_valid():
+        password_encriptada = hashlib.sha256(request.POST['mie_password'].encode())
+        password_encriptada = password_encriptada.hexdigest()
         Miembro.objects.create(
             mie_rut              = request.POST['mie_rut'],
             mie_dv               = request.POST['mie_dv'],
@@ -46,7 +49,7 @@ def registrarPresidente(request, jun_id):
             mie_fecha_nacimiento  = request.POST.get('mie_fecha_nacimiento'),
             mie_telefono         = request.POST['mie_telefono'],
             mie_correo           = request.POST['mie_correo'],
-            mie_password         = request.POST['mie_password'],
+            mie_password         = password_encriptada,
             mie_direccion        = request.POST['mie_direccion'],
             junta_vecinos_jun_id = jun_id,
             mie_estado           = "Habilitado",

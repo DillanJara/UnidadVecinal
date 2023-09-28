@@ -91,7 +91,7 @@ class AgregarPresidente(forms.ModelForm):
     mie_fecha_nacimiento = forms.DateField(label="Fecha de Nacimiento", widget=forms.TextInput(attrs={
         "type": "date"
     }))
-    mie_password         = forms.CharField(max_length=100, label="Contraseña", widget=forms.PasswordInput())
+    mie_password         = forms.CharField(max_length=100, min_length=8, label="Contraseña", widget=forms.PasswordInput())
     mie_password_2       = forms.CharField(max_length=100, label="Confirmar Contraseña", widget=forms.PasswordInput())
 
     class Meta:
