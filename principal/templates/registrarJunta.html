@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+
+<div class="contenedor-registro-junta container mt-5 bg-light p-5">
+    <h1 class="text-center">Registro de tu <br> Junta de Vecinos</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+
+        <datalist id="opcionesComunas">
+            {% for c in comunas %}
+            <option value="{{ c.com_nombre }}"></option>
+            {% endfor %}
+        </datalist>
+    
+        <div class="text-end">
+            <button id="form-btn">Registrar</button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
