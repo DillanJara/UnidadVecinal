@@ -4,6 +4,21 @@
     box-sizing: border-box;
 }
 
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #D9D9D9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #D9D9D9;
+    border: 1px #0F75BD solid;
+    border-radius: 10px;
+}
+
 .all-content {
     background: #D9D9D9;
 }
@@ -474,4 +489,13 @@ html {
     text-align: center;
 }
 
-/* home container */
+/* contenedor registro junta vecinos */
+
+.contenedor-registro-junta {
+    border-radius: 10px;
+    border: #0F75BD solid 2px; 
+    padding: 5%; 
+    width: 65%;
+}
+
+/* contenedor registro junta vecinos */

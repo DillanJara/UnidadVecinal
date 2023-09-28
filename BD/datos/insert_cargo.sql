@@ -1,4 +1,4 @@
-INSERT INTO `cargo`
+INSERT INTO `principal_cargo`
     (`car_nombre`)
 VALUES
     ('Presidente'),

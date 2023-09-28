@@ -24,5 +24,6 @@ urlpatterns = [
     path('index/', verIndex, name="index"),
     path('login/', verLogin, name="login"), 
     path('registrarMiembro/', registrarMiembro, name="registrarMiembro"), 
-    path('registrarJuntaVecinos/', registrarJunta, name="registrarJuntaVecinos")
+    path('registrarJuntaVecinos/', registrarJunta, name="registrarJuntaVecinos"), 
+    path('registrarPresidente/<int:jun_id>', registrarPresidente, name="registrarPresidente")
 ]

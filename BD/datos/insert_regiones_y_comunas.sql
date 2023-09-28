@@ -1,4 +1,4 @@
-INSERT INTO `region`
+INSERT INTO `principal_region`
     (`reg_nombre`)
 VALUES
     ('Region de Arica y Parinacota'),
@@ -18,7 +18,7 @@ VALUES
     ('Region Aysen del General Carlos Ibanez del Campo'),
     ('Region de Magallanes y de la Antartica Chilena');
 
-INSERT INTO `comuna` (`com_nombre`, `REGION_reg_id`)
+INSERT INTO `principal_comuna` (`com_nombre`, `REGION_reg_id`)
 VALUES
     ("Arica", "1"),
     ("Camarones", "1"),
