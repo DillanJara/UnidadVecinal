@@ -62,12 +62,17 @@
                     src="{% static 'img/Logo_UnidadVecinal-removebg-preview-removebg-preview.png' %}" alt=""></a>
                 <div>
                     <ul class="navbar-nav me-auto mb-2 mb-sm-0">
-
                     </ul>
+                    {% if request.session.correo %}
+                    <form class="d-flex">
+                        <a href="{% url 'cerrarSesion' %}" id="btn_navbar">Cerrar Sesión</a>
+                    </form>
+                    {% else %}
                     <form class="d-flex">
                         <a href="{% url 'login' %}" id="btn_navbar">Iniciar Sesión</a>
                     </form>
-                </div>
+                    {% endif %}
+            </div>
             </div>
         </nav>
         <!-- navbar 2 -->

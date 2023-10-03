@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-
+{% load django_bootstrap5 %}
 {% load static %}
 
 {% block content %}
@@ -8,64 +8,57 @@
 <section class="form" id="form">
     <div class="heading"><span>Formulario de Registro</span></div>
     <div class="container">
-        <form>
+        <form method="POST">
+            {% csrf_token %}
             <!--Dos Input tipo Texto en 2 columnas de 6-->
             <div class="row">
                 <div class="col-md-4  mb-3">
-                    <label class="form-label" for="input_name">Rut:</label>
-                    <input type="text" id="input_name" class="form-control">
+                    {% bootstrap_field form.mie_rut %}
                 </div>
                 <div class="col-md-2  mb-3">
-                    <label class="form-label" for="">Dv:</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">-</span>
-                        <input type="text" id="" class="form-control">
-                    </div>
+                    {% bootstrap_field form.mie_dv %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="input_lastname">Nombre:</label>
-                    <input type="text" id="input_lastname" class="form-control">
+                    {% bootstrap_field form.mie_nombre %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="input_name">Apellido Paterno:</label>
-                    <input type="text" id="input_name" class="form-control">
+                    {% bootstrap_field form.mie_ap_paterno %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="input_lastname">Apellido Materno:</label>
-                    <input type="text" id="input_lastname" class="form-control">
+                    {% bootstrap_field form.mie_ap_materno %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="">Teléfono:</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">+56 9</span>
-                        <input type="text" id="" class="form-control">
-                    </div>
+                    {% bootstrap_field form.mie_telefono %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="input_name">Dirección:</label>
-                    <input type="text" id="input_name" class="form-control">
+                    {% bootstrap_field form.mie_direccion %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="">Correo:</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">@</span>
-                        <input type="email" id="" class="form-control">
-                    </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label" for="fecha">Fecha de nacimiento:</label>
-                    <input type="date" id="fecha" class="form-control">
+                    {% bootstrap_field form.mie_correo %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="input_name">Contraseña:</label>
-                    <input type="password" id="input_name" class="form-control">
+                    {% bootstrap_field form.mie_fecha_nacimiento %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="input_name">Confirmar Contraseña:</label>
-                    <input type="password" id="input_name" class="form-control">
+                    {% bootstrap_field form.mie_password %}
+                </div>
+                <div class="col-md-6  mb-3">
+                    {% bootstrap_field form.mie_password_2 %}
+                </div>
+                <div class="col-md-6  mb-3">
+                    {% bootstrap_field form.mie_junta_vecinos %}
+                    <datalist id="opcionesJuntasVecinos">
+                        {% for jun in juntaVecinos %}
+                        <option value="{{ jun.jun_nombre }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div class="col-md-6  mb-3">
+                    <label class="form-label" for="cargo_car">Cargo</label>
+                    <input type="text" id="cargo_car" name="cargo_car" class="form-control" readonly value="{{ cargo.car_nombre}}">
                 </div>
                 <div class="text-end">
-                    <button type="submit" id="form-btn">Enviar</button>
+                    <button id="form-btn">Enviar</button>
                 </div>
         </form>
     </div>

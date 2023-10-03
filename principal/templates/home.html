@@ -17,6 +17,18 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <img src="{% static 'img/logo_login.png' %}" class="img-fluid card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Ingresar</h5>
+                    <p class="card-text">Accede a la aplicacion de gestion de tu junta de vecinos</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesion</a>
+                    <br>
+                    <a href="{% url 'registrarMiembro' %}" >¿No tienes una cuenta? Registrate</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

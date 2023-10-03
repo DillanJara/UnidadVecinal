@@ -5,7 +5,7 @@
 {% block content %}
 
 <section class="form" id="form">
-    <div class="heading"><span>Formulario de Registro</span></div>
+    <div class="heading"><span>Formulario de Registro de Presidente</span></div>
     <div class="container">
         <form method="POST">
             {% csrf_token %}
@@ -17,7 +17,6 @@
                 <div class="col-md-2  mb-3">
                     {% bootstrap_field form.mie_dv %}
                 </div>
-                
                 <div class="col-md-6  mb-3">
                     {% bootstrap_field form.mie_nombre %}
                 </div>

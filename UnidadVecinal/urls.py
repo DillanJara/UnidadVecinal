@@ -21,9 +21,14 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('admin/', admin.site.urls),
     path('', verHome, name="home"),
-    path('index/', verIndex, name="index"),
     path('login/', verLogin, name="login"), 
     path('registrarMiembro/', registrarMiembro, name="registrarMiembro"), 
     path('registrarJuntaVecinos/', registrarJunta, name="registrarJuntaVecinos"), 
-    path('registrarPresidente/<int:jun_id>', registrarPresidente, name="registrarPresidente")
+    path('registrarPresidente/<int:jun_id>', registrarPresidente, name="registrarPresidente"),
+    path('index/<int:rut>', verIndex, name="index"),
+    path('validarLogin', validarLogin, name="validarLogin"),
+    path('eliminarFamiliarMiembro/<int:fam_mie_rut>', eliminarFamiliarMiembro, name="eliminarFamiliarMiembro"),
+    path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"), 
+    path('cerrarSesion', cerrarSesion, name="cerrarSesion")
+
 ]
