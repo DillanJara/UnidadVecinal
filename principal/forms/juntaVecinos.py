@@ -35,7 +35,7 @@ class AgregarJuntaVecinos(forms.ModelForm):
                 return jun_telefono
             else:
                 raise forms.ValidationError("El formato del numero debe ser +56 9 1234 5678")
-    
+
     def clean_jun_comuna(self):
         jun_comuna = self.cleaned_data.get('jun_comuna')
         if Comuna.objects.filter(com_nombre=jun_comuna).count() > 0:

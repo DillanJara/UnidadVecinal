@@ -8,13 +8,13 @@ class Actividad(models.Model):
     act_cupo               = models.IntegerField()
     act_imagen             = models.CharField(max_length=300)
     act_cuota              = models.IntegerField(default=0, null=True)
-    tipo_actividad_tip_act = models.ForeignKey('TipoActividad', models.PROTECT, db_column='TIPO_ACTIVIDAD_tip_act_id')  # Field name made lowercase.
+    tipo_actividad_tip_act = models.ForeignKey('TipoActividad', models.PROTECT, db_column='TIPO_ACTIVIDAD_tip_act_id')
 
 
 class Asistencia(models.Model):
     asis_id         = models.AutoField(primary_key=True)
-    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id')  # Field name made lowercase.
-    miembro_mie = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')  # Field name made lowercase.
+    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id')
+    miembro_mie = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Cargo(models.Model):
@@ -33,7 +33,7 @@ class Certificado(models.Model):
 class Comuna(models.Model):
     com_id     = models.AutoField(primary_key=True)
     com_nombre = models.CharField(max_length=30)
-    region_reg = models.ForeignKey('Region', models.PROTECT, db_column='REGION_reg_id')  # Field name made lowercase.
+    region_reg = models.ForeignKey('Region', models.PROTECT, db_column='REGION_reg_id')
 
 
 
@@ -42,7 +42,7 @@ class CuotaSocial(models.Model):
     cuo_monto       = models.IntegerField()
     cuo_fecha_pago  = models.DateField()
     cuo_estado      = models.CharField(max_length=30)
-    miembro_mie = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')  # Field name made lowercase.
+    miembro_mie = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 
@@ -51,7 +51,7 @@ class Espacio(models.Model):
     esp_nombre        = models.CharField(max_length=30)
     esp_direccion     = models.CharField(max_length=50)
     esp_telefono      = models.CharField(max_length=12)
-    junta_vecinos = models.ForeignKey('JuntaVecinos', models.PROTECT, db_column='JUNTA_VECINOS_jun_id')  # Field name made lowercase.
+    junta_vecinos = models.ForeignKey('JuntaVecinos', models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
 
 
 
@@ -80,7 +80,7 @@ class JuntaVecinos(models.Model):
     jun_correo          = models.CharField(unique=True, max_length=50)
     jun_direccion       = models.CharField(max_length=50)
     jun_mision          = models.CharField(max_length=300)
-    comuna_com          = models.ForeignKey(Comuna, models.PROTECT, db_column='COMUNA_com_id')  # Field name made lowercase.
+    comuna_com          = models.ForeignKey(Comuna, models.PROTECT, db_column='COMUNA_com_id')
 
 
 class Miembro(models.Model):
@@ -94,9 +94,9 @@ class Miembro(models.Model):
     mie_correo          = models.CharField(unique=True, max_length=50)
     mie_password        = models.CharField(max_length=150)
     mie_direccion       = models.CharField(max_length=50)
-    junta_vecinos_jun   = models.ForeignKey(JuntaVecinos, models.PROTECT, db_column='JUNTA_VECINOS_jun_id')  # Field name made lowercase.
+    junta_vecinos_jun   = models.ForeignKey(JuntaVecinos, models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
     mie_estado          = models.CharField(max_length=30)
-    cargo_car           = models.ForeignKey(Cargo, models.PROTECT, db_column='CARGO_car_id')  # Field name made lowercase.
+    cargo_car           = models.ForeignKey(Cargo, models.PROTECT, db_column='CARGO_car_id')
 
 
 
@@ -107,9 +107,9 @@ class Noticia(models.Model):
     not_fecha       = models.DateField()
     not_descripcion = models.CharField(max_length=300)
     not_imagen      = models.CharField(max_length=300)
-    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id', blank=True, null=True)  # Field name made lowercase.
-    proyecto_proy   = models.ForeignKey('Proyecto', models.PROTECT, db_column='PROYECTO_proy_id', blank=True, null=True)  # Field name made lowercase.
-    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')  # Field name made lowercase.
+    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id', blank=True, null=True)
+    proyecto_proy   = models.ForeignKey('Proyecto', models.PROTECT, db_column='PROYECTO_proy_id', blank=True, null=True)
+    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Proyecto(models.Model):
@@ -117,8 +117,8 @@ class Proyecto(models.Model):
     proy_nombre              = models.CharField(max_length=30)
     proy_descripcion         = models.CharField(max_length=300)
     proy_imagen              = models.CharField(max_length=300)
-    estado_proyecto_est_proy = models.ForeignKey(EstadoProyecto, models.PROTECT, db_column='ESTADO_PROYECTO_est_proy_id')  # Field name made lowercase.
-    miembro_mie         = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')  # Field name made lowercase.
+    estado_proyecto_est_proy = models.ForeignKey(EstadoProyecto, models.PROTECT, db_column='ESTADO_PROYECTO_est_proy_id')
+    miembro_mie         = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Region(models.Model):
@@ -129,15 +129,15 @@ class Region(models.Model):
 class Reserva(models.Model):
     res_id          = models.AutoField(primary_key=True)
     res_fecha_hora  = models.DateTimeField()
-    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')  # Field name made lowercase.
-    espacio_esp     = models.ForeignKey(Espacio, models.PROTECT, db_column='ESPACIO_esp_id')  # Field name made lowercase.
+    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
+    espacio_esp     = models.ForeignKey(Espacio, models.PROTECT, db_column='ESPACIO_esp_id')
 
 
 class SolicitudCertificado(models.Model):
     sol_cer_id      = models.IntegerField(primary_key=True)
     sol_cer_fecha   = models.DateField()
-    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')  # Field name made lowercase.
-    certificado_cer = models.ForeignKey(Certificado, models.PROTECT, db_column='CERTIFICADO_cer_id')  # Field name made lowercase.
+    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
+    certificado_cer = models.ForeignKey(Certificado, models.PROTECT, db_column='CERTIFICADO_cer_id')
 
 
 class TipoActividad(models.Model):

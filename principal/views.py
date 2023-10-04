@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .forms.form_juntaVecinos import *
-from .forms.form_personas import *
+from .forms.juntaVecinos import *
+from .forms.miembro import *
+from .forms.familiarMiembro import *
 import hashlib
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -18,12 +19,13 @@ def verLogin(request):
 
 def validarLogin(request):
     try:
-        v_email = request.POST.get('correo')
-        v_password = hashlib.sha256(request.POST.get('password').encode())
-        password_encriptada = v_password.hexdigest()
-        miembro = Miembro.objects.get(mie_correo=v_email, mie_password=password_encriptada)
+        email = request.POST.get('correo')
+        password = hashlib.sha256(request.POST.get('password').encode())
+        password_encriptada = password.hexdigest()
+        miembro = Miembro.objects.get(mie_correo=email, mie_password=password_encriptada)
         if miembro.mie_estado == "Habilitado":
-            del request.session["errorLogin"]
+            if request.session.get("errorLogin"):
+                del request.session["errorLogin"]
             request.session.modified = True
             request.session['correo'] = miembro.mie_correo
             request.session['rut'] = miembro.mie_rut
@@ -54,7 +56,7 @@ def registrarJunta(request):
             "form": form, 
             "comunas": Comuna.objects.all()
         }
-    return render(request, "registrarJunta.html", context)
+    return render(request, "registroJunta/registrarJunta.html", context)
 
 def registrarPresidente(request, jun_id):
     form         = AgregarPresidente(request.POST or None)
@@ -87,7 +89,7 @@ def registrarPresidente(request, jun_id):
         "cargo"        : cargo,
         "form"         : form
     }
-    return render(request, "registrarPresidente.html", context)
+    return render(request, "registroJunta/registrarPresidente.html", context)
 
 def registrarMiembro(request):
     form         = AgregarMiembro(request.POST or None)
@@ -117,10 +119,13 @@ def registrarMiembro(request):
         "cargo"        : cargo,
         "form"         : form
     }
-    return render(request, "registroMiembro.html", context)
+    return render(request, "registroJunta/registroMiembro.html", context)
 
 def verIndex(request, rut):
     if request.session.get("correo"):
+        if request.session.get("errorValidarRut"):
+            del request.session["errorValidarRut"]
+            request.session.modified = True
         miembro = Miembro.objects.get(mie_rut=rut)
         miembrosDeshabilitados = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Deshabilitado")
         familiarMiembro = FamiliarMiembro.objects.filter(miembro_mie_id=rut)
@@ -128,22 +133,28 @@ def verIndex(request, rut):
         context = {
             "miembro": miembro,
             "miembrosDeshabilitados": miembrosDeshabilitados,
-            "familiarMiembro": familiarMiembro, 
-            "form":  form
+            "familiarMiembro": familiarMiembro,
+            "form":  form,
         }
         if form.is_valid():
-            FamiliarMiembro.objects.create(
-                fam_mie_rut        = request.POST["fam_mie_rut"],
-                fam_mie_dv         = request.POST["fam_mie_dv"],
-                fam_mie_nombre     = request.POST["fam_mie_nombre"],
-                fam_mie_ap_paterno = request.POST["fam_mie_ap_paterno"],
-                fam_mie_ap_materno = request.POST["fam_mie_ap_materno"],
-                fam_mie_telefono   = request.POST["fam_mie_telefono"],
-                fam_mie_parentesco = request.POST["fam_mie_parentesco"],
-                miembro_mie_id     = miembro.mie_rut
-            )
-            return redirect('/index/'+ str(miembro.mie_rut))
-        return render(request, "index.html", context)
+            if validar_rut(request.POST["fam_mie_rut"], request.POST["fam_mie_dv"]):
+                if request.session.get("errorValidarRut"):
+                    del request.session["errorValidarRut"]
+                    request.session.modified = True
+                FamiliarMiembro.objects.create(
+                    fam_mie_rut        = request.POST["fam_mie_rut"],
+                    fam_mie_dv         = request.POST["fam_mie_dv"],
+                    fam_mie_nombre     = request.POST["fam_mie_nombre"],
+                    fam_mie_ap_paterno = request.POST["fam_mie_ap_paterno"],
+                    fam_mie_ap_materno = request.POST["fam_mie_ap_materno"],
+                    fam_mie_telefono   = request.POST["fam_mie_telefono"],
+                    fam_mie_parentesco = request.POST["fam_mie_parentesco"],
+                    miembro_mie_id     = miembro.mie_rut
+                )
+                return redirect('/index/'+ str(miembro.mie_rut))
+            else:
+                request.session["errorValidarRut"] = "El digito verificador del Rut ingresado no es valido"
+        return render(request, "principal/index.html", context)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
@@ -156,7 +167,31 @@ def eliminarFamiliarMiembro(request, fam_mie_rut):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
-    
+
+def modificarFamiliarMiembro(request, fam_mie_rut):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        familiarMiembro = FamiliarMiembro.objects.get(fam_mie_rut=fam_mie_rut)
+        form = editarFamiliarMiembro(instance=familiarMiembro)
+        context = {
+            "miembro": miembro,
+            "familiarMiembro": familiarMiembro,
+            "form": form
+        }
+        if request.method == "POST":
+            familiarMiembro.fam_mie_nombre = request.POST["fam_mie_nombre"]
+            familiarMiembro.fam_mie_ap_paterno = request.POST["fam_mie_ap_paterno"]
+            familiarMiembro.fam_mie_ap_materno = request.POST["fam_mie_ap_materno"]
+            familiarMiembro.fam_mie_telefono = request.POST["fam_mie_telefono"]
+            familiarMiembro.fam_mie_parentesco = request.POST["fam_mie_parentesco"]
+            familiarMiembro.miembro_mie_rut = miembro.mie_rut
+            familiarMiembro.save()
+            return redirect("/index/" + str(request.session.get("rut")))
+        return render(request, "principal/modificarFamiliarMiembro.html", context)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
 def activarCuenta(request, mie_rut):
     if request.session.get("correo"):
         miembro = Miembro.objects.get(mie_rut=mie_rut)
@@ -167,6 +202,21 @@ def activarCuenta(request, mie_rut):
         message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo]) 
         message.send()
         return redirect("/index/" + str(request.session.get("rut")))
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+def visualizarMiembros(request):
+    if request.session.get("correo"):
+        miembroUsuario = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        miembros = Miembro.objects.filter(junta_vecinos_jun_id=miembroUsuario.junta_vecinos_jun_id)
+        cargos = Cargo.objects.exclude(car_id=1)
+        contexto = {
+            "miembroUsuario" : miembroUsuario,
+            "miembros"       : miembros,
+            "cargos"         : cargos
+        }
+        return render(request, "principal/visualizarMiembros.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
