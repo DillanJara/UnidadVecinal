@@ -25,16 +25,10 @@ class Cargo(models.Model):
         return self.car_nombre
 
 
-class Certificado(models.Model):
-    cer_id     = models.AutoField(primary_key=True)
-    cer_nombre = models.IntegerField()
-
-
 class Comuna(models.Model):
     com_id     = models.AutoField(primary_key=True)
     com_nombre = models.CharField(max_length=30)
     region_reg = models.ForeignKey('Region', models.PROTECT, db_column='REGION_reg_id')
-
 
 
 class CuotaSocial(models.Model):
@@ -133,13 +127,18 @@ class Reserva(models.Model):
     espacio_esp     = models.ForeignKey(Espacio, models.PROTECT, db_column='ESPACIO_esp_id')
 
 
+class TipoActividad(models.Model):
+    tip_act_id     = models.AutoField(primary_key=True)
+    tip_act_nombre = models.CharField(max_length=30)
+
+
+class Certificado(models.Model):
+    cer_id     = models.AutoField(primary_key=True)
+    cer_nombre = models.CharField(max_length=50, default="")
+
+
 class SolicitudCertificado(models.Model):
-    sol_cer_id      = models.IntegerField(primary_key=True)
-    sol_cer_fecha   = models.DateField()
+    sol_cer_id      = models.AutoField(primary_key=True)
+    sol_cer_fecha   = models.DateField(auto_now_add=True, blank=True)
     miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
     certificado_cer = models.ForeignKey(Certificado, models.PROTECT, db_column='CERTIFICADO_cer_id')
-
-
-class TipoActividad(models.Model):
-    tip_act_id     = models.IntegerField(primary_key=True)
-    tip_act_nombre = models.CharField(max_length=30)

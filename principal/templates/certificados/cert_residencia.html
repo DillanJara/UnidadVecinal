@@ -24,16 +24,15 @@
 
 <body>
     <div class="certificado">
-        <h2>Certificado de Residencia</h2>
+        <h2>{{ certificado.cer_nombre }}</h2>
         <br>
-        <p>Don (ña). <strong>María Herrera</strong>, Presidente(a) de la Junta de Vecinos <strong>“Villa
-                Independencia”</strong>,
+        <p>Don (ña). <strong>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</strong>, Presidente(a) de la Junta de Vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong>,
             <br>
-            de la Comuna de <strong>Puente Alto</strong>, viene a través del presente instrumento en certificar que Don
-            (ña) <strong>Mario Díaz</strong>,
+            de la Comuna de <strong>{{ miembro.junta_vecinos_jun.comuna_com.com_nombre }}</strong>, viene a través del presente instrumento en certificar que Don
+            (ña) <strong>{{ miembro.mie_nombre }}{{ miembro.mie_ap_paterno }}</strong>,
             <br>
-            tiene Domicilio en calle <strong>Pasaje Gabriela Mistral</strong> Número <strong>983</strong>, Comuna de
-            <strong>Puente Alto</strong>.
+            tiene Domicilio en calle <strong>{{ miembro.mie_direccion }}</strong>, Comuna de
+            <strong>{{ miembro.junta_vecinos_jun.comuna_com.com_nombre }}</strong>.
             <br>
             <br>
             Se extiende el presente certificado a petición del interesado.
@@ -41,12 +40,12 @@
         <br>
         <div class="linea"></div>
         <br>
-        <h5>María Herrera</h5>
+        <h5>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</h5>
         <p>Presidente(a)
             <br>
-            Rut 14.756.123-0
+            Rut {{ presidente.mie_rut }}-{{ presidente.mie_dv }}
             <br>
-            Villa Independencia
+            {{ presidente.junta_vecinos_jun.jun_nombre }}
         </p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

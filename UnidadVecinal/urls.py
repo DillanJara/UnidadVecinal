@@ -34,5 +34,7 @@ urlpatterns = [
     path('eliminarFamiliarMiembro/<int:fam_mie_rut>', eliminarFamiliarMiembro, name="eliminarFamiliarMiembro"),
     path('modificarFamiliarMiembro/<int:fam_mie_rut>', modificarFamiliarMiembro, name="modificarFamiliarMiembro"),
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
-    path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros")
+    path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros"),
+    #-------------------------------------------------------------------------
+    path('certificadoResidencia/<int:mie_rut>', obtenerCetificadoResidencia, name="certificadoResidencia")
 ]

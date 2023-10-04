@@ -8,14 +8,27 @@
 <section id="home">
     <div class="content">
         <h3>Bienvenido {{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}<br> a la Aplicación Web <br> de tu Junta de Vecinos</h3>
-        <!--
-            <a id="btn" class="btn" href="{% url 'registrarMiembro' %}">Registrate</a>
-        -->
     </div>
 </section>
-
-
 <!-- home section -->
+
+<div class="d-flex justify-content-center">
+    <div class="card border-light mt-3" style="max-width: 30rem;">
+        <div class="card-header text-white" style="background-color: #0B558A;">Certificados</div>
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <td><h4 class="text-primary">Certificado de Residencia</h4></td>
+                    <td><a href="{% url 'certificadoResidencia' miembro.mie_rut %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
+                </tr>
+                <tr>
+                    <td><h4 class="text-primary">Certificado de Socio</h4></td>
+                    <td><a href="#" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
 
 <!-- about section -->
 <div class="about" id="about">

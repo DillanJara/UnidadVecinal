@@ -6,6 +6,9 @@ import hashlib
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 # Create your views here.
 
 def verHome(request):
@@ -220,3 +223,35 @@ def visualizarMiembros(request):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+
+
+def obtenerCetificadoResidencia(request, mie_rut):
+    certificado = Certificado.objects.get(cer_id=1)
+    miembro = Miembro.objects.get(mie_rut=mie_rut)
+    presidente = Miembro.objects.get(cargo_car_id=1)
+    context = {
+        "miembro": miembro,
+        "presidente": presidente,
+        "certificado": certificado
+    }
+    #------------------------------------------------------
+    solicitud = SolicitudCertificado()
+    solicitud.certificado_cer = certificado
+    solicitud.miembro_mie = miembro
+    solicitud.save()
+    #------------------------------------------------------
+    asunto = "Solicitud de " + certificado.cer_nombre
+    cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + ". El certificado se descargó directamente en el dispositivo."
+    message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+    message.send()
+    #------------------------------------------------------
+    template = get_template("certificados/cert_residencia.html")
+    html = template.render(context)
+    #------------------------------------------------------
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors')
+    return response
+    #return render(request, "certificados/cert_residencia.html", context)
