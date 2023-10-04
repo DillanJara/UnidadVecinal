@@ -133,9 +133,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # ------------------------------------------------------------------------
+from decouple import config
 
 EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'unidadvecinal.comunicaciones@gmail.com'
-EMAIL_HOST_PASSWORD = 'lwjy wwtw ziac ztwt'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True

@@ -43,12 +43,12 @@ class AgregarPresidente(forms.ModelForm):
     class Meta:
         model   = Miembro
         fields = ["mie_rut", "mie_dv", "mie_nombre", "mie_ap_paterno", "mie_ap_materno",]
-        """exclude = ("mie_estado", "junta_vecinos_jun", "cargo_car", "mie_dv", "mie_fecha_nacimiento", 
+        """exclude = ("mie_estado", "junta_vecinos_jun", "cargo_car", "mie_dv", "mie_fecha_nacimiento",
             "mie_telefono", "mie_correo", )"""
 
     def clean_mie_rut(self):
         mie_rut = self.cleaned_data.get("mie_rut")
-        if Miembro.objects.filter(mie_rut=mie_rut).count > 0 or FamiliarMiembro.objects.filter(fam_mie_rut=mie_rut).count > 0:
+        if Miembro.objects.filter(mie_rut=mie_rut).count() > 0 or FamiliarMiembro.objects.filter(fam_mie_rut=mie_rut).count() > 0:
             raise forms.ValidationError("Esta persona ya se encuentra registrada")
         return mie_rut
 
