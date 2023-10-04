@@ -1,0 +1,53 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="contenedor-registro-junta container mt-5 bg-light p-5">
+    <h1 class="text-center">Miembros de {{ miembroUsuario.junta_vecinos_jun.jun_nombre|title }}</h1>
+    <table class="table table-light table-hover">
+        <thead>
+            <tr>
+                <th>Rut</th>
+                <th>Nombre</th>
+                <th>Fecha nacimiento</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Direccion</th>
+                <th>Estado</th>
+                <th colspan="2">Cargo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in miembros %}
+            <tr>
+                <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
+                <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }} {{ m.mie_ap_materno|title }}</td>
+                <td>{{ m.mie_fecha_nacimiento }}</td>
+                <td>{{ m.mie_telefono }}</td>
+                <td>{{ m.mie_correo }}</td>
+                <td>{{ m.mie_direccion }}</td>
+                <td>{{ m.mie_estado }}</td>
+                <td>{{ m.cargo_car.car_nombre }}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Cambiar Cargo
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for c in cargos %}
+                                {% if c.car_id == m.cargo_car.car_id %}
+                                    <li><a class="dropdown-item disabled" href="#">{{ c.car_nombre }}</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="#">{{ c.car_nombre }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

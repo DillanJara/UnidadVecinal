@@ -1,0 +1,24 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<div class="mt-5 row">
+    <div class="col-12 col-md-6 offset-md-3 rounded-3">
+        <div class="card">
+            <div class="card-body">
+                <h2>Editar Datos de Familiar</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <input class="visually-hidden-focusable" id="familiar_miembro_mie_rut" type="text" value="{{ miembro.mie_rut }}" name="miembro_rut" readonly>
+                    <button class="mb-3" id="contact-btn">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
