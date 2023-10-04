@@ -3,13 +3,14 @@
 {% load static %}
 
 {% block content %}
+<!-- form -->
 
 <section class="form" id="form">
     <div class="heading"><span>Formulario de Registro</span></div>
     <div class="container">
         <form method="POST">
             {% csrf_token %}
-            <!--Dos Input tipo Texto en 2 columnas de 6 -->
+            <!--Dos Input tipo Texto en 2 columnas de 6-->
             <div class="row">
                 <div class="col-md-4  mb-3">
                     {% bootstrap_field form.mie_rut %}
@@ -17,7 +18,6 @@
                 <div class="col-md-2  mb-3">
                     {% bootstrap_field form.mie_dv %}
                 </div>
-                
                 <div class="col-md-6  mb-3">
                     {% bootstrap_field form.mie_nombre %}
                 </div>
@@ -46,8 +46,12 @@
                     {% bootstrap_field form.mie_password_2 %}
                 </div>
                 <div class="col-md-6  mb-3">
-                    <label class="form-label" for="junta_vecinos_jun">Junta de vecinos</label>
-                    <input type="text" id="junta_vecinos_jun" name="junta_vecinos_jun" class="form-control" readonly value="{{ juntaVecinos.jun_nombre }}">
+                    {% bootstrap_field form.mie_junta_vecinos %}
+                    <datalist id="opcionesJuntasVecinos">
+                        {% for jun in juntaVecinos %}
+                        <option value="{{ jun.jun_nombre }}"></option>
+                        {% endfor %}
+                    </datalist>
                 </div>
                 <div class="col-md-6  mb-3">
                     <label class="form-label" for="cargo_car">Cargo</label>
@@ -59,5 +63,5 @@
         </form>
     </div>
 </section>
-
+<!-- form -->
 {% endblock %}

@@ -79,12 +79,12 @@ WSGI_APPLICATION = 'UnidadVecinal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'unidad_vecinal',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE'   : 'django.db.backends.mysql',
+        'NAME'     : 'unidad_vecinal',
+        'USER'     : 'root',
+        'PASSWORD' : '',
+        'HOST'     : 'localhost',
+        'PORT'     : '3306',
     }
 }
 
@@ -129,3 +129,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# ------------------------------------------------------------------------
+
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'unidadvecinal.comunicaciones@gmail.com'
+EMAIL_HOST_PASSWORD = 'lwjy wwtw ziac ztwt'
+EMAIL_USE_TLS = True
