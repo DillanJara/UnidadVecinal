@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import pymysql
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -79,12 +79,12 @@ WSGI_APPLICATION = 'UnidadVecinal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE'   : 'django.db.backends.mysql',
-        'NAME'     : 'unidad_vecinal',
-        'USER'     : 'root',
-        'PASSWORD' : '',
-        'HOST'     : 'localhost',
-        'PORT'     : '3306',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'unidad_vecinal',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -131,12 +131,14 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 # ------------------------------------------------------------------------
 from decouple import config
 
+from decouple import config
 EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
+
+# -------------------------------------------------------------------------
