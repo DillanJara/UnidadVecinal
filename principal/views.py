@@ -69,9 +69,9 @@ def registrarJunta(request):
 
 
 def registrarPresidente(request, jun_id):
-    form = AgregarPresidente(request.POST or None)
+    form         = AgregarPresidente(request.POST or None)
     juntaVecinos = JuntaVecinos.objects.get(jun_id=jun_id)
-    cargo = Cargo.objects.get(car_id=1)
+    cargo        = Cargo.objects.get(car_id=1)
     if Miembro.objects.filter(junta_vecinos_jun_id=jun_id, cargo_car_id=1).count() > 0:
         return HttpResponse("Esta junta de vecinos ya tiene a su presidente registrado")
     else:

@@ -46,8 +46,7 @@ class AgregarPresidente(forms.ModelForm):
 
     class Meta:
         model = Miembro
-        fields = ["mie_rut", "mie_dv", "mie_nombre",
-                  "mie_ap_paterno", "mie_ap_materno",]
+        fields = ["mie_rut", "mie_dv", "mie_nombre", "mie_ap_paterno", "mie_ap_materno",]
         """exclude = ("mie_estado", "junta_vecinos_jun", "cargo_car", "mie_dv", "mie_fecha_nacimiento", 
             "mie_telefono", "mie_correo", )"""
 
@@ -66,8 +65,7 @@ class AgregarPresidente(forms.ModelForm):
             if validar_rut(str(mie_rut), mie_dv):
                 return mie_dv
             else:
-                raise forms.ValidationError(
-                    "Ingrese un digito verificador valido")
+                raise forms.ValidationError("Ingrese un digito verificador valido")
         else:
             raise forms.ValidationError("Ingrese un digito verificador valido")
 
