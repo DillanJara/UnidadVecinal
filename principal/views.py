@@ -241,7 +241,7 @@ def obtenerCetificadoResidencia(request, mie_rut):
     solicitud.save()
     #------------------------------------------------------
     asunto = "Solicitud de " + certificado.cer_nombre
-    cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + ". El certificado se descargó directamente en el dispositivo."
+    cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_paterno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + ". El certificado se descargó directamente en el dispositivo."
     message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
     message.send()
     #------------------------------------------------------
