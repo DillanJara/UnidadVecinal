@@ -132,6 +132,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # ------------------------------------------------------------------------
+from decouple import config
 
 from decouple import config
 EMAIL_HOST = 'smtp.googlemail.com'
