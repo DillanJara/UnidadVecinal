@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 from principal.views import *
 
 urlpatterns = [
@@ -36,5 +37,10 @@ urlpatterns = [
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
     path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros"),
     #-------------------------------------------------------------------------
-    path('certificadoResidencia/<int:mie_rut>', obtenerCetificadoResidencia, name="certificadoResidencia")
+    path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
+    #-------------------------------------------------------------------------
+    path("agregarProyecto/", agregarProyecto, name="agregarProyecto")
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

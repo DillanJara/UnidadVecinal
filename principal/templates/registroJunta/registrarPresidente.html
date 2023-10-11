@@ -7,6 +7,13 @@
 <section class="form" id="form">
     <div class="heading"><span>Formulario de Registro de Presidente</span></div>
     <div class="container">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item text-success">Registra a tu Junta ✓</li>
+                <li class="breadcrumb-item active">Registra al presidente</li>
+                <li class="breadcrumb-item active">✅</li>
+            </ol>
+        </nav>
         <form method="POST">
             {% csrf_token %}
             <!--Dos Input tipo Texto en 2 columnas de 6 -->

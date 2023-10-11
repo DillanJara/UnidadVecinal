@@ -3,11 +3,11 @@
 {% load static %}
 
 {% block content %}
-<div class="contenedor mx-auto">
+<div class="contenedor mx-auto" style="width: fit-content;">
     <div class="row">
         <div class="col-sm-6">
-            <div class="card">
-                <img src="{% static 'img/logo_registrar_junta.png' %}" class="img-fluid card-img-top" alt="...">
+            <div class="card" style="max-width: 20rem;">
+                <img src="{% static 'img/icon-transformed.png' %}" class="img-fluid card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Registrar Junta de Vecinos</h5>
                     <p class="card-text">Para acceder a sistema primero debes agregar tu junta de vecinos</p>
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="card">
+            <div class="card" style="max-width: 20rem;">
                 <img src="{% static 'img/logo_login.png' %}" class="img-fluid card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Ingresar</h5>

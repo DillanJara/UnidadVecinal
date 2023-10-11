@@ -14,10 +14,8 @@ def validar_rut(rut_numero, rut_verificador):
         multiplicador += 1
         if multiplicador > 7:
             multiplicador = 2
-
     resto = suma % 11
     digito_esperado = 11 - resto if resto > 1 else 0
-
     # Comparar el dígito verificador calculado con el proporcionado
     if str(digito_esperado) == digito_verificador:
         return True
@@ -71,9 +69,7 @@ class AgregarPresidente(forms.ModelForm):
     def clean_mie_fecha_nacimiento(self):
         mie_fecha_nacimiento = self.cleaned_data.get('mie_fecha_nacimiento')
         fecha_actual = date.today()
-        edad = fecha_actual.year - mie_fecha_nacimiento.year - \
-            ((fecha_actual.month, fecha_actual.day) <
-             (mie_fecha_nacimiento.month, mie_fecha_nacimiento.day))
+        edad = edad = fecha_actual.year - mie_fecha_nacimiento.year - ((fecha_actual.month, fecha_actual.day) < (mie_fecha_nacimiento.month, mie_fecha_nacimiento.day))
         if edad < 18:
             raise forms.ValidationError(
                 "Debes ser mayor de 18 años para registrarte.")
@@ -84,26 +80,22 @@ class AgregarPresidente(forms.ModelForm):
         mie_telefono = self.cleaned_data.get('mie_telefono')
         patron = r"^\+569\d{8}$"
         if Miembro.objects.filter(mie_telefono=mie_telefono).count() > 0 or FamiliarMiembro.objects.filter(fam_mie_telefono=mie_telefono).count():
-            raise forms.ValidationError(
-                "Este telefono ya se encuentra registrado")
+            raise forms.ValidationError("Este telefono ya se encuentra registrado")
         else:
             if bool(re.match(patron, mie_telefono)):
                 return mie_telefono
             else:
-                raise forms.ValidationError(
-                    "El formato del numero debe ser +56 9 1234 5678")
+                raise forms.ValidationError("El formato del numero debe ser +56 9 1234 5678")
 
     def clean_mie_correo(self):
         mie_correo = self.cleaned_data.get('mie_correo')
         if Miembro.objects.filter(mie_correo=mie_correo).count() > 0:
-            raise forms.ValidationError(
-                "Este correo ya se encuentra registrado")
+            raise forms.ValidationError("Este correo ya se encuentra registrado")
         return mie_correo
 
     def clean_mie_password_2(self):
         mie_password = self.cleaned_data.get('mie_password')
         mie_password_2 = self.cleaned_data.get('mie_password_2')
-
         if mie_password == mie_password_2:
             return mie_password_2
         else:
@@ -133,8 +125,7 @@ class AgregarMiembro(forms.ModelForm):
 
     class Meta:
         model = Miembro
-        fields = ["mie_rut", "mie_dv", "mie_nombre",
-                  "mie_ap_paterno", "mie_ap_materno",]
+        fields = ["mie_rut", "mie_dv", "mie_nombre", "mie_ap_paterno", "mie_ap_materno",]
 
     def clean_mie_rut(self):
         mie_rut = self.cleaned_data.get("mie_rut")
@@ -159,9 +150,7 @@ class AgregarMiembro(forms.ModelForm):
     def clean_mie_fecha_nacimiento(self):
         mie_fecha_nacimiento = self.cleaned_data.get('mie_fecha_nacimiento')
         fecha_actual = date.today()
-        edad = fecha_actual.year - mie_fecha_nacimiento.year - \
-            ((fecha_actual.month, fecha_actual.day) <
-             (mie_fecha_nacimiento.month, mie_fecha_nacimiento.day))
+        edad = fecha_actual.year - mie_fecha_nacimiento.year - ((fecha_actual.month, fecha_actual.day) < (mie_fecha_nacimiento.month, mie_fecha_nacimiento.day))
         if edad < 18:
             raise forms.ValidationError(
                 "Debes ser mayor de 18 años para registrarte.")

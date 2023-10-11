@@ -22,14 +22,13 @@
                     <td>
                         <h4 class="text-primary">Certificado de Residencia</h4>
                     </td>
-                    <td><a href="{% url 'certificadoResidencia' miembro.mie_rut %}"
-                            class="btn btn-outline-primary rounded-pill">Obtener</a></td>
+                    <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 1 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
                 </tr>
                 <tr>
                     <td>
                         <h4 class="text-primary">Certificado de Socio</h4>
                     </td>
-                    <td><a href="#" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
+                    <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 2 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
                 </tr>
             </table>
         </div>

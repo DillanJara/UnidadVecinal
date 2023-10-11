@@ -29,6 +29,7 @@
                 <td>{{ m.mie_direccion }}</td>
                 <td>{{ m.mie_estado }}</td>
                 <td>{{ m.cargo_car.car_nombre }}</td>
+                {% if miembroUsuario.cargo_car.car_id == 1 or miembroUsuario.cargo_car.car_id == 2 %}
                 <td>
                     <div class="btn-group">
                         <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -45,6 +46,7 @@
                         </ul>
                     </div>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

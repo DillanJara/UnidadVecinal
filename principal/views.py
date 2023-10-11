@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect, HttpResponse
 from .forms.juntaVecinos import *
 from .forms.miembro import *
 from .forms.familiarMiembro import *
+from .forms.proyecto import *
 import hashlib
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-
+from django.core.files.storage import FileSystemStorage
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 import os
@@ -229,15 +230,13 @@ def activarCuenta(request, mie_rut):
 
 def visualizarMiembros(request):
     if request.session.get("correo"):
-        miembroUsuario = Miembro.objects.get(
-            mie_rut=request.session.get("rut"))
-        miembros = Miembro.objects.filter(
-            junta_vecinos_jun_id=miembroUsuario.junta_vecinos_jun_id)
-        cargos = Cargo.objects.exclude(car_id=1)
+        miembroUsuario = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        miembros       = Miembro.objects.filter(junta_vecinos_jun_id=miembroUsuario.junta_vecinos_jun_id)
+        cargos         = Cargo.objects.exclude(car_id=1)
         contexto = {
-            "miembroUsuario": miembroUsuario,
-            "miembros": miembros,
-            "cargos": cargos
+            "miembroUsuario" : miembroUsuario,
+            "miembros"       : miembros,
+            "cargos"         : cargos
         }
         return render(request, "principal/visualizarMiembros.html", contexto)
     else:
@@ -245,14 +244,14 @@ def visualizarMiembros(request):
         return redirect("/login")
 
 
-def obtenerCetificadoResidencia(request, mie_rut):
-    certificado = Certificado.objects.get(cer_id=1)
-    miembro = Miembro.objects.get(mie_rut=mie_rut)
-    presidente = Miembro.objects.get(cargo_car_id=1)
+def obtenerCetificado(request, mie_rut, cer_id):
+    certificado = Certificado.objects.get(cer_id=cer_id)
+    miembro     = Miembro.objects.get(mie_rut=mie_rut)
+    presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
     context = {
-        "miembro": miembro,
-        "presidente": presidente,
-        "certificado": certificado,
+        "miembro"     : miembro,
+        "presidente"  : presidente,
+        "certificado" : certificado,
     }
     # ------------------------------------------------------
     solicitud = SolicitudCertificado()
@@ -265,13 +264,43 @@ def obtenerCetificadoResidencia(request, mie_rut):
     message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
     message.send()
     # ------------------------------------------------------
-    template = get_template("certificados/cert_residencia.html")
+    if certificado.cer_id == 1:
+        template = get_template("certificados/cert_residencia.html")
+    else:
+        template = get_template("certificados/cert_socio.html")
     html = template.render(context)
     # ------------------------------------------------------
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="Cetificado_Residencia.pdf"'
+    if certificado.cer_id == 1:
+        response['Content-Disposition'] = 'attachment; filename="Cetificado_Residencia.pdf"'
+    else:
+        response['Content-Disposition'] = 'attachment; filename="Cetificado_Socio.pdf"'
+    # ------------------------------------------------------
     pisa_status = pisa.CreatePDF(html, dest=response)
     if pisa_status.err:
-        return HttpResponse('We had some errors')
+        return HttpResponse('No se pudo descargar tu certificado')
     return response
-    # return render(request, "certificados/cert_residencia.html", context)
+
+
+def agregarProyecto(request):
+    if request.session.get("correo"):
+        form = AgregarProyecto(request.POST or None)
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        if request.method == "POST":
+            estado_proyecto = EstadoProyecto.objects.get(est_proy_estado="En Revision")
+            Proyecto.objects.create(
+                proy_nombre = request.POST["proy_nombre"],
+                proy_descripcion = request.POST["proy_descripcion"],
+                proy_imagen = request.FILES.get("proy_imagen"),
+                estado_proyecto_est_proy = estado_proyecto,
+                miembro_mie = miembro
+            )
+            return redirect("/index/" + str(request.session.get("rut")))
+        context = {
+            "form": form,
+            "miembro": miembro
+        }
+        return render(request, "principal/proyecto/agregarProyecto.html", context)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")

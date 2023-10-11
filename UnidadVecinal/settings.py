@@ -134,7 +134,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ------------------------------------------------------------------------
 from decouple import config
 
-from decouple import config
 EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
@@ -142,3 +141,6 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 # -------------------------------------------------------------------------
+
+MEDIA_URL = 'principal/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -39,19 +39,21 @@ class CuotaSocial(models.Model):
     miembro_mie = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
-
 class Espacio(models.Model):
     esp_id            = models.AutoField(primary_key=True)
     esp_nombre        = models.CharField(max_length=30)
     esp_direccion     = models.CharField(max_length=50)
     esp_telefono      = models.CharField(max_length=12)
+    esp_imagen        = models.ImageField(upload_to="espacio/", null=True)
     junta_vecinos = models.ForeignKey('JuntaVecinos', models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
-
 
 
 class EstadoProyecto(models.Model):
     est_proy_id     = models.AutoField(primary_key=True)
     est_proy_estado = models.CharField(max_length=30)
+
+    def __str__(self) -> str:
+        return self.est_proy_estado
 
 
 class FamiliarMiembro(models.Model):
@@ -100,7 +102,7 @@ class Noticia(models.Model):
     not_subtitulo   = models.CharField(max_length=100)
     not_fecha       = models.DateField()
     not_descripcion = models.CharField(max_length=300)
-    not_imagen      = models.CharField(max_length=300)
+    not_imagen      = models.ImageField(upload_to="media/noticia/")
     actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id', blank=True, null=True)
     proyecto_proy   = models.ForeignKey('Proyecto', models.PROTECT, db_column='PROYECTO_proy_id', blank=True, null=True)
     miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
@@ -110,9 +112,9 @@ class Proyecto(models.Model):
     proy_id                  = models.AutoField(primary_key=True)
     proy_nombre              = models.CharField(max_length=30)
     proy_descripcion         = models.CharField(max_length=300)
-    proy_imagen              = models.CharField(max_length=300)
+    proy_imagen              = models.ImageField(upload_to="media/proyecto/")
     estado_proyecto_est_proy = models.ForeignKey(EstadoProyecto, models.PROTECT, db_column='ESTADO_PROYECTO_est_proy_id')
-    miembro_mie         = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
+    miembro_mie              = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Region(models.Model):
