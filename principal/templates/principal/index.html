@@ -13,24 +13,57 @@
 </section>
 <!-- home section -->
 
+{% if miembro.mie_firma == null and miembro.cargo_car.car_id == 1 %}
+<div class="fixed-bottom mb-2 mx-2">
+    <a href="/firma" class="btn btn-primary position-absolute bottom-0 end-0">
+        Registra tu firma<span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+            <span class="visually-hidden">New alerts</span>
+        </span>
+    </a>
+</div>
+{% endif %}
+
+
+
 <div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 30rem;">
-        <div class="card-header text-white" style="background-color: #0B558A;">Certificados</div>
-        <div class="card-body">
-            <table class="table">
-                <tr>
-                    <td>
-                        <h4 class="text-primary">Certificado de Residencia</h4>
-                    </td>
-                    <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 1 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
-                </tr>
-                <tr>
-                    <td>
-                        <h4 class="text-primary">Certificado de Socio</h4>
-                    </td>
-                    <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 2 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
-                </tr>
-            </table>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card border-light mt-3" style="max-width: 30rem;">
+                <div class="card-header text-white" style="background-color: #0B558A;">Certificados</div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <h4 class="text-primary">Certificado de Residencia</h4>
+                            </td>
+                            <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 1 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4 class="text-primary">Certificado de Socio</h4>
+                            </td>
+                            <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 2 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card border-light mt-3" style="max-width: 30rem;">
+                <div class="card-header text-white" style="background-color: #0B558A;">Proyectos</div>
+                <div class="card-body">
+                    <table class="table">
+                        {% for p in proyectos %}
+                        <tr>
+                            <td>
+                                <h4 class="text-primary">{{ p.proy_nombre }}</h4>
+                            </td>
+                            <td><a href="#" class="btn btn-outline-primary rounded-pill">Ver Mas</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -48,6 +81,12 @@
                 </div>
             </div>
             <div class="col-md-6">
+                {% if miembro.cargo_car.car_id == 4 %}
+                <h3>Miembros Totales </h3>
+                <h5>→ {{ miembrosRegistrados }}</h5>
+                <h3>Miembros Activos</h3>
+                <h5>→ {{ miembrosActivos }}</h5>
+                {% else %}
                 <h3>Nuevos Miembros Registrados</h3>
                 <table class="table">
                     <thead>
@@ -68,15 +107,13 @@
                             <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }}</td>
                             <td class="col-2 text-truncate" style="max-width: 150px;">{{ m.mie_correo }}</td>
                             <td>{{ m.mie_estado }}</td>
-                            {% if miembro.cargo_car.car_id == 1 %}
-                            <th><a href="/activarCuenta/{{ m.mie_rut }}" class="btn btn-outline-primary">Activar</a>
-                            </th>
-                            {% endif %}
+                            <th><a href="/activarCuenta/{{ m.mie_rut }}" class="btn btn-outline-primary">Activar</a></th>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
                 <a href="{% url 'visualizarMiembros' %}"><button id="about-btn">Ver Todos</button></a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -145,8 +182,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <td><a href="{% url 'modificarFamiliarMiembro' fm.fam_mie_rut %}"><button
-                                        class="badge rounded-pill bg-secondary">Modificar</button></a></td>
+                            <td><a href="{% url 'modificarFamiliarMiembro' fm.fam_mie_rut %}"><button class="badge rounded-pill bg-secondary">Modificar</button></a></td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="badge rounded-pill bg-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Solicitar Certificado
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'obtenerCertificado' fm.fam_mie_rut 1 %}" class="dropdown-item">Cert. de Residencia</a></li>
+                                    </ul>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

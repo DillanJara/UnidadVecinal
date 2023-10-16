@@ -64,7 +64,7 @@ class FamiliarMiembro(models.Model):
     fam_mie_ap_materno = models.CharField(max_length=30)
     fam_mie_telefono   = models.CharField(max_length=12)
     fam_mie_parentesco = models.CharField(max_length=30)
-    miembro_mie        = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut') 
+    miembro_mie        = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class JuntaVecinos(models.Model):
@@ -80,19 +80,20 @@ class JuntaVecinos(models.Model):
 
 
 class Miembro(models.Model):
-    mie_rut             = models.IntegerField(primary_key=True)
-    mie_dv              = models.CharField(max_length=1)
-    mie_nombre          = models.CharField(max_length=30)
-    mie_ap_paterno      = models.CharField(max_length=30)
-    mie_ap_materno      = models.CharField(max_length=30)
+    mie_rut              = models.IntegerField(primary_key=True)
+    mie_dv               = models.CharField(max_length=1)
+    mie_nombre           = models.CharField(max_length=30)
+    mie_ap_paterno       = models.CharField(max_length=30)
+    mie_ap_materno       = models.CharField(max_length=30)
     mie_fecha_nacimiento = models.DateField()
-    mie_telefono        = models.CharField(unique=True, max_length=12)
-    mie_correo          = models.CharField(unique=True, max_length=50)
-    mie_password        = models.CharField(max_length=150)
-    mie_direccion       = models.CharField(max_length=50)
-    junta_vecinos_jun   = models.ForeignKey(JuntaVecinos, models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
-    mie_estado          = models.CharField(max_length=30)
-    cargo_car           = models.ForeignKey(Cargo, models.PROTECT, db_column='CARGO_car_id')
+    mie_telefono         = models.CharField(unique=True, max_length=12)
+    mie_correo           = models.CharField(unique=True, max_length=50)
+    mie_password         = models.CharField(max_length=150)
+    mie_direccion        = models.CharField(max_length=50)
+    junta_vecinos_jun    = models.ForeignKey(JuntaVecinos, models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
+    mie_estado           = models.CharField(max_length=30)
+    cargo_car            = models.ForeignKey(Cargo, models.PROTECT, db_column='CARGO_car_id')
+    mie_firma            = models.CharField(max_length=50000, null=True)
 
 
 

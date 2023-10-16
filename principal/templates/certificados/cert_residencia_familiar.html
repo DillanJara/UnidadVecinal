@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 {% load static %}
 
 <style>
@@ -28,7 +29,6 @@
             -pdf-frame-border: 1;
         }
     }
-
     #nro_certificado {
         display: inline-flex;
         text-align: right;
@@ -43,17 +43,21 @@
         <img src="http://127.0.0.1:8000{% static 'img/icon.png' %}" alt="" width="80" height="90">
     </div>
     <div class="certificado">
+        <div id="nro_certificado">
+            <p>Nro. Solicitud: {{ solicitud.sol_cer_id }}</p>
+        </div>
         <h1>{{ certificado.cer_nombre }}</h1>
+        <img style="width: 100px;" src="http://127.0.0.1:8000{% static 'img/icon.png' %}" alt="....">
         <br>
         <p>Don (ña) <strong>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</strong>, Presidente(a) de la
             Junta de Vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong>,
             <br>
-            de la Comuna de <strong>{{ solicitante.junta_vecinos_jun.comuna_com.com_nombre }}</strong>, viene a través del
+            de la Comuna de <strong>{{ presidente.junta_vecinos_jun.comuna_com.com_nombre }}</strong>, viene a través del
             presente instrumento en certificar que
             <br>
-            Don (ña) <strong>{{ solicitante.mie_nombre }} {{ solicitante.mie_ap_paterno }}</strong>, tiene Domicilio en calle
-            <strong>{{ solicitante.mie_direccion }}</strong>, Comuna de
-            <strong>{{ solicitante.junta_vecinos_jun.comuna_com.com_nombre }}</strong>.
+            Don (ña) <strong>{{ solicitante.fam_mie_nombre }} {{ solicitante.fam_mie_ap_paterno }}</strong>, tiene Domicilio en calle
+            <strong>{{ miembro.mie_direccion }}</strong>, Comuna de
+            <strong>{{ presidente.junta_vecinos_jun.comuna_com.com_nombre }}</strong>.
             <br>
             <br>
             <br>

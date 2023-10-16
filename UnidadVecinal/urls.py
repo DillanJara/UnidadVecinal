@@ -36,10 +36,13 @@ urlpatterns = [
     path('modificarFamiliarMiembro/<int:fam_mie_rut>', modificarFamiliarMiembro, name="modificarFamiliarMiembro"),
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
     path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros"),
+    path('cambiarCargo/<int:mie_rut>/<int:car_id>', cambiarCargo, name="cambiarCargo"),
     #-------------------------------------------------------------------------
     path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
     #-------------------------------------------------------------------------
-    path("agregarProyecto/", agregarProyecto, name="agregarProyecto")
+    path("agregarProyecto/", agregarProyecto, name="agregarProyecto"),
+    #-------------------------------------------------------------------------
+    path("registrarFirma/", firma, name="registraFirma"),
 ]
 
 if settings.DEBUG:

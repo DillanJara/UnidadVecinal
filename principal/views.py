@@ -6,17 +6,24 @@ from .forms.proyecto import *
 import hashlib
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-from django.core.files.storage import FileSystemStorage
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-import os
-# Create your views here.
+import base64
+from PIL import Image
+import io
 
+# Create your views here.
 
 def verHome(request):
     if request.session.get("errorLogin"):
         del request.session["errorLogin"]
         request.session.modified = True
+    if request.session.get("correo"):
+        del request.session["correo"]
+        del request.session['rut']
+        request.session.modified = True
+    if request.session.get("alertaLogin"):
+        del request.session["alertaLogin"]
     return render(request, "home.html")
 
 
@@ -77,25 +84,24 @@ def registrarPresidente(request, jun_id):
         return HttpResponse("Esta junta de vecinos ya tiene a su presidente registrado")
     else:
         if form.is_valid():
-            password_encriptada = hashlib.sha256(
-                request.POST['mie_password'].encode())
+            password_encriptada = hashlib.sha256(request.POST['mie_password'].encode())
             password_encriptada = password_encriptada.hexdigest()
             Miembro.objects.create(
-                mie_rut=request.POST['mie_rut'],
-                mie_dv=request.POST['mie_dv'],
-                mie_nombre=request.POST['mie_nombre'],
-                mie_ap_paterno=request.POST['mie_ap_paterno'],
-                mie_ap_materno=request.POST['mie_ap_materno'],
-                mie_fecha_nacimiento=request.POST.get('mie_fecha_nacimiento'),
-                mie_telefono=request.POST['mie_telefono'],
-                mie_correo=request.POST['mie_correo'],
-                mie_password=password_encriptada,
-                mie_direccion=request.POST['mie_direccion'],
-                junta_vecinos_jun_id=jun_id,
-                mie_estado="Habilitado",
-                cargo_car_id=1
+                mie_rut              = request.POST['mie_rut'],
+                mie_dv               = request.POST['mie_dv'],
+                mie_nombre           = request.POST['mie_nombre'],
+                mie_ap_paterno       = request.POST['mie_ap_paterno'],
+                mie_ap_materno       = request.POST['mie_ap_materno'],
+                mie_fecha_nacimiento = request.POST.get('mie_fecha_nacimiento'),
+                mie_telefono         = request.POST['mie_telefono'],
+                mie_correo           = request.POST['mie_correo'],
+                mie_password         = password_encriptada,
+                mie_direccion        = request.POST['mie_direccion'],
+                junta_vecinos_jun_id = jun_id,
+                mie_estado           = "Habilitado",
+                cargo_car_id         = 1
             )
-            return redirect("/")
+            return redirect("/registrarFirma")
     context = {
         "juntaVecinos": juntaVecinos,
         "cargo": cargo,
@@ -142,17 +148,25 @@ def verIndex(request, rut):
         if request.session.get("errorValidarRut"):
             del request.session["errorValidarRut"]
             request.session.modified = True
-        miembro = Miembro.objects.get(mie_rut=rut)
-        miembrosDeshabilitados = Miembro.objects.filter(
-            junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Deshabilitado")
-        familiarMiembro = FamiliarMiembro.objects.filter(miembro_mie_id=rut)
-        form = agregarFamiliarMiembro(request.POST or None)
+        # ------------------------------------------------------
+        miembro                = Miembro.objects.get(mie_rut=rut)
+        miembrosDeshabilitados = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Deshabilitado")
+        familiarMiembro        = FamiliarMiembro.objects.filter(miembro_mie_id=rut)
+        proyectos              = Proyecto.objects.filter(miembro_mie_id=miembro.mie_rut)
+        form                   = agregarFamiliarMiembro(request.POST or None)
+        miembrosRegistrados    = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id).count()
+        miembrosActivos        = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Habilitado").count()
+        # ------------------------------------------------------
         context = {
-            "miembro": miembro,
-            "miembrosDeshabilitados": miembrosDeshabilitados,
-            "familiarMiembro": familiarMiembro,
-            "form":  form,
+            "miembro"                : miembro,
+            "miembrosDeshabilitados" : miembrosDeshabilitados,
+            "familiarMiembro"        : familiarMiembro,
+            "form"                   : form,
+            "proyectos"              : proyectos,
+            "miembrosRegistrados": miembrosRegistrados,
+            "miembrosActivos": miembrosActivos
         }
+        # ------------------------------------------------------
         if form.is_valid():
             if validar_rut(request.POST["fam_mie_rut"], request.POST["fam_mie_dv"]):
                 if request.session.get("errorValidarRut"):
@@ -244,37 +258,59 @@ def visualizarMiembros(request):
         return redirect("/login")
 
 
+def cambiarCargo(request, mie_rut, car_id):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=mie_rut)
+        cargo = Cargo.objects.get(car_id=car_id)
+        miembro.cargo_car = cargo
+        miembro.save()
+        return redirect("/visualizarMiembros")
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
 def obtenerCetificado(request, mie_rut, cer_id):
+    miembro     = Miembro.objects.get(mie_rut=request.session.get("rut"))
     certificado = Certificado.objects.get(cer_id=cer_id)
-    miembro     = Miembro.objects.get(mie_rut=mie_rut)
     presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
-    context = {
-        "miembro"     : miembro,
-        "presidente"  : presidente,
-        "certificado" : certificado,
-    }
+    # ------------------------------------------------------
+    if certificado.cer_id == 1:
+        if Miembro.objects.filter(mie_rut=mie_rut).count() > 0:
+            solicitante = Miembro.objects.get(mie_rut=mie_rut)
+            template = get_template("certificados/cert_residencia.html")
+        else:
+            solicitante = FamiliarMiembro.objects.get(fam_mie_rut=mie_rut)
+            template = get_template("certificados/cert_residencia_familiar.html")
+    else:
+        solicitante = miembro
+        template = get_template("certificados/cert_socio.html")
     # ------------------------------------------------------
     solicitud = SolicitudCertificado()
     solicitud.certificado_cer = certificado
     solicitud.miembro_mie = miembro
     solicitud.save()
     # ------------------------------------------------------
+    context = {
+        "solicitante" : solicitante,
+        "miembro"     : miembro,
+        "presidente"  : presidente,
+        "certificado" : certificado,
+        "solicitud"   : solicitud
+    }
+    # ------------------------------------------------------
     asunto = "Solicitud de " + certificado.cer_nombre
     cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + ". El certificado se descargó directamente en el dispositivo."
     message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
     message.send()
     # ------------------------------------------------------
-    if certificado.cer_id == 1:
-        template = get_template("certificados/cert_residencia.html")
-    else:
-        template = get_template("certificados/cert_socio.html")
     html = template.render(context)
     # ------------------------------------------------------
     response = HttpResponse(content_type='application/pdf')
     if certificado.cer_id == 1:
-        response['Content-Disposition'] = 'attachment; filename="Cetificado_Residencia.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="Certificado_Residencia.pdf"'
     else:
-        response['Content-Disposition'] = 'attachment; filename="Cetificado_Socio.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="Certificado_Socio.pdf"'
     # ------------------------------------------------------
     pisa_status = pisa.CreatePDF(html, dest=response)
     if pisa_status.err:
@@ -301,6 +337,20 @@ def agregarProyecto(request):
             "miembro": miembro
         }
         return render(request, "principal/proyecto/agregarProyecto.html", context)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def firma(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        if request.method == 'POST':
+            firma = request.POST["img"]
+            miembro.mie_firma = firma
+            miembro.save()
+            return redirect("/index/" + str(request.session.get("rut")))
+        return render(request, "principal/registrarFirma.html")
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
