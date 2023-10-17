@@ -3,6 +3,7 @@ from .forms.juntaVecinos import *
 from .forms.miembro import *
 from .forms.familiarMiembro import *
 from .forms.proyecto import *
+from .forms.espacios import *
 import hashlib
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -244,11 +245,11 @@ def activarCuenta(request, mie_rut):
 
 def visualizarMiembros(request):
     if request.session.get("correo"):
-        miembroUsuario = Miembro.objects.get(mie_rut=request.session.get("rut"))
-        miembros       = Miembro.objects.filter(junta_vecinos_jun_id=miembroUsuario.junta_vecinos_jun_id)
+        miembro        = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        miembros       = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
         cargos         = Cargo.objects.exclude(car_id=1)
         contexto = {
-            "miembroUsuario" : miembroUsuario,
+            "miembro" : miembro,
             "miembros"       : miembros,
             "cargos"         : cargos
         }
@@ -275,20 +276,23 @@ def obtenerCetificado(request, mie_rut, cer_id):
     certificado = Certificado.objects.get(cer_id=cer_id)
     presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
     # ------------------------------------------------------
+    solicitud = SolicitudCertificado()
+    solicitud.certificado_cer = certificado
+    solicitud.miembro_mie = miembro
+    # ------------------------------------------------------
     if certificado.cer_id == 1:
         if Miembro.objects.filter(mie_rut=mie_rut).count() > 0:
             solicitante = Miembro.objects.get(mie_rut=mie_rut)
             template = get_template("certificados/cert_residencia.html")
         else:
             solicitante = FamiliarMiembro.objects.get(fam_mie_rut=mie_rut)
+            solicitud.sol_cer_familiar = True
+            solicitud.sol_cer_rut_familiar = solicitante.fam_mie_rut
             template = get_template("certificados/cert_residencia_familiar.html")
     else:
         solicitante = miembro
         template = get_template("certificados/cert_socio.html")
     # ------------------------------------------------------
-    solicitud = SolicitudCertificado()
-    solicitud.certificado_cer = certificado
-    solicitud.miembro_mie = miembro
     solicitud.save()
     # ------------------------------------------------------
     context = {
@@ -343,7 +347,10 @@ def agregarProyecto(request):
 
 
 def firma(request):
-    if request.session.get("correo"):
+    if request.session.get("correo") or request.session.get("rut"):
+        if not request.session.get("correo") and request.session.get("rut"):
+            del request.session["rut"]
+            request.session.modified = True
         miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
         if request.method == 'POST':
             firma = request.POST["img"]
@@ -351,6 +358,58 @@ def firma(request):
             miembro.save()
             return redirect("/index/" + str(request.session.get("rut")))
         return render(request, "principal/registrarFirma.html")
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def verSolicitudes(request, mie_rut):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=mie_rut)
+        solicitudes = SolicitudCertificado.objects.filter(miembro_mie=miembro)
+        familiares = FamiliarMiembro.objects.filter(miembro_mie=miembro)
+        contexto = {
+            "miembro": miembro,
+            "solicitudes": solicitudes,
+            "familiares": familiares,
+        }
+        return render(request, "certificados/solicitudes/solicitudes_certificados.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+def agregarEspacios(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        form = AgregarEspacio(request.POST or None)
+        contexto = {
+            "form": form,
+            "miembro": miembro
+        }
+        if request.method == "POST":
+            Espacio.objects.create(
+                esp_nombre = request.POST["esp_nombre"],
+                esp_direccion = request.POST["esp_direccion"],
+                esp_telefono  = request.POST["esp_telefono"],
+                esp_imagen = request.FILES.get("esp_imagen"),
+                junta_vecinos_jun = miembro.junta_vecinos_jun
+            )
+            return redirect("/index/" + str(request.session.get("rut")))
+        return render(request, "principal/espacios/agregarEspacios.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def verEspacios(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        espacios = Espacio.objects.filter(junta_vecinos_jun=miembro.junta_vecinos_jun)
+        contexto = {
+            "miembro": miembro,
+            "espacios": espacios
+        }
+        return render(request, "principal/espacios/verEspacios.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")

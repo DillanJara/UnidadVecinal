@@ -14,7 +14,7 @@ class Actividad(models.Model):
 class Asistencia(models.Model):
     asis_id         = models.AutoField(primary_key=True)
     actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id')
-    miembro_mie = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
+    miembro_mie     = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Cargo(models.Model):
@@ -36,7 +36,7 @@ class CuotaSocial(models.Model):
     cuo_monto       = models.IntegerField()
     cuo_fecha_pago  = models.DateField()
     cuo_estado      = models.CharField(max_length=30)
-    miembro_mie = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
+    miembro_mie     = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Espacio(models.Model):
@@ -44,8 +44,8 @@ class Espacio(models.Model):
     esp_nombre        = models.CharField(max_length=30)
     esp_direccion     = models.CharField(max_length=50)
     esp_telefono      = models.CharField(max_length=12)
-    esp_imagen        = models.ImageField(upload_to="espacio/", null=True)
-    junta_vecinos = models.ForeignKey('JuntaVecinos', models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
+    esp_imagen        = models.ImageField(upload_to="media/espacio/", null=True)
+    junta_vecinos_jun = models.ForeignKey('JuntaVecinos', models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
 
 
 class EstadoProyecto(models.Model):
@@ -94,6 +94,7 @@ class Miembro(models.Model):
     mie_estado           = models.CharField(max_length=30)
     cargo_car            = models.ForeignKey(Cargo, models.PROTECT, db_column='CARGO_car_id')
     mie_firma            = models.CharField(max_length=50000, null=True)
+    mie_documento        = models.ImageField(upload_to="media/miembro/")
 
 
 
@@ -106,7 +107,7 @@ class Noticia(models.Model):
     not_imagen      = models.ImageField(upload_to="media/noticia/")
     actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id', blank=True, null=True)
     proyecto_proy   = models.ForeignKey('Proyecto', models.PROTECT, db_column='PROYECTO_proy_id', blank=True, null=True)
-    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
+    miembro_mie     = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Proyecto(models.Model):
@@ -126,7 +127,7 @@ class Region(models.Model):
 class Reserva(models.Model):
     res_id          = models.AutoField(primary_key=True)
     res_fecha_hora  = models.DateTimeField()
-    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
+    miembro_mie     = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
     espacio_esp     = models.ForeignKey(Espacio, models.PROTECT, db_column='ESPACIO_esp_id')
 
 
@@ -141,7 +142,9 @@ class Certificado(models.Model):
 
 
 class SolicitudCertificado(models.Model):
-    sol_cer_id      = models.AutoField(primary_key=True)
-    sol_cer_fecha   = models.DateField(auto_now_add=True, blank=True)
-    miembro_mie = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
-    certificado_cer = models.ForeignKey(Certificado, models.PROTECT, db_column='CERTIFICADO_cer_id')
+    sol_cer_id           = models.AutoField(primary_key=True)
+    sol_cer_fecha        = models.DateField(auto_now_add=True, blank=True)
+    miembro_mie          = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
+    certificado_cer      = models.ForeignKey(Certificado, models.PROTECT, db_column='CERTIFICADO_cer_id')
+    sol_cer_familiar     = models.BooleanField(default=False)
+    sol_cer_rut_familiar = models.IntegerField(null=True)

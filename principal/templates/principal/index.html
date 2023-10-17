@@ -82,37 +82,37 @@
             </div>
             <div class="col-md-6">
                 {% if miembro.cargo_car.car_id == 4 %}
-                <h3>Miembros Totales </h3>
-                <h5>→ {{ miembrosRegistrados }}</h5>
-                <h3>Miembros Activos</h3>
-                <h5>→ {{ miembrosActivos }}</h5>
+                    <h3>Miembros Totales </h3>
+                    <h1 class="display-1">→ {{ miembrosRegistrados }}</h1>
+                    <h3>Miembros Activos</h3>
+                    <h1 class="display-3">→ {{ miembrosActivos }}</h1>
                 {% else %}
-                <h3>Nuevos Miembros Registrados</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>RUT</th>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Estado de cuenta</th>
-                            {% if miembro.cargo_car.car_id == 1 %}
-                            <th>Activar cuenta</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for m in miembrosDeshabilitados %}
-                        <tr>
-                            <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
-                            <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }}</td>
-                            <td class="col-2 text-truncate" style="max-width: 150px;">{{ m.mie_correo }}</td>
-                            <td>{{ m.mie_estado }}</td>
-                            <th><a href="/activarCuenta/{{ m.mie_rut }}" class="btn btn-outline-primary">Activar</a></th>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <a href="{% url 'visualizarMiembros' %}"><button id="about-btn">Ver Todos</button></a>
+                    <h3>Nuevos Miembros Registrados</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Estado de cuenta</th>
+                                {% if miembro.cargo_car.car_id == 1 %}
+                                <th>Activar cuenta</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in miembrosDeshabilitados %}
+                            <tr>
+                                <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
+                                <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }}</td>
+                                <td class="col-2 text-truncate" style="max-width: 150px;">{{ m.mie_correo }}</td>
+                                <td>{{ m.mie_estado }}</td>
+                                <th><a href="/activarCuenta/{{ m.mie_rut }}" class="btn btn-outline-primary">Activar</a></th>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{% url 'visualizarMiembros' %}"><button id="about-btn">Ver Todos</button></a>
                 {% endif %}
             </div>
         </div>

@@ -35,23 +35,23 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     {% if request.session.correo %}
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Noticias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="{% url 'agregarProyecto' %}">Proyectos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Cuota Social</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Certificados</a>
-                        </li>
-                    </ul>
+                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'index' request.session.rut %}">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Noticias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="{% url 'agregarProyecto' %}">Proyectos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Cuota Social</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'verEspacios' %}">Espacios</a>
+                            </li>
+                        </ul>
                     {% endif %}
                 </div>
             </div>
@@ -62,24 +62,34 @@
         <nav class="navbar navbar-expand-lg" id="navbar_2">
             <div class="container-fluid">
                 {% if request.session.correo %}
-                <a class="navbar-brand" href="{% url 'index' request.session.rut %}" id="logo"><img
-                    src="{% static 'img/Logo_UnidadVecinal-removebg-preview-removebg-preview.png' %}" alt="">
-                </a>
+                    <a class="navbar-brand" href="{% url 'index' request.session.rut %}" id="logo"><img
+                        src="{% static 'img/Logo_UnidadVecinal-removebg-preview-removebg-preview.png' %}" alt="">
+                    </a>
                 {% else %}
-                <a class="navbar-brand" href="{% url 'home' %}" id="logo"><img
-                    src="{% static 'img/Logo_UnidadVecinal-removebg-preview-removebg-preview.png' %}" alt="">
-                </a>
+                    <a class="navbar-brand" href="{% url 'home' %}" id="logo"><img
+                        src="{% static 'img/Logo_UnidadVecinal-removebg-preview-removebg-preview.png' %}" alt="">
+                    </a>
                 {% endif %}
                 <div>
                     <ul class="navbar-nav me-auto mb-2 mb-sm-0">
                         {% if request.session.correo %}
-                        <form class="d-flex">
-                            <a href="{% url 'cerrarSesion' %}" id="btn_navbar">Cerrar Sesión</a>
-                        </form>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle" type="button" id="btn_navbar" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ miembro.mie_nombre|title }} {{ miembro.mie_ap_paterno|title }}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="btn_navbar">
+                                    <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                                    {% if miembro.cargo_car.car_id != 4 %}
+                                        <li><a class="dropdown-item" href="{% url 'agregarEspacios' %}">Espacios</a></li>
+                                    {% endif %}
+                                    <li><a class="dropdown-item" href="{% url 'verSolicitudes' miembro.mie_rut %}">Solicitudes</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'cerrarSesion' %}">Cerrar Sesión</a></li>
+                                </ul>
+                            </div>
                         {% else %}
-                        <form class="d-flex">
-                            <a href="{% url 'login' %}" id="btn_navbar">Iniciar Sesión</a>
-                        </form>
+                            <form class="d-flex">
+                                <a href="{% url 'login' %}" id="btn_navbar">Iniciar Sesión</a>
+                            </form>
                         {% endif %}
                     </ul>
                 </div>

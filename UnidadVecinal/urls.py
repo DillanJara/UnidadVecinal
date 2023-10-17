@@ -39,8 +39,12 @@ urlpatterns = [
     path('cambiarCargo/<int:mie_rut>/<int:car_id>', cambiarCargo, name="cambiarCargo"),
     #-------------------------------------------------------------------------
     path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
+    path('verSolicitudes/<int:mie_rut>', verSolicitudes, name="verSolicitudes"),
     #-------------------------------------------------------------------------
     path("agregarProyecto/", agregarProyecto, name="agregarProyecto"),
+    #-------------------------------------------------------------------------
+    path("agregarEspacios/", agregarEspacios, name="agregarEspacios"),
+    path("verEspacios/", verEspacios, name="verEspacios"),
     #-------------------------------------------------------------------------
     path("registrarFirma/", firma, name="registraFirma"),
 ]
