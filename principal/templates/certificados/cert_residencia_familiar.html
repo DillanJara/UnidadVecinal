@@ -44,7 +44,6 @@
     </div>
     <div class="certificado">
         <h1>{{ certificado.cer_nombre }}</h1>
-        <img style="width: 100px;" src="http://127.0.0.1:8000{% static 'img/icon.png' %}" alt="....">
         <br>
         <p>Don (ña) <strong>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</strong>, Presidente(a) de la
             Junta de Vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong>,
@@ -60,6 +59,7 @@
             <br>
             Se extiende el presente certificado a petición del interesado.
         </p>
+        <img src="{{ presidente.mie_firma }}" alt="..." width="100" height="80">
         <h3>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</h3>
         <p>Presidente(a)
             <br>
@@ -69,7 +69,6 @@
             <br>
             {{ solicitud.sol_cer_fecha }}
         </p>
-        <img src="{{ presidente.mie_firma }}" alt="..." width="100" height="80">
     </div>
 </body>
 </html>

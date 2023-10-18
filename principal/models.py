@@ -126,7 +126,9 @@ class Region(models.Model):
 
 class Reserva(models.Model):
     res_id          = models.AutoField(primary_key=True)
-    res_fecha_hora  = models.DateTimeField()
+    res_fecha       = models.DateField()
+    res_hora_inicio = models.TimeField()
+    res_hora_fin    = models.TimeField()
     miembro_mie     = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
     espacio_esp     = models.ForeignKey(Espacio, models.PROTECT, db_column='ESPACIO_esp_id')
 

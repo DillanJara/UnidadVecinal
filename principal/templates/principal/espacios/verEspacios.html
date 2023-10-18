@@ -20,7 +20,7 @@
                                 Direccion: {{ e.esp_direccion }} <br>
                                 Telefono: {{ e.esp_telefono }}
                             </p>
-                            <p class="card-text text-end"><a href="#" class="text-muted">Reservar Hora</a></p>
+                            <p class="card-text text-end"><a href="{% url 'agregarReserva' e.esp_id %}" class="text-muted">Reservar Hora</a></p>
                         </div>
                     </div>
                 </div>

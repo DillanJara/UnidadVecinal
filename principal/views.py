@@ -4,14 +4,14 @@ from .forms.miembro import *
 from .forms.familiarMiembro import *
 from .forms.proyecto import *
 from .forms.espacios import *
+from .forms.reservas import *
 import hashlib
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-import base64
-from PIL import Image
-import io
+from datetime import datetime, time, timedelta
+
 
 # Create your views here.
 
@@ -116,8 +116,7 @@ def registrarMiembro(request):
     juntaVecinos = JuntaVecinos.objects.all()
     cargo = Cargo.objects.get(car_id=4)
     if form.is_valid():
-        password_encriptada = hashlib.sha256(
-            request.POST['mie_password'].encode())
+        password_encriptada = hashlib.sha256(request.POST['mie_password'].encode())
         password_encriptada = password_encriptada.hexdigest()
         Miembro.objects.create(
             mie_rut=request.POST['mie_rut'],
@@ -348,16 +347,19 @@ def agregarProyecto(request):
 
 def firma(request):
     if request.session.get("correo") or request.session.get("rut"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
         if not request.session.get("correo") and request.session.get("rut"):
             del request.session["rut"]
             request.session.modified = True
-        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
         if request.method == 'POST':
             firma = request.POST["img"]
             miembro.mie_firma = firma
             miembro.save()
             return redirect("/index/" + str(request.session.get("rut")))
-        return render(request, "principal/registrarFirma.html")
+        contexto = {
+            "miembro": miembro
+        }
+        return render(request, "principal/registrarFirma.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
@@ -413,3 +415,54 @@ def verEspacios(request):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+
+
+def agregarReserva(request,  esp_id):
+    miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+    espacio = Espacio.objects.get(esp_id=esp_id)
+    form = AgregarReserva(request.POST or None)
+    # ------------------------------------------------------
+    contexto = {
+        "form": form,
+        "miembro": miembro,
+        "espacio": espacio
+    }
+    # ------------------------------------------------------
+    if request.method == "POST":
+        if form.is_valid():
+            reservas_existente = Reserva.objects.filter(
+                miembro_mie=miembro,
+                res_fecha=request.POST["res_fecha"]
+            )
+            reservas_existente_2 = Reserva.objects.filter(
+                espacio_esp     = espacio,
+                res_fecha       = request.POST["res_fecha"],
+                res_hora_inicio = time.fromisoformat(request.POST["res_hora_inicio"])
+            )
+            if reservas_existente.exists():
+                contexto["error"] = True
+                return render(request, "principal/reservas/agregarReservas.html", contexto)
+            # ------------------------------------------------------
+            elif reservas_existente_2.exists():
+                contexto["error2"] = True
+                return render(request, "principal/reservas/agregarReservas.html", contexto)
+            # ------------------------------------------------------
+            else:
+                reserva = Reserva()
+                reserva.res_fecha = request.POST["res_fecha"]
+                reserva.res_hora_inicio = time.fromisoformat(request.POST["res_hora_inicio"])
+                reserva.res_hora_fin = (datetime.combine(datetime.min, reserva.res_hora_inicio) + timedelta(hours=1)).time()
+                reserva.espacio_esp = espacio
+                reserva.miembro_mie = miembro
+                reserva.save()
+                return redirect("/detalleReserva/" + str(reserva.res_id))
+    return render(request, "principal/reservas/agregarReservas.html", contexto)
+
+def detalleReserva(request, res_id):
+    reserva = Reserva.objects.get(res_id=res_id)
+    miembro = reserva.miembro_mie
+    contexto = {
+        "reserva": reserva,
+        "miembro": miembro
+    }
+    return render(request, "principal/reservas/detalleReserva.html", contexto)

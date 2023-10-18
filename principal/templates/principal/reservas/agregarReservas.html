@@ -1,0 +1,36 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="card border-light mt-3" style="max-width: 30rem;">
+        <div class="card-header text-white" style="background-color: #0F75BD;">
+            <h2 class="text-center">Reservar Hora en {{ espacio.esp_nombre }}</h2>
+        </div>
+        <div class="card-body">
+            <img src="/media/{{ espacio.esp_imagen }}" class="img-fluid rounded-start" alt="{{ espacio.esp_nombre }}">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div class="inputbox mb-3">
+                    <button id="btn_navbar">Reservar</button>
+                </div>
+                {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Ya hiciste una reserva para este dia
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+                {% if error2 %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Ya existe una reserva en este horario
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
