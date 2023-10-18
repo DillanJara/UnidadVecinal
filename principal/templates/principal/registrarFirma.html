@@ -1,0 +1,77 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+
+<!-- <form method="post" action="" onsubmit="prepareImg();">
+    {% csrf_token %}
+    <input id="inp_img" name="img" type="hidden" value="">
+    <input id="bt_upload" type="submit" value="Upload">
+</form> -->
+
+
+<div class="login-form">
+    <form class="login" method="POST" onsubmit="prepareImg();">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item text-success">Registra a tu Junta ✓</li>
+                <li class="breadcrumb-item text-success">Registrate</li>
+                <li class="breadcrumb-item active">Registra tu firma</li>
+                <li class="breadcrumb-item active">✅</li>
+            </ol>
+        </nav>
+        <h2>Dibuja tu firma</h2>
+        <canvas id="canvas" width="315" height="200"></canvas>
+        {% csrf_token %}
+        <div class="inputbox">
+            <input id="inp_img" name="img" type="hidden" value="">
+            <input type="submit" value="Registrar Firma" id="btn-login" required>
+        </div>
+    </form>
+</div>
+
+<style>
+    #canvas {
+        border: 2px #0F75BD solid;
+        cursor: crosshair;
+    }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    let drawing = false;
+
+    canvas.addEventListener('mousedown', () => {
+        drawing = true;
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        drawing = false;
+        context.beginPath();
+    });
+
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+        if (!drawing) return;
+
+        context.lineWidth = 5;
+        context.lineCap = 'round';
+        context.strokeStyle = 'black';
+
+        context.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+    }
+
+    function prepareImg() {
+        var canvas = document.getElementById('canvas');
+        document.getElementById('inp_img').value = canvas.toDataURL();
+    }
+</script>
+
+{% endblock %}

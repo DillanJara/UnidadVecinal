@@ -1,0 +1,68 @@
+{% extends 'layouts/base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% load static %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-center">
+    <div class="card border-light mt-3" style="max-width: 30rem;">
+        <div class="card-header text-white" style="background-color: #0F75BD;">
+            <h2 class="text-center">Registra tu proyecto aqui</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div class="mb-3" id="agregarImg">
+                    <label for="input-btn">Subir Archivo</label>
+                    <div id="input-archivo">
+                        <p><img src="{% static 'img/icono_input.png' %}"></p>
+                        <input class="form-control" type="file" name="proy_imagen" id="input-btn" required>
+                    </div>
+                    <div id="previewImagen" class="mx-auto" style="max-width: 20rem;">
+                    </div>
+                </div>
+                <div class="inputbox">
+                    <button id="btn_navbar">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    /* PREVISUALIZACION IMAGEN */
+    function filePreview(input) {
+        let extension = /(.jpg|.jpeg|.png)$/i;
+        let nombreArchivo = $("#input-btn").val()
+        if(!extension.exec(nombreArchivo)) {
+            Swal.fire({
+                "title": "Uups!",
+                "text": "Debes selecionar un archivo png o jpg",
+                "icon": "error"
+            })
+            nombreArchivo = '';
+            return false;
+        }
+        else {
+            if(input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#previewImagen').html("<img class='img-thumbnail' src='"+e.target.result+"' alt='No se pudo Cargar la Imagen'>");
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
+
+    $('#input-btn').change(function() {
+        filePreview(this);
+    });
+</script>
+
+{% endblock %}

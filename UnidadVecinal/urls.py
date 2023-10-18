@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 from principal.views import *
 
 urlpatterns = [
@@ -35,6 +36,21 @@ urlpatterns = [
     path('modificarFamiliarMiembro/<int:fam_mie_rut>', modificarFamiliarMiembro, name="modificarFamiliarMiembro"),
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
     path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros"),
+    path('cambiarCargo/<int:mie_rut>/<int:car_id>', cambiarCargo, name="cambiarCargo"),
     #-------------------------------------------------------------------------
-    path('certificadoResidencia/<int:mie_rut>', obtenerCetificadoResidencia, name="certificadoResidencia")
+    path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
+    path('verSolicitudes/<int:mie_rut>', verSolicitudes, name="verSolicitudes"),
+    #-------------------------------------------------------------------------
+    path("agregarProyecto/", agregarProyecto, name="agregarProyecto"),
+    #-------------------------------------------------------------------------
+    path("agregarEspacios/", agregarEspacios, name="agregarEspacios"),
+    path("verEspacios/", verEspacios, name="verEspacios"),
+    #-------------------------------------------------------------------------
+    path("agregarReserva/<int:esp_id>", agregarReserva, name="agregarReserva"),
+    path('detalleReserva/<int:res_id>', detalleReserva, name="detalleReserva"),
+    #-------------------------------------------------------------------------
+    path("registrarFirma/", firma, name="registraFirma"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

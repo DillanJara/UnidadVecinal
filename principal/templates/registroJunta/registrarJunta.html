@@ -5,6 +5,14 @@
 {% block content %}
 
 <div class="contenedor-registro-junta container mt-5 bg-light p-5">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Registra a tu Junta</li>
+            <li class="breadcrumb-item text-primary">Registrate</li>
+            <li class="breadcrumb-item text-primary">Registra tu firma</li>
+            <li class="breadcrumb-item">✅</li>
+        </ol>
+    </nav>
     <h1 class="text-center">Registro de tu <br> Junta de Vecinos</h1>
     <form method="POST">
         {% csrf_token %}
@@ -15,7 +23,6 @@
             <option value="{{ c.com_nombre }}"></option>
             {% endfor %}
         </datalist>
-    
         <div class="text-end">
             <button id="form-btn">Registrar</button>
         </div>
