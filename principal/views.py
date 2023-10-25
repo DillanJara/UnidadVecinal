@@ -25,11 +25,50 @@ def verHome(request):
         request.session.modified = True
     if request.session.get("alertaLogin"):
         del request.session["alertaLogin"]
+        request.session.modified = True
     return render(request, "home.html")
 
 
 def verLogin(request):
-    return render(request, "login.html")
+    contexto = {
+        "form": AgregarMiembro(request.POST or None)
+    }
+    return render(request, "login.html", contexto)
+
+
+def errorEncontrarCuenta(request):
+    return render(request, "recuperarPassword/errorEncontrarCuenta.html")
+
+
+def encontrarCuenta(request):
+    mie_rut = request.POST["mie_rut"]
+    mie_dv = request.POST["mie_dv"]
+    mie_correo = request.POST["mie_correo"]
+    if Miembro.objects.filter(mie_rut=mie_rut, mie_dv=mie_dv, mie_correo=mie_correo).exists():
+        miembro = Miembro.objects.get(mie_rut=mie_rut, mie_dv=mie_dv, mie_correo=mie_correo)
+        return redirect("cambiarPassword/" + str(miembro.mie_rut))
+    else:
+        return redirect("/errorEncontrarCuenta")
+
+
+def cambiarPassword(request, mie_rut):
+    miembro = Miembro.objects.get(mie_rut=mie_rut)
+    contexto = {
+        "miembro": miembro,
+        "form": AgregarMiembro(request.POST or None)
+    }
+    if request.method == "POST":
+        password = hashlib.sha256(request.POST.get('mie_password').encode())
+        password_encriptada = password.hexdigest()
+        miembro.mie_password = password_encriptada
+        miembro.save()
+        asunto = "Cambio de contraseña"
+        cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_paterno + " le informamos que su en cuenta se ha realizado una actualizacion de la contraseña"
+        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+        message.send()
+        return redirect('/login')
+    return render(request, "recuperarPassword/cambiarPassword.html", contexto)
+
 
 
 def validarLogin(request):
@@ -37,8 +76,7 @@ def validarLogin(request):
         email = request.POST.get('correo')
         password = hashlib.sha256(request.POST.get('password').encode())
         password_encriptada = password.hexdigest()
-        miembro = Miembro.objects.get(
-            mie_correo=email, mie_password=password_encriptada)
+        miembro = Miembro.objects.get(mie_correo=email, mie_password=password_encriptada)
         if miembro.mie_estado == "Habilitado":
             if request.session.get("errorLogin"):
                 del request.session["errorLogin"]
@@ -233,8 +271,7 @@ def activarCuenta(request, mie_rut):
         miembro.save()
         asunto = "Activacion cuenta " + miembro.junta_vecinos_jun.jun_nombre
         cuerpo = "Le informamos que su cuenta iniciada en Unidad Vecinal fue activada, ya puede iniciar sesion."
-        message = EmailMultiAlternatives(
-            asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
         message.send()
         return redirect("/index/" + str(request.session.get("rut")))
     else:
@@ -274,6 +311,9 @@ def obtenerCetificado(request, mie_rut, cer_id):
     miembro     = Miembro.objects.get(mie_rut=request.session.get("rut"))
     certificado = Certificado.objects.get(cer_id=cer_id)
     presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
+    # ------------------------------------------------------
+    if SolicitudCertificado.objects.filter(sol_cer_fecha=timezone.now().date(), miembro_mie=miembro).count() > 3:
+        return render(request, "certificados/error_solicitud.html")
     # ------------------------------------------------------
     solicitud = SolicitudCertificado()
     solicitud.certificado_cer = certificado
