@@ -1,42 +1,87 @@
-{% extends 'layouts/base.html' %}
+<head>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/logoNegro.png' %}">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- bootstrap links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- bootstrap links -->
+    <!-- fonts links -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <!-- fonts links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
 
-{% load static %}
-
-{% block content %}
-
-<!-- form -->
-<div class="login-form">
-    <form class="login" method="POST" action="/validarLogin">
-        {% csrf_token %}
-        <h2>Iniciar Sesión</h2>
-        {% if request.session.alertaLogin %}
-        <div class="alert alert-warning" role="alert">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-            </svg>
-            {{ request.session.alertaLogin }}
+<body>
+    <section id="login">
+        <div class="container mt-5 pt-5 text-center">
+            <img src="{% static 'img/logoLogin.png' %}" class="img-login">
+            <div class="row">
+                <div class="col-12 col-sm-7 col-md-6 m-auto">
+                    <div class="card-login">
+                        <div class="card-body">
+                            <form class="login" method="POST" action="/validarLogin">
+                                {% csrf_token %}
+                                <input type="email" class="form-control my-4 py-2" placeholder="Correo electronico" required name="correo">
+                                <input type="password" class="form-control my-4 py-2" placeholder="Contraseña" required name="password">
+                                {% if request.session.errorLogin %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ request.session.errorLogin }}
+                                </div>
+                                {% endif %}
+                                <div class="text-center mt-3">
+                                    <input type="submit" class="btn btn-login" value="Iniciar Sesión" required>
+                                </div>
+                                <div class="bottom-content">
+                                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#staticBackdrop">¿Olvidaste tu contraseña?</button>
+                                </div>
+                                <hr>
+                                <a class="btn btn-registrate-login" href="{% url 'registrarMiembro' %}">Registraste</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
-        <div class="inputbox">
-            <input type="email" placeholder="Correo electronico" required name="correo">
+    </section>
+    <!-- Modal -->
+    <div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="card-title">Contraseña Olvidada</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'encontrarCuenta' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p class="modal-body text-muted">Ingresa los siguientes datos para encontrar tu cuenta y actualizar tu contraseña</p>
+                        <div class="input-group row">
+                            <div class="col-10">
+                                {% bootstrap_field form.mie_rut show_label=False %}
+                            </div>
+                            <div class="col-2">
+                                {% bootstrap_field form.mie_dv show_label=False %}
+                            </div>
+                        </div>
+                        {% bootstrap_field form.mie_correo show_label=False %}
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn-recuperar-password text-white" value="Recuperar"></input>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="inputbox">
-            <input type="password" placeholder="Contraseña" required name="password">
-        </div>
-        {% if request.session.errorLogin %}
-        <div class="alert alert-danger" role="alert">
-            {{ request.session.errorLogin }}
-        </div>
-        {% endif %}
-        <div class="inputbox">
-            <input type="submit" value="Iniciar Sesión" id="btn-login" required>
-        </div>
-        <div class="bottom-content">
-            <a href="#">¿Olvidaste tu Contraseña?</a>
-            <a href="{% url 'registrarMiembro' %}">Registrate</a>
-        </div>
-    </>
-</div>
-<!-- form -->
-
-{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>

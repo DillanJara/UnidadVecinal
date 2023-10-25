@@ -1,0 +1,77 @@
+.img-home-miembro {
+    max-width: 40%;
+    height: auto;
+}
+
+.home-miembro-title {
+    font-size: 50px;
+    font-weight: 500;
+    margin-top: 10%;
+    margin-bottom: 40px;
+}
+
+#home-miembro .card-header {
+    background-color: #0F75BD;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 4%;
+    padding-bottom: 0;
+    font-size: 20px;
+    font-weight: 450;
+    margin-top: 50px;
+}
+
+#home-miembro .card-certificados {
+    box-shadow: 10px 10px 30px #bebebe;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    font-size: 18px;
+    width: fit-content;
+}
+
+#home-miembro .btn-obt-cert {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    width: 100%;
+}
+
+#home-miembro .btn-obt-cert:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#home-miembro .btn-registro-firma {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    position: absolute;
+    bottom: 0;
+    justify-content: end;
+}
+
+#home-miembro .btn-registro-firma:hover {
+    background: #114c55;
+    transition: 0s;
+}
+
+#home-miembro .btn-obt-cert-familiar {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    width: min-content;
+}
+
+#home-miembro .btn-obt-cert-familiar:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

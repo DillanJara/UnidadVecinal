@@ -2,12 +2,42 @@
 
 {% load static %}
 
+{% block title %}
+<title>Unidad Vecinal</title>
+{% endblock %}
+
 {% block content %}
-<div class="contenedor mx-auto" style="width: fit-content;">
+
+<!-- banner section start -->
+<section id="banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="banner-title">SOMOS LA MEJOR OPCIÓN <br>
+                    PARA TU JUNTA DE VECINOS</p>
+                <p>Nuestra aplicación web es una herramienta de gestión comunitaria diseñada para fortalecer la
+                    colaboración y comunicación en las unidades territoriales. <br> <br>Facilitamos el acceso y la
+                    participación
+                    de los habitantes y miembros de la junta de vecinos en una amplia gama de actividades y trámites.
+                </p>
+                <a type="button" class="btn-banner" href="{% url 'registrarJuntaVecinos' %}">Comienza Ahora</a>
+
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="{% static 'img/home2.png' %}" class="img-home">
+            </div>
+        </div>
+    </div>
+    <img src="{% static 'img/wave1.png' %}" class="bottom-img">
+</section>
+<!-- banner section end -->
+
+<!--
+<div class="contenedor mx-auto">
     <div class="row">
         <div class="col-sm-6">
-            <div class="card" style="max-width: 20rem;">
-                <img src="{% static 'img/icon-transformed.png' %}" class="img-fluid card-img-top" alt="...">
+            <div class="card">
+                <img src="{% static 'img/logo_registrar_junta.png' %}" class="img-fluid card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Registrar Junta de Vecinos</h5>
                     <p class="card-text">Para acceder a sistema primero debes agregar tu junta de vecinos</p>
@@ -16,7 +46,7 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="card" style="max-width: 20rem;">
+            <div class="card">
                 <img src="{% static 'img/logo_login.png' %}" class="img-fluid card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Ingresar</h5>
@@ -29,4 +59,5 @@
         </div>
     </div>
 </div>
+-->
 {% endblock %}

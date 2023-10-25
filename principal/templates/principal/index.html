@@ -2,73 +2,121 @@
 {% load django_bootstrap5 %}
 {% load static %}
 
+{% block title %}
+<title>Inicio</title>
+{% endblock %}
+
 {% block content %}
 
-<!-- home section -->
-<section id="home">
-    <div class="content">
-        <h3>Bienvenido <br> {{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}<br> a la Aplicación Web <br> de tu
-            Junta de Vecinos</h3>
-    </div>
+<section id="home-miembro">
+    <div class="container">
+        {% if miembro.mie_firma == null and miembro.cargo_car.car_id == 1 %}
+        <div class="fixed-bottom mb-2 mx-2">
+            <a href="{% url 'registraFirma' %}" class="btn btn-registro-firma end-0">
+                Registra tu firma<span
+                    class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
+                </span>
+            </a>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <p class="home-miembro-title">Bienvenido! <br> {{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}.
+                </p>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="{% static 'img/welcome.png' %}" class="img-home-miembro">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card-certificados">
+                    <div class="card-header text-center">
+                        <p class="card-cert-title">Certificados</p>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <p class="cert-title">Certificado de Residencia</p>
+                                </td>
+                                <td>
+                                    <a href="{% url 'obtenerCertificado' miembro.mie_rut 1 %}" class="btn btn-obt-cert">Obtener</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="cert-title">Certificado de Socio</p>
+                                </td>
+                                <td>
+                                    <a href="{% url 'obtenerCertificado' miembro.mie_rut 2 %}" class="btn btn-obt-cert">Obtener</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card-certificados">
+                    <div class="card-header text-center header-fam">
+                        <p class="card-fam-title">Familiares</p>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tbody>
+                                {% for fm in familiarMiembro %}
+                                <tr>
+                                    <th class="">{{ fm.fam_mie_nombre }} {{ fm.fam_mie_ap_paterno }}
+                                    <th class="">{{ fm.fam_mie_parentesco }}
+                                        <div class="modal fade" id="staticBackdrop{{ fm.fam_mie_rut }}"
+                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="staticBackdropLabel">Eliminar
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Esta seguro que desea eliminar a {{ fm.fam_mie_nombre }}
+                                                        {{ fm.fam_mie_ap_paterno }} de tus familiares?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a href="/eliminarFamiliarMiembro/{{ fm.fam_mie_rut }}" class="btn btn-danger">Eliminar</a>
+                                                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <td class="">
+                                        <a class="btn btn-modificar-fam" href="{% url 'modificarFamiliarMiembro' fm.fam_mie_rut %}">Modificar</a>
+                                    </td>
+                                    <td class="">
+                                        <button class="btn btn-eliminar-fam" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ fm.fam_mie_rut }}">Eliminar</button>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-obt-cert-familiar dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Solicitar Certificado
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{% url 'obtenerCertificado' fm.fam_mie_rut 1 %}" class="dropdown-item">Cert. de Residencia</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 </section>
-<!-- home section -->
 
-{% if miembro.mie_firma == null and miembro.cargo_car.car_id == 1 %}
-<div class="fixed-bottom mb-2 mx-2">
-    <a href="{% url 'registraFirma' %}" class="btn btn-primary position-absolute bottom-0 end-0">
-        Registra tu firma<span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-            <span class="visually-hidden">New alerts</span>
-        </span>
-    </a>
-</div>
-{% endif %}
+<!--
 
-
-
-<div class="d-flex justify-content-center">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card border-light mt-3" style="max-width: 30rem;">
-                <div class="card-header text-white" style="background-color: #0B558A;">Certificados</div>
-                <div class="card-body">
-                    <table class="table">
-                        <tr>
-                            <td>
-                                <h4 class="text-primary">Certificado de Residencia</h4>
-                            </td>
-                            <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 1 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4 class="text-primary">Certificado de Socio</h4>
-                            </td>
-                            <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 2 %}" class="btn btn-outline-primary rounded-pill">Obtener</a></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="card border-light mt-3" style="max-width: 30rem;">
-                <div class="card-header text-white" style="background-color: #0B558A;">Proyectos</div>
-                <div class="card-body">
-                    <table class="table">
-                        {% for p in proyectos %}
-                        <tr>
-                            <td>
-                                <h4 class="text-primary">{{ p.proy_nombre }}</h4>
-                            </td>
-                            <td><a href="#" class="btn btn-outline-primary rounded-pill">Ver Mas</a></td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- about section -->
 <div class="about" id="about">
     <div class="container">
         <div class="">
@@ -86,6 +134,7 @@
                     <h1 class="display-1">→ {{ miembrosRegistrados }}</h1>
                     <h3>Miembros Activos</h3>
                     <h1 class="display-3">→ {{ miembrosActivos }}</h1>
+                
                 {% else %}
                     <h3>Nuevos Miembros Registrados</h3>
                     <table class="table">
@@ -117,11 +166,9 @@
             </div>
         </div>
     </div>
-</div>
-<!-- about section -->
+</div> 
 
 
-<!-- contact -->
 <section class="contact" id="contact">
     <div class="container">
         <div class="row">
@@ -182,17 +229,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <td><a href="{% url 'modificarFamiliarMiembro' fm.fam_mie_rut %}"><button class="badge rounded-pill bg-secondary">Modificar</button></a></td>
-                            <td>
-                                <div class="btn-group">
-                                    <button class="badge rounded-pill bg-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Solicitar Certificado
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{% url 'obtenerCertificado' fm.fam_mie_rut 1 %}" class="dropdown-item">Cert. de Residencia</a></li>
-                                    </ul>
-                                </div>
-                            </td>
+                            <td><a href="{% url 'modificarFamiliarMiembro' fm.fam_mie_rut %}"><button
+                                        class="badge rounded-pill bg-secondary">Modificar</button></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -201,5 +239,9 @@
         </div>
     </div>
 </section>
-<!-- contact -->
+
+
+
+
+-->
 {% endblock %}

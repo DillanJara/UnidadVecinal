@@ -27,6 +27,10 @@ urlpatterns = [
     path('validarLogin', validarLogin, name="validarLogin"),
     path('cerrarSesion', cerrarSesion, name="cerrarSesion"),
     #-------------------------------------------------------------------------
+    path('encontrarCuenta', encontrarCuenta, name="encontrarCuenta"),
+    path('errorEncontrarCuenta', errorEncontrarCuenta, name="errorEncontrarCuenta"),
+    path('cambiarPassword/<int:mie_rut>', cambiarPassword, name="cambiarPassword"),
+    #-------------------------------------------------------------------------
     path('registrarMiembro/', registrarMiembro, name="registrarMiembro"),
     path('registrarJuntaVecinos/', registrarJunta, name="registrarJuntaVecinos"),
     path('registrarPresidente/<int:jun_id>', registrarPresidente, name="registrarPresidente"),
