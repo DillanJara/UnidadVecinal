@@ -4,24 +4,24 @@
 {% load django_bootstrap5 %}
 
 {% block title %}
-<title>Agregar Espacios</title>
+<title>Agregar Noticia</title>
 {% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-center">
     <div class="card border-light mt-3" style="max-width: 30rem;">
         <div class="card-header text-white" style="background-color: #0F75BD;">
-            <h2 class="text-center">Registra el Espacio de tu Junta</h2>
+            <h2 class="text-center">Agregar Noticia</h2>
         </div>
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 <div class="mb-3" id="agregarImg">
-                    <label for="input-btn">Subir Archivo</label>
+                    <label for="input-btn">Subir Imagen</label>
                     <div id="input-archivo">
                         <p><img src="{% static 'img/icono_input.png' %}"></p>
-                        <input class="form-control" type="file" name="esp_imagen" id="input-btn" required>
+                        <input class="form-control" type="file" name="not_imagen" id="input-btn" required>
                     </div>
                     <div id="previewImagen" class="mx-auto" style="max-width: 20rem;">
                     </div>

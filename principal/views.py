@@ -5,6 +5,7 @@ from .forms.familiarMiembro import *
 from .forms.proyecto import *
 from .forms.espacios import *
 from .forms.reservas import *
+from .forms.noticias import *
 import hashlib
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -506,3 +507,22 @@ def detalleReserva(request, res_id):
         "miembro": miembro
     }
     return render(request, "principal/reservas/detalleReserva.html", contexto)
+
+
+def agregarNoticia(request):
+    form = AgregarNoticia(request.POST or None)
+    miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+    contexto = {
+        "form": form,
+        "miembro": miembro
+    }
+    if request.method == 'POST':
+        noticia = Noticia()
+        noticia.not_titulo      = request.POST["not_titulo"]
+        noticia.not_subtitulo   = request.POST["not_subtitulo"]
+        noticia.not_descripcion = request.POST["not_descripcion"]
+        noticia.not_imagen      = request.FILES.get("not_imagen")
+        noticia.miembro_mie     = miembro
+        noticia.save()
+        return HttpResponse("N0ticia agregada")
+    return render(request, "principal/noticias/agregarNoticia.html", contexto)

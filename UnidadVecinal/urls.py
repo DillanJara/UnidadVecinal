@@ -54,6 +54,8 @@ urlpatterns = [
     path('detalleReserva/<int:res_id>', detalleReserva, name="detalleReserva"),
     #-------------------------------------------------------------------------
     path("registrarFirma/", firma, name="registraFirma"),
+    #-------------------------------------------------------------------------
+    path("agregarNoticia", agregarNoticia, name="agregarNoticia"),
 ]
 
 if settings.DEBUG:

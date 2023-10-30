@@ -68,15 +68,18 @@ class FamiliarMiembro(models.Model):
 
 
 class JuntaVecinos(models.Model):
-    jun_id              = models.AutoField(primary_key=True)
-    jun_nombre          = models.CharField(max_length=50)
-    jun_fecha_fundacion = models.DateField()
-    jun_nombre_villa    = models.CharField(max_length=30)
-    jun_telefono        = models.CharField(unique=True, max_length=12)
-    jun_correo          = models.CharField(unique=True, max_length=50)
-    jun_direccion       = models.CharField(max_length=50)
-    jun_mision          = models.CharField(max_length=300)
-    comuna_com          = models.ForeignKey(Comuna, models.PROTECT, db_column='COMUNA_com_id')
+    jun_id                   = models.AutoField(primary_key=True)
+    jun_nombre               = models.CharField(max_length=50)
+    jun_fecha_fundacion      = models.DateField()
+    jun_nombre_villa         = models.CharField(max_length=30)
+    jun_telefono             = models.CharField(unique=True, max_length=12)
+    jun_correo               = models.CharField(unique=True, max_length=50)
+    jun_direccion            = models.CharField(max_length=50)
+    jun_mision               = models.CharField(max_length=300, null=True)
+    jun_habilitada           = models.BooleanField(default=False)
+    jun_certificado_vigencia = models.ImageField(upload_to="media/juntaVecinos/", blank=True)
+    jun_directiva            = models.CharField(max_length=300)
+    comuna_com               = models.ForeignKey(Comuna, models.PROTECT, db_column='COMUNA_com_id')
 
 
 class Miembro(models.Model):
@@ -102,11 +105,9 @@ class Noticia(models.Model):
     not_id          = models.AutoField(primary_key=True)
     not_titulo      = models.CharField(max_length=50)
     not_subtitulo   = models.CharField(max_length=100)
-    not_fecha       = models.DateField()
+    not_fecha       = models.DateField(auto_now_add=True)
     not_descripcion = models.CharField(max_length=300)
-    not_imagen      = models.ImageField(upload_to="media/noticia/")
-    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id', blank=True, null=True)
-    proyecto_proy   = models.ForeignKey('Proyecto', models.PROTECT, db_column='PROYECTO_proy_id', blank=True, null=True)
+    not_imagen      = models.ImageField(upload_to="media/noticia/", null=True)
     miembro_mie     = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
