@@ -3,6 +3,10 @@
 {% load static %}
 {% load django_bootstrap5 %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/agregarNoticia.css' %}">
+{% endblock %}
+
 {% block title %}
 <title>Agregar Noticia</title>
 {% endblock %}

@@ -3,6 +3,10 @@
 {% load django_bootstrap5 %}
 {% load static %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/agregarProyecto.css' %}">
+{% endblock %}
+
 {% block title %}
 <title>Proponer Proyecto</title>
 {% endblock %}

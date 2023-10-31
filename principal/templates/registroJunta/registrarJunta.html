@@ -15,8 +15,16 @@
 <section id="registroJunta">
     <div class="container">
         <p class="form-registroJunta-title">Registra tu Junta de Vecinos</p>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">Registra a tu Junta ✓</li>
+                <li class="breadcrumb-item text-primary">Registrate</li>
+                <li class="breadcrumb-item text-primary">Registra tu firma</li>
+                <li class="breadcrumb-item active">⌛</li>
+            </ol>
+        </nav>
         <div class="card-registroJunta">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 <datalist id="opcionesComunas">
@@ -24,6 +32,21 @@
                     <option value="{{ c.com_nombre }}"></option>
                     {% endfor %}
                 </datalist>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Directiva</span>
+                    <textarea class="form-control" required name="directiva1" aria-label="With textarea"></textarea>
+                    <textarea class="form-control" name="directiva2" aria-label="With textarea"></textarea>
+                    <textarea class="form-control" name="directiva3" aria-label="With textarea"></textarea>
+                </div>
+                <div class="mb-3" id="agregarImg">
+                    <label for="input-btn">Subir Certificado de Vigencia <em>(Debe ser archivo de Imagen)</em></label>
+                    <div id="input-archivo">
+                        <p><img src="{% static 'img/icono_input.png' %}"></p>
+                        <input class="form-control" type="file" name="jun_certificado_vigencia" id="input-btn" required>
+                    </div>
+                    <div id="previewImagen" class="mx-auto" style="max-width: 20rem;">
+                    </div>
+                </div>
                 <div class="text-end">
                     <button class="btn-form-registroJunta" id="form-btn">Registrar</button>
                 </div>
@@ -31,5 +54,36 @@
         </div>
     </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    /* PREVISUALIZACION IMAGEN */
+    function filePreview(input) {
+        let extension = /(.jpg|.jpeg|.png)$/i;
+        let nombreArchivo = $("#input-btn").val()
+        if(!extension.exec(nombreArchivo)) {
+            Swal.fire({
+                "title": "Uups!",
+                "text": "Debes selecionar un archivo png o jpg",
+                "icon": "error"
+            })
+            nombreArchivo = '';
+            return false;
+        }
+        else {
+            if(input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#previewImagen').html("<img class='img-thumbnail' src='"+e.target.result+"' alt='No se pudo Cargar la Imagen'>");
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
+
+    $('#input-btn').change(function() {
+        filePreview(this);
+    });
+</script>
 
 {% endblock %}

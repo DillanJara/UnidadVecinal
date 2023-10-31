@@ -1,5 +1,5 @@
-from django.db import models
 
+from django.db import models
 
 class Actividad(models.Model):
     act_id                 = models.AutoField(primary_key=True)
@@ -69,6 +69,7 @@ class FamiliarMiembro(models.Model):
 
 class JuntaVecinos(models.Model):
     jun_id                   = models.AutoField(primary_key=True)
+    jun_rol_municipal        = models.PositiveIntegerField()
     jun_nombre               = models.CharField(max_length=50)
     jun_fecha_fundacion      = models.DateField()
     jun_nombre_villa         = models.CharField(max_length=30)
@@ -83,7 +84,7 @@ class JuntaVecinos(models.Model):
 
 
 class Miembro(models.Model):
-    mie_rut              = models.IntegerField(primary_key=True)
+    mie_rut              = models.IntegerField(primary_key=True,)
     mie_dv               = models.CharField(max_length=1)
     mie_nombre           = models.CharField(max_length=30)
     mie_ap_paterno       = models.CharField(max_length=30)
@@ -93,12 +94,11 @@ class Miembro(models.Model):
     mie_correo           = models.CharField(unique=True, max_length=50)
     mie_password         = models.CharField(max_length=150)
     mie_direccion        = models.CharField(max_length=50)
-    junta_vecinos_jun    = models.ForeignKey(JuntaVecinos, models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
-    mie_estado           = models.CharField(max_length=30)
-    cargo_car            = models.ForeignKey(Cargo, models.PROTECT, db_column='CARGO_car_id')
+    mie_estado           = models.CharField(max_length=30, default="Deshabilitado")
+    junta_vecinos_jun    = models.ForeignKey(JuntaVecinos, on_delete=models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
+    cargo_car            = models.ForeignKey(Cargo, on_delete=models.PROTECT, db_column='CARGO_car_id')
     mie_firma            = models.CharField(max_length=50000, null=True)
     mie_documento        = models.ImageField(upload_to="media/miembro/")
-
 
 
 class Noticia(models.Model):

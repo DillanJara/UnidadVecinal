@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Noticias</title>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="card border-light mt-3" style="max-width: 100rem;">
+        <div class="card-header text-white" style="background-color: #0F75BD;">Noticias</div>
+        <div class="card-body">
+            {% for n in noticias %}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/media/{{ n.not_imagen }}" class="img-fluid rounded-start" alt="{{ n.not_titulo }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ n.not_titulo }}</h5>
+                            <p class="card-text">
+                                Fecha: {{ n.not_fecha }}
+                            </p>
+                            <p class="card-text text-end"><a href="#" class="text-muted">Ver Detalle</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

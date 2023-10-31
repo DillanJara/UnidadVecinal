@@ -3,12 +3,15 @@
 {% load static %}
 {% load django_bootstrap5 %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/registroMiembro.css' %}">
+{% endblock %}
+
 {% block title %}
 <title>Registro de Presidente</title>
 {% endblock %}
 
 {% block content %}
-
 <section class="form" id="form">
     <div class="heading"><span>Formulario de Registro de Presidente</span></div>
     <div class="container">
@@ -17,10 +20,10 @@
                 <li class="breadcrumb-item text-success">Registra a tu Junta ✓</li>
                 <li class="breadcrumb-item active">Registrate</li>
                 <li class="breadcrumb-item text-primary">Registra tu firma</li>
-                <li class="breadcrumb-item active">✅</li>
+                <li class="breadcrumb-item active">⌛</li>
             </ol>
         </nav>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <!--Dos Input tipo Texto en 2 columnas de 6 -->
             <div class="row">
@@ -65,12 +68,21 @@
                     <label class="form-label" for="cargo_car">Cargo</label>
                     <input type="text" id="cargo_car" name="cargo_car" class="form-control" readonly value="{{ cargo.car_nombre}}">
                 </div>
+                <div class="mb-3" id="agregarImg">
+                    <label for="input-btn">Suba una imagen de un documento a su nombre <em>(boleta de agua, luz, etc.)</em></label>
+                    <div id="input-archivo">
+                        <p><img src="{% static 'img/icono_input.png' %}"></p>
+                        <input class="form-control" type="file" name="mie_documento" id="input-btn" required>
+                    </div>
+                    <div id="previewImagen" class="mx-auto" style="max-width: 20rem;">
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="form-btn">Enviar</button>
                 </div>
         </form>
     </div>
 </section>
-
-
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="{% static 'scripts\registroMiembro.js' %}"></script>
 {% endblock %}

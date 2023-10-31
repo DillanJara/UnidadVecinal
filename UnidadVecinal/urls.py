@@ -53,9 +53,15 @@ urlpatterns = [
     path("agregarReserva/<int:esp_id>", agregarReserva, name="agregarReserva"),
     path('detalleReserva/<int:res_id>', detalleReserva, name="detalleReserva"),
     #-------------------------------------------------------------------------
-    path("registrarFirma/", firma, name="registraFirma"),
+    path("registrarFirma/<int:mie_rut>", firma, name="registraFirma"),
     #-------------------------------------------------------------------------
     path("agregarNoticia", agregarNoticia, name="agregarNoticia"),
+    path('verNoticias', verNoticias, name="verNoticias"),
+    #-------------------------------------------------------------------------
+    path('procesar-pago/', procesarPago, name='procesar_pago'),
+    #path('stripe_webhook', stripe_webhook, name='stripe_webhook'),
+    path('pagoExitoso', pagoExitoso, name="pagoExitoso"),
+    path('pagoCancelado', pagoCancelado, name="pagoCancelado")
 ]
 
 if settings.DEBUG:

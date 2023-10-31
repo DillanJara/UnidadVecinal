@@ -7,15 +7,18 @@ from .forms.espacios import *
 from .forms.reservas import *
 from .forms.noticias import *
 import hashlib
+import stripe
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from datetime import datetime, time, timedelta
-
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
+# ------------------------------------------------------
+# seccion de inicio
 def verHome(request):
     if request.session.get("errorLogin"):
         del request.session["errorLogin"]
@@ -28,8 +31,11 @@ def verHome(request):
         del request.session["alertaLogin"]
         request.session.modified = True
     return render(request, "home.html")
+# ------------------------------------------------------
 
 
+# ------------------------------------------------------
+# seccion de autenticacion
 def verLogin(request):
     contexto = {
         "form": AgregarMiembro(request.POST or None)
@@ -53,6 +59,9 @@ def encontrarCuenta(request):
 
 
 def cambiarPassword(request, mie_rut):
+    if request.session.get("errorLogin"):
+        del request.session["errorLogin"]
+        request.session.modified = True
     miembro = Miembro.objects.get(mie_rut=mie_rut)
     contexto = {
         "miembro": miembro,
@@ -71,20 +80,25 @@ def cambiarPassword(request, mie_rut):
     return render(request, "recuperarPassword/cambiarPassword.html", contexto)
 
 
-
 def validarLogin(request):
     try:
-        email = request.POST.get('correo')
-        password = hashlib.sha256(request.POST.get('password').encode())
+        email               = request.POST.get('correo')
+        password            = hashlib.sha256(request.POST.get('password').encode())
         password_encriptada = password.hexdigest()
-        miembro = Miembro.objects.get(mie_correo=email, mie_password=password_encriptada)
+        miembro             = Miembro.objects.get(mie_correo=email, mie_password=password_encriptada)
+        # ------------------------------------------------------
         if miembro.mie_estado == "Habilitado":
             if request.session.get("errorLogin"):
                 del request.session["errorLogin"]
-            request.session.modified = True
+            # ------------------------------------------------------
+            request.session.modified  = True
             request.session['correo'] = miembro.mie_correo
-            request.session['rut'] = miembro.mie_rut
+            request.session['rut']    = miembro.mie_rut
+            # ------------------------------------------------------
             return redirect('/index/' + str(miembro.mie_rut))
+        elif not miembro.junta_vecinos_jun.jun_habilitada:
+            request.session["errorLogin"] = "Aun no se valida la vericidad de su Junta Vecinal"
+            return redirect("/login")
         else:
             request.session["errorLogin"] = "Su cuenta aun se encuentra deshabilitada"
             return redirect("/login")
@@ -98,16 +112,22 @@ def cerrarSesion(request):
     del request.session['rut']
     request.session.modified = True
     return redirect('/')
+# ------------------------------------------------------
 
 
+# ------------------------------------------------------
+# seccion de registro
 def registrarJunta(request):
     form = AgregarJuntaVecinos(request.POST or None)
     if form.is_valid():
-        junta_vecinos = form.save(commit=False)
-        comuna = Comuna.objects.get(com_nombre=request.POST['jun_comuna'])
-        junta_vecinos.jun_correo = request.POST['jun_correo']
-        junta_vecinos.comuna_com_id = comuna.com_id
+        junta_vecinos                          = form.save(commit=False)
+        comuna                                 = Comuna.objects.get(com_nombre=request.POST['jun_comuna'])
+        junta_vecinos.comuna_com_id            = comuna.com_id
+        # ------------------------------------------------------
+        junta_vecinos.jun_directiva            = request.POST['directiva1'] + ", " + request.POST['directiva2'] + ", " + request.POST['directiva3']
+        junta_vecinos.jun_certificado_vigencia = request.FILES.get("jun_certificado_vigencia")
         junta_vecinos.save()
+        # ------------------------------------------------------
         return redirect("/registrarPresidente/" + str(junta_vecinos.jun_id))
     context = {
         "form": form,
@@ -120,12 +140,14 @@ def registrarPresidente(request, jun_id):
     form         = AgregarPresidente(request.POST or None)
     juntaVecinos = JuntaVecinos.objects.get(jun_id=jun_id)
     cargo        = Cargo.objects.get(car_id=1)
+    # ------------------------------------------------------
     if Miembro.objects.filter(junta_vecinos_jun_id=jun_id, cargo_car_id=1).count() > 0:
         return HttpResponse("Esta junta de vecinos ya tiene a su presidente registrado")
     else:
         if form.is_valid():
             password_encriptada = hashlib.sha256(request.POST['mie_password'].encode())
             password_encriptada = password_encriptada.hexdigest()
+            # ------------------------------------------------------
             Miembro.objects.create(
                 mie_rut              = request.POST['mie_rut'],
                 mie_dv               = request.POST['mie_dv'],
@@ -138,10 +160,12 @@ def registrarPresidente(request, jun_id):
                 mie_password         = password_encriptada,
                 mie_direccion        = request.POST['mie_direccion'],
                 junta_vecinos_jun_id = jun_id,
-                mie_estado           = "Habilitado",
-                cargo_car_id         = 1
+                mie_estado           = "Deshabilitado",
+                cargo_car_id         = 1,
+                mie_documento        = request.FILES.get("mie_documento")
             )
-            return redirect("/registrarFirma")
+            return redirect("/registrarFirma/" + str(request.POST['mie_rut']))
+    # ------------------------------------------------------
     context = {
         "juntaVecinos": juntaVecinos,
         "cargo": cargo,
@@ -150,13 +174,32 @@ def registrarPresidente(request, jun_id):
     return render(request, "registroJunta/registrarPresidente.html", context)
 
 
+def firma(request, mie_rut):
+    miembro = Miembro.objects.get(mie_rut=mie_rut)
+    if request.method == 'POST':
+        firma             = request.POST["img"]
+        miembro.mie_firma = firma
+        miembro.save()
+        # ------------------------------------------------------
+        if request.session.get("rut"):
+            return redirect("/index/" + str(request.session.get("rut")))
+        return render(request, "registroJunta/mensajeRegistro.html")
+    # ------------------------------------------------------
+    contexto = {
+        "miembro": miembro
+    }
+    return render(request, "registroJunta/registrarFirma.html", contexto)
+
+
 def registrarMiembro(request):
-    form = AgregarMiembro(request.POST or None)
+    form         = AgregarMiembro(request.POST or None)
     juntaVecinos = JuntaVecinos.objects.all()
-    cargo = Cargo.objects.get(car_id=4)
+    cargo        = Cargo.objects.get(car_id=4)
+    # ------------------------------------------------------
     if form.is_valid():
         password_encriptada = hashlib.sha256(request.POST['mie_password'].encode())
         password_encriptada = password_encriptada.hexdigest()
+        # ------------------------------------------------------
         Miembro.objects.create(
             mie_rut=request.POST['mie_rut'],
             mie_dv=request.POST['mie_dv'],
@@ -168,20 +211,23 @@ def registrarMiembro(request):
             mie_correo=request.POST['mie_correo'],
             mie_password=password_encriptada,
             mie_direccion=request.POST['mie_direccion'],
-            junta_vecinos_jun_id=JuntaVecinos.objects.get(
-                jun_nombre=request.POST['mie_junta_vecinos']).jun_id,
+            junta_vecinos_jun_id=JuntaVecinos.objects.get(jun_nombre=request.POST['mie_junta_vecinos']).jun_id,
             mie_estado="Deshabilitado",
             cargo_car_id=4
         )
         return redirect("/")
+    # ------------------------------------------------------
     context = {
         "juntaVecinos": juntaVecinos,
         "cargo": cargo,
         "form": form
     }
     return render(request, "registroJunta/registroMiembro.html", context)
+# ------------------------------------------------------
 
 
+# ------------------------------------------------------
+# seccion principal
 def verIndex(request, rut):
     if request.session.get("correo"):
         if request.session.get("errorValidarRut"):
@@ -211,6 +257,7 @@ def verIndex(request, rut):
                 if request.session.get("errorValidarRut"):
                     del request.session["errorValidarRut"]
                     request.session.modified = True
+                # ------------------------------------------------------
                 FamiliarMiembro.objects.create(
                     fam_mie_rut=request.POST["fam_mie_rut"],
                     fam_mie_dv=request.POST["fam_mie_dv"],
@@ -263,8 +310,11 @@ def modificarFamiliarMiembro(request, fam_mie_rut):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+# ------------------------------------------------------
 
 
+# ------------------------------------------------------
+# seccion de gestion de miembros
 def activarCuenta(request, mie_rut):
     if request.session.get("correo"):
         miembro = Miembro.objects.get(mie_rut=mie_rut)
@@ -306,8 +356,11 @@ def cambiarCargo(request, mie_rut, car_id):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+# ------------------------------------------------------
 
 
+# ------------------------------------------------------
+# seccion de certificados
 def obtenerCetificado(request, mie_rut, cer_id):
     miembro     = Miembro.objects.get(mie_rut=request.session.get("rut"))
     certificado = Certificado.objects.get(cer_id=cer_id)
@@ -362,12 +415,35 @@ def obtenerCetificado(request, mie_rut, cer_id):
     return response
 
 
+def verSolicitudes(request, mie_rut):
+    if request.session.get("correo"):
+        miembro     = Miembro.objects.get(mie_rut=mie_rut)
+        solicitudes = SolicitudCertificado.objects.filter(miembro_mie=miembro)
+        familiares  = FamiliarMiembro.objects.filter(miembro_mie=miembro)
+        # ------------------------------------------------------
+        contexto = {
+            "miembro": miembro,
+            "solicitudes": solicitudes,
+            "familiares": familiares,
+        }
+        # ------------------------------------------------------
+        return render(request, "certificados/solicitudes/solicitudes_certificados.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+# ------------------------------------------------------
+
+
+# ------------------------------------------------------
+# seccion de proyectos
 def agregarProyecto(request):
     if request.session.get("correo"):
-        form = AgregarProyecto(request.POST or None)
+        form    = AgregarProyecto(request.POST or None)
         miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        # ------------------------------------------------------
         if request.method == "POST":
             estado_proyecto = EstadoProyecto.objects.get(est_proy_estado="En Revision")
+            # ------------------------------------------------------
             Proyecto.objects.create(
                 proy_nombre = request.POST["proy_nombre"],
                 proy_descripcion = request.POST["proy_descripcion"],
@@ -376,59 +452,30 @@ def agregarProyecto(request):
                 miembro_mie = miembro
             )
             return redirect("/index/" + str(request.session.get("rut")))
+        # ------------------------------------------------------
         context = {
             "form": form,
             "miembro": miembro
         }
+        # ------------------------------------------------------
         return render(request, "principal/proyecto/agregarProyecto.html", context)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
 
 
-def firma(request):
-    if request.session.get("correo") or request.session.get("rut"):
-        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
-        if not request.session.get("correo") and request.session.get("rut"):
-            del request.session["rut"]
-            request.session.modified = True
-        if request.method == 'POST':
-            firma = request.POST["img"]
-            miembro.mie_firma = firma
-            miembro.save()
-            return redirect("/index/" + str(request.session.get("rut")))
-        contexto = {
-            "miembro": miembro
-        }
-        return render(request, "principal/registrarFirma.html", contexto)
-    else:
-        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
-        return redirect("/login")
-
-
-def verSolicitudes(request, mie_rut):
-    if request.session.get("correo"):
-        miembro = Miembro.objects.get(mie_rut=mie_rut)
-        solicitudes = SolicitudCertificado.objects.filter(miembro_mie=miembro)
-        familiares = FamiliarMiembro.objects.filter(miembro_mie=miembro)
-        contexto = {
-            "miembro": miembro,
-            "solicitudes": solicitudes,
-            "familiares": familiares,
-        }
-        return render(request, "certificados/solicitudes/solicitudes_certificados.html", contexto)
-    else:
-        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
-        return redirect("/login")
-
+# ------------------------------------------------------
+# seccion de espacios y reservas
 def agregarEspacios(request):
     if request.session.get("correo"):
         miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
-        form = AgregarEspacio(request.POST or None)
+        form    = AgregarEspacio(request.POST or None)
+        # ------------------------------------------------------
         contexto = {
-            "form": form,
-            "miembro": miembro
+            "form"    : form,
+            "miembro" : miembro
         }
+        # ------------------------------------------------------
         if request.method == "POST":
             Espacio.objects.create(
                 esp_nombre = request.POST["esp_nombre"],
@@ -437,6 +484,7 @@ def agregarEspacios(request):
                 esp_imagen = request.FILES.get("esp_imagen"),
                 junta_vecinos_jun = miembro.junta_vecinos_jun
             )
+            # ------------------------------------------------------
             return redirect("/index/" + str(request.session.get("rut")))
         return render(request, "principal/espacios/agregarEspacios.html", contexto)
     else:
@@ -446,12 +494,14 @@ def agregarEspacios(request):
 
 def verEspacios(request):
     if request.session.get("correo"):
-        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        miembro  = Miembro.objects.get(mie_rut=request.session.get("rut"))
         espacios = Espacio.objects.filter(junta_vecinos_jun=miembro.junta_vecinos_jun)
+        # ------------------------------------------------------
         contexto = {
             "miembro": miembro,
             "espacios": espacios
         }
+        # ------------------------------------------------------
         return render(request, "principal/espacios/verEspacios.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
@@ -461,19 +511,19 @@ def verEspacios(request):
 def agregarReserva(request,  esp_id):
     miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
     espacio = Espacio.objects.get(esp_id=esp_id)
-    form = AgregarReserva(request.POST or None)
+    form    = AgregarReserva(request.POST or None)
     # ------------------------------------------------------
     contexto = {
-        "form": form,
-        "miembro": miembro,
-        "espacio": espacio
+        "form"    : form,
+        "miembro" : miembro,
+        "espacio" : espacio
     }
     # ------------------------------------------------------
     if request.method == "POST":
         if form.is_valid():
             reservas_existente = Reserva.objects.filter(
-                miembro_mie=miembro,
-                res_fecha=request.POST["res_fecha"]
+                miembro_mie = miembro,
+                res_fecha   = request.POST["res_fecha"]
             )
             reservas_existente_2 = Reserva.objects.filter(
                 espacio_esp     = espacio,
@@ -499,9 +549,11 @@ def agregarReserva(request,  esp_id):
                 return redirect("/detalleReserva/" + str(reserva.res_id))
     return render(request, "principal/reservas/agregarReservas.html", contexto)
 
+
 def detalleReserva(request, res_id):
     reserva = Reserva.objects.get(res_id=res_id)
     miembro = reserva.miembro_mie
+    # ------------------------------------------------------
     contexto = {
         "reserva": reserva,
         "miembro": miembro
@@ -509,13 +561,17 @@ def detalleReserva(request, res_id):
     return render(request, "principal/reservas/detalleReserva.html", contexto)
 
 
+# ------------------------------------------------------
+# seccion de noticias
 def agregarNoticia(request):
-    form = AgregarNoticia(request.POST or None)
+    form    = AgregarNoticia(request.POST or None)
     miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+    # ------------------------------------------------------# ------------------------------------------------------
     contexto = {
-        "form": form,
-        "miembro": miembro
+        "form"    : form,
+        "miembro" : miembro
     }
+    # ------------------------------------------------------
     if request.method == 'POST':
         noticia = Noticia()
         noticia.not_titulo      = request.POST["not_titulo"]
@@ -524,5 +580,44 @@ def agregarNoticia(request):
         noticia.not_imagen      = request.FILES.get("not_imagen")
         noticia.miembro_mie     = miembro
         noticia.save()
+        # ------------------------------------------------------
         return HttpResponse("N0ticia agregada")
     return render(request, "principal/noticias/agregarNoticia.html", contexto)
+
+
+def verNoticias(request):
+    noticias = Noticia.objects.all()
+    miembro  = Miembro.objects.get(mie_rut=request.session.get("rut"))
+    # ------------------------------------------------------
+    contexto = {
+        "miembro": miembro,
+        "noticias": noticias
+    }
+    # ------------------------------------------------------
+    return render(request, "principal/noticias/verNoticias.html", contexto)
+# ------------------------------------------------------
+
+
+# ------------------------------------------------------
+def procesarPago(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    if request.method == "POST":
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types = ["card"],
+            line_items = [{
+                "price": "price_1O76IhHX3JM5WQuI6fw8oxZp",
+                "quantity": 1, 
+            }],
+            mode = "subscription",
+            success_url = "http://127.0.0.1:8000/pagoExitoso",
+            cancel_url = "http://127.0.0.1:8000/pagoCancelado"
+        )
+        return redirect(checkout_session.url, code=303)
+    return render(request, "pago.html")
+
+
+def pagoExitoso(request):
+    return HttpResponse("Pago exitoso")
+
+def pagoCancelado(request):
+    return HttpResponse("Pago cancelado")

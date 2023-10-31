@@ -2,18 +2,11 @@
 
 {% load static %}
 
-{% block content %}
-
 {% block title %}
 <title>Registrar Firma</title>
 {% endblock %}
 
-<!-- <form method="post" action="" onsubmit="prepareImg();">
-    {% csrf_token %}
-    <input id="inp_img" name="img" type="hidden" value="">
-    <input id="bt_upload" type="submit" value="Upload">
-</form> -->
-
+{% block content %}
 
 <div class="login-form">
     <form class="login" method="POST" onsubmit="prepareImg();">
@@ -22,7 +15,7 @@
                 <li class="breadcrumb-item text-success">Registra a tu Junta ✓</li>
                 <li class="breadcrumb-item text-success">Registrate</li>
                 <li class="breadcrumb-item active">Registra tu firma</li>
-                <li class="breadcrumb-item active">✅</li>
+                <li class="breadcrumb-item active">⌛</li>
             </ol>
         </nav>
         <h2>Dibuja tu firma</h2>
