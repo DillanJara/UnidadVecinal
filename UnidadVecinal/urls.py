@@ -36,6 +36,7 @@ urlpatterns = [
     path('registrarPresidente/<int:jun_id>', registrarPresidente, name="registrarPresidente"),
     #-------------------------------------------------------------------------
     path('index/<int:rut>', verIndex, name="index"),
+    path('verPerfil/<int:mie_rut>', verPerfil, name="verPerfil"),
     path('eliminarFamiliarMiembro/<int:fam_mie_rut>', eliminarFamiliarMiembro, name="eliminarFamiliarMiembro"),
     path('modificarFamiliarMiembro/<int:fam_mie_rut>', modificarFamiliarMiembro, name="modificarFamiliarMiembro"),
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
@@ -45,23 +46,23 @@ urlpatterns = [
     path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
     path('verSolicitudes/<int:mie_rut>', verSolicitudes, name="verSolicitudes"),
     #-------------------------------------------------------------------------
-    path("agregarProyecto/", agregarProyecto, name="agregarProyecto"),
+    path('agregarProyecto/', agregarProyecto, name="agregarProyecto"),
     #-------------------------------------------------------------------------
-    path("agregarEspacios/", agregarEspacios, name="agregarEspacios"),
-    path("verEspacios/", verEspacios, name="verEspacios"),
+    path('agregarEspacios/', agregarEspacios, name="agregarEspacios"),
+    path('verEspacios/', verEspacios, name="verEspacios"),
     #-------------------------------------------------------------------------
-    path("agregarReserva/<int:esp_id>", agregarReserva, name="agregarReserva"),
+    path('agregarReserva/<int:esp_id>', agregarReserva, name="agregarReserva"),
     path('detalleReserva/<int:res_id>', detalleReserva, name="detalleReserva"),
     #-------------------------------------------------------------------------
-    path("registrarFirma/<int:mie_rut>", firma, name="registraFirma"),
+    path('registrarFirma/<int:mie_rut>', firma, name="registraFirma"),
     #-------------------------------------------------------------------------
-    path("agregarNoticia", agregarNoticia, name="agregarNoticia"),
+    path('agregarNoticia', agregarNoticia, name="agregarNoticia"),
     path('verNoticias', verNoticias, name="verNoticias"),
     #-------------------------------------------------------------------------
+    path('verCuotas/', verCuotas, name="verCuotas"),
     path('procesar-pago/', procesarPago, name='procesar_pago'),
-    #path('stripe_webhook', stripe_webhook, name='stripe_webhook'),
-    path('pagoExitoso', pagoExitoso, name="pagoExitoso"),
-    path('pagoCancelado', pagoCancelado, name="pagoCancelado")
+    path('stripe_webhook', stripe_webhook, name='stripe_webhook'),
+    path('pagoRealizado/', pagoRealizado, name="pagoRealizado"),
 ]
 
 if settings.DEBUG:

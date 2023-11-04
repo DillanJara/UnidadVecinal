@@ -59,7 +59,7 @@
                             <a class="nav-link" href="{% url 'verNoticias' %}">Noticias</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Cuota Social</a>
+                            <a class="nav-link" href="{% url 'verCuotas' %}">Cuota Social</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'verEspacios' %}">Espacios</a>
@@ -84,7 +84,7 @@
                                         data-bs-toggle="dropdown" aria-expanded="false">Opciones</button>
                                     <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="btn_navbar">
                                         <li>
-                                            <a class="dropdown-item" href="#">Mi perfil</a>
+                                            <a class="dropdown-item" href="{% url 'verPerfil' miembro.mie_rut %} ">Mi perfil</a>
                                         </li>
                                         {% if miembro.cargo_car.car_id != 4 %}
                                         <li>
@@ -204,8 +204,7 @@
                 </div>
                 <div class="col-md-4 footer-box">
                     <img src="{% static 'img/logoSinLetras.png' %}">
-                    <p>Únete a las miles de personas que ahorran tiempo y organizan sus Juntas de Vecinos con
-                        UnionVecinal.</p>
+                    <p>Únete a las miles de personas que ahorran tiempo y organizan sus Juntas de Vecinos con Unidad Vecinal.</p>
                 </div>
                 <div class="col-md-4 footer-box">
                     <p><b>CONTÁCTANOS</b></p>

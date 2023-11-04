@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/vercuotas.css' %}">
+{% endblock %}
+
+{% block title %}
+<title>Cuotas Sociales</title>
+{% endblock %}
+
+{% block content %}
+<div class="contenedor-ver-cuotas container">
+    <div style="overflow-x: auto;">
+        <h1 class="text-center">Cuotas Pagadas</h1>
+        <table class="table table-light table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha de Pago</th>
+                    <th>Monto</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in cuotas %}
+                <tr>
+                    <td>{{ c.cuo_id }}</td>
+                    <td>{{ c.cuo_fecha_pago }}</td>
+                    <td>{{ c.cuo_monto }}</td>
+                    <td>{{ c.cuo_estado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="text-end mt-3">
+        <a href="{% url 'procesar_pago' %}" class="btn-pagar">Pagar</a>
+    </div>
+</div>
+{% endblock %}
+

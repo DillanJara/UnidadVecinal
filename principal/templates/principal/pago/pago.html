@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Pago Realizado</title>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="card border-light mt-3" style="max-width: 30rem;">
+        <div class="card-body">
+            Se ha realizado correctamente el pago de tu cuota
+            <div class="text-end mt-3">
+                <a href="{% url 'verCuotas' %}" class="btn-pagar">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

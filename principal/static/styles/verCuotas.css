@@ -1,0 +1,32 @@
+/* contenedor registro junta vecinos */
+
+.contenedor-ver-cuotas {
+    background-color: white;
+    border-radius: 10px;
+    padding: 3em;
+    margin: 3em;
+}
+
+/* contenedor registro junta vecinos */
+
+.btn-pagar {
+    border: 0;
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-color: #114c55;
+    color: #fff;
+    font-weight: 500;
+    margin: 2px;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    text-decoration: none;
+}
+
+.btn-pagar:hover {
+    background: #17285f;
+    color: #fff;
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

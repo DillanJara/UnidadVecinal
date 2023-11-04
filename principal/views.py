@@ -277,6 +277,17 @@ def verIndex(request, rut):
         return redirect("/login")
 
 
+def verPerfil(request, mie_rut):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=mie_rut)
+        contexto = {
+            "miembro": miembro
+        }
+        return render(request, "principal/verPerfil.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
 def eliminarFamiliarMiembro(request, fam_mie_rut):
     if request.session.get("correo"):
         familiarMiembro = FamiliarMiembro.objects.get(fam_mie_rut=fam_mie_rut)
@@ -362,57 +373,61 @@ def cambiarCargo(request, mie_rut, car_id):
 # ------------------------------------------------------
 # seccion de certificados
 def obtenerCetificado(request, mie_rut, cer_id):
-    miembro     = Miembro.objects.get(mie_rut=request.session.get("rut"))
-    certificado = Certificado.objects.get(cer_id=cer_id)
-    presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
-    # ------------------------------------------------------
-    if SolicitudCertificado.objects.filter(sol_cer_fecha=timezone.now().date(), miembro_mie=miembro).count() > 3:
-        return render(request, "certificados/error_solicitud.html")
-    # ------------------------------------------------------
-    solicitud = SolicitudCertificado()
-    solicitud.certificado_cer = certificado
-    solicitud.miembro_mie = miembro
-    # ------------------------------------------------------
-    if certificado.cer_id == 1:
-        if Miembro.objects.filter(mie_rut=mie_rut).count() > 0:
-            solicitante = Miembro.objects.get(mie_rut=mie_rut)
-            template = get_template("certificados/cert_residencia.html")
+    if request.session.get("correo"):
+        miembro     = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        certificado = Certificado.objects.get(cer_id=cer_id)
+        presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
+        # ------------------------------------------------------
+        if SolicitudCertificado.objects.filter(sol_cer_fecha=timezone.now().date(), miembro_mie=miembro).count() > 3:
+            return render(request, "certificados/error_solicitud.html")
+        # ------------------------------------------------------
+        solicitud = SolicitudCertificado()
+        solicitud.certificado_cer = certificado
+        solicitud.miembro_mie = miembro
+        # ------------------------------------------------------
+        if certificado.cer_id == 1:
+            if Miembro.objects.filter(mie_rut=mie_rut).count() > 0:
+                solicitante = Miembro.objects.get(mie_rut=mie_rut)
+                template = get_template("certificados/cert_residencia.html")
+            else:
+                solicitante = FamiliarMiembro.objects.get(fam_mie_rut=mie_rut)
+                solicitud.sol_cer_familiar = True
+                solicitud.sol_cer_rut_familiar = solicitante.fam_mie_rut
+                template = get_template("certificados/cert_residencia_familiar.html")
         else:
-            solicitante = FamiliarMiembro.objects.get(fam_mie_rut=mie_rut)
-            solicitud.sol_cer_familiar = True
-            solicitud.sol_cer_rut_familiar = solicitante.fam_mie_rut
-            template = get_template("certificados/cert_residencia_familiar.html")
+            solicitante = miembro
+            template = get_template("certificados/cert_socio.html")
+        # ------------------------------------------------------
+        solicitud.save()
+        # ------------------------------------------------------
+        context = {
+            "solicitante" : solicitante,
+            "miembro"     : miembro,
+            "presidente"  : presidente,
+            "certificado" : certificado,
+            "solicitud"   : solicitud
+        }
+        # ------------------------------------------------------
+        asunto = "Solicitud de " + certificado.cer_nombre
+        cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + ". El certificado se descargó directamente en el dispositivo."
+        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+        message.send()
+        # ------------------------------------------------------
+        html = template.render(context)
+        # ------------------------------------------------------
+        response = HttpResponse(content_type='application/pdf')
+        if certificado.cer_id == 1:
+            response['Content-Disposition'] = 'attachment; filename="Certificado_Residencia.pdf"'
+        else:
+            response['Content-Disposition'] = 'attachment; filename="Certificado_Socio.pdf"'
+        # ------------------------------------------------------
+        pisa_status = pisa.CreatePDF(html, dest=response)
+        if pisa_status.err:
+            return HttpResponse('No se pudo descargar tu certificado')
+        return response
     else:
-        solicitante = miembro
-        template = get_template("certificados/cert_socio.html")
-    # ------------------------------------------------------
-    solicitud.save()
-    # ------------------------------------------------------
-    context = {
-        "solicitante" : solicitante,
-        "miembro"     : miembro,
-        "presidente"  : presidente,
-        "certificado" : certificado,
-        "solicitud"   : solicitud
-    }
-    # ------------------------------------------------------
-    asunto = "Solicitud de " + certificado.cer_nombre
-    cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + ". El certificado se descargó directamente en el dispositivo."
-    message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
-    message.send()
-    # ------------------------------------------------------
-    html = template.render(context)
-    # ------------------------------------------------------
-    response = HttpResponse(content_type='application/pdf')
-    if certificado.cer_id == 1:
-        response['Content-Disposition'] = 'attachment; filename="Certificado_Residencia.pdf"'
-    else:
-        response['Content-Disposition'] = 'attachment; filename="Certificado_Socio.pdf"'
-    # ------------------------------------------------------
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('No se pudo descargar tu certificado')
-    return response
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 
 
 def verSolicitudes(request, mie_rut):
@@ -509,115 +524,174 @@ def verEspacios(request):
 
 
 def agregarReserva(request,  esp_id):
-    miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
-    espacio = Espacio.objects.get(esp_id=esp_id)
-    form    = AgregarReserva(request.POST or None)
-    # ------------------------------------------------------
-    contexto = {
-        "form"    : form,
-        "miembro" : miembro,
-        "espacio" : espacio
-    }
-    # ------------------------------------------------------
-    if request.method == "POST":
-        if form.is_valid():
-            reservas_existente = Reserva.objects.filter(
-                miembro_mie = miembro,
-                res_fecha   = request.POST["res_fecha"]
-            )
-            reservas_existente_2 = Reserva.objects.filter(
-                espacio_esp     = espacio,
-                res_fecha       = request.POST["res_fecha"],
-                res_hora_inicio = time.fromisoformat(request.POST["res_hora_inicio"])
-            )
-            if reservas_existente.exists():
-                contexto["error"] = True
-                return render(request, "principal/reservas/agregarReservas.html", contexto)
-            # ------------------------------------------------------
-            elif reservas_existente_2.exists():
-                contexto["error2"] = True
-                return render(request, "principal/reservas/agregarReservas.html", contexto)
-            # ------------------------------------------------------
-            else:
-                reserva = Reserva()
-                reserva.res_fecha = request.POST["res_fecha"]
-                reserva.res_hora_inicio = time.fromisoformat(request.POST["res_hora_inicio"])
-                reserva.res_hora_fin = (datetime.combine(datetime.min, reserva.res_hora_inicio) + timedelta(hours=1)).time()
-                reserva.espacio_esp = espacio
-                reserva.miembro_mie = miembro
-                reserva.save()
-                return redirect("/detalleReserva/" + str(reserva.res_id))
-    return render(request, "principal/reservas/agregarReservas.html", contexto)
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        espacio = Espacio.objects.get(esp_id=esp_id)
+        form    = AgregarReserva(request.POST or None)
+        # ------------------------------------------------------
+        contexto = {
+            "form"    : form,
+            "miembro" : miembro,
+            "espacio" : espacio
+        }
+        # ------------------------------------------------------
+        if request.method == "POST":
+            if form.is_valid():
+                reservas_existente = Reserva.objects.filter(
+                    miembro_mie = miembro,
+                    res_fecha   = request.POST["res_fecha"]
+                )
+                reservas_existente_2 = Reserva.objects.filter(
+                    espacio_esp     = espacio,
+                    res_fecha       = request.POST["res_fecha"],
+                    res_hora_inicio = time.fromisoformat(request.POST["res_hora_inicio"])
+                )
+                if reservas_existente.exists():
+                    contexto["error"] = True
+                    return render(request, "principal/reservas/agregarReservas.html", contexto)
+                # ------------------------------------------------------
+                elif reservas_existente_2.exists():
+                    contexto["error2"] = True
+                    return render(request, "principal/reservas/agregarReservas.html", contexto)
+                # ------------------------------------------------------
+                else:
+                    reserva = Reserva()
+                    reserva.res_fecha = request.POST["res_fecha"]
+                    reserva.res_hora_inicio = time.fromisoformat(request.POST["res_hora_inicio"])
+                    reserva.res_hora_fin = (datetime.combine(datetime.min, reserva.res_hora_inicio) + timedelta(hours=1)).time()
+                    reserva.espacio_esp = espacio
+                    reserva.miembro_mie = miembro
+                    reserva.save()
+                    return redirect("/detalleReserva/" + str(reserva.res_id))
+        return render(request, "principal/reservas/agregarReservas.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 
 
 def detalleReserva(request, res_id):
-    reserva = Reserva.objects.get(res_id=res_id)
-    miembro = reserva.miembro_mie
-    # ------------------------------------------------------
-    contexto = {
-        "reserva": reserva,
-        "miembro": miembro
-    }
-    return render(request, "principal/reservas/detalleReserva.html", contexto)
+    if request.session.get("correo"):
+        reserva = Reserva.objects.get(res_id=res_id)
+        miembro = reserva.miembro_mie
+        # ------------------------------------------------------
+        contexto = {
+            "reserva": reserva,
+            "miembro": miembro
+        }
+        return render(request, "principal/reservas/detalleReserva.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 
 
 # ------------------------------------------------------
 # seccion de noticias
 def agregarNoticia(request):
-    form    = AgregarNoticia(request.POST or None)
-    miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
-    # ------------------------------------------------------# ------------------------------------------------------
-    contexto = {
-        "form"    : form,
-        "miembro" : miembro
-    }
-    # ------------------------------------------------------
-    if request.method == 'POST':
-        noticia = Noticia()
-        noticia.not_titulo      = request.POST["not_titulo"]
-        noticia.not_subtitulo   = request.POST["not_subtitulo"]
-        noticia.not_descripcion = request.POST["not_descripcion"]
-        noticia.not_imagen      = request.FILES.get("not_imagen")
-        noticia.miembro_mie     = miembro
-        noticia.save()
+    if request.session.get("correo"):
+        form    = AgregarNoticia(request.POST or None)
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        # ------------------------------------------------------# ------------------------------------------------------
+        contexto = {
+            "form"    : form,
+            "miembro" : miembro
+        }
         # ------------------------------------------------------
-        return HttpResponse("N0ticia agregada")
-    return render(request, "principal/noticias/agregarNoticia.html", contexto)
+        if request.method == 'POST':
+            noticia = Noticia()
+            noticia.not_titulo      = request.POST["not_titulo"]
+            noticia.not_subtitulo   = request.POST["not_subtitulo"]
+            noticia.not_descripcion = request.POST["not_descripcion"]
+            noticia.not_imagen      = request.FILES.get("not_imagen")
+            noticia.miembro_mie     = miembro
+            noticia.save()
+            # ------------------------------------------------------
+            return HttpResponse("N0ticia agregada")
+        return render(request, "principal/noticias/agregarNoticia.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 
 
 def verNoticias(request):
-    noticias = Noticia.objects.all()
-    miembro  = Miembro.objects.get(mie_rut=request.session.get("rut"))
-    # ------------------------------------------------------
-    contexto = {
-        "miembro": miembro,
-        "noticias": noticias
-    }
-    # ------------------------------------------------------
-    return render(request, "principal/noticias/verNoticias.html", contexto)
+    if request.session.get("correo"):
+        noticias = Noticia.objects.all()
+        miembro  = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        # ------------------------------------------------------
+        contexto = {
+            "miembro": miembro,
+            "noticias": noticias
+        }
+        # ------------------------------------------------------
+        return render(request, "principal/noticias/verNoticias.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 # ------------------------------------------------------
 
 
 # ------------------------------------------------------
+# seccion de pago de cuotas
+def verCuotas(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        cuotas = CuotaSocial.objects.filter(miembro_mie=miembro)
+        contexto = {
+            'miembro': miembro,
+            'cuotas': cuotas
+        }
+        return render(request, "principal/pago/verCuotas.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
 def procesarPago(request):
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    if request.method == "POST":
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types = ["card"],
-            line_items = [{
-                "price": "price_1O76IhHX3JM5WQuI6fw8oxZp",
-                "quantity": 1, 
-            }],
-            mode = "subscription",
-            success_url = "http://127.0.0.1:8000/pagoExitoso",
-            cancel_url = "http://127.0.0.1:8000/pagoCancelado"
-        )
-        return redirect(checkout_session.url, code=303)
-    return render(request, "pago.html")
+    if request.session.get("correo"):
+        today = datetime.today()
+        mesActual = today.month
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        if CuotaSocial.objects.filter(cuo_fecha_pago__month=mesActual, miembro_mie=miembro).count() > 0:
+            return render(request, 'principal/pago/mensajePago.html', {"miembro": miembro})
+        else:
+            return redirect('https://buy.stripe.com/test_fZe03gbwZfqAdcQ8ww')
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 
+@csrf_exempt
+def stripe_webhook(request):
+	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+	time.sleep(10)
+	payload = request.body
+	signature_header = request.META['HTTP_STRIPE_SIGNATURE']
+	event = None
+	try:
+		event = stripe.Webhook.construct_event(
+			payload, signature_header, settings.STRIPE_WEBHOOK_SECRET_TEST
+		)
+	except ValueError as e:
+		return HttpResponse(status=400)
+	except stripe.error.SignatureVerificationError as e:
+		return HttpResponse(status=400)
+	if event['type'] == 'checkout.session.completed':
+		session = event['data']['object']
+		session_id = session.get('id', None)
+		time.sleep(15)
+	return HttpResponse(status=200)
 
-def pagoExitoso(request):
-    return HttpResponse("Pago exitoso")
-
-def pagoCancelado(request):
-    return HttpResponse("Pago cancelado")
+def pagoRealizado(request):
+    if request.session.get("correo"):
+        miembro                    = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        cuotaSocial                = CuotaSocial()
+        cuotaSocial.cuo_monto      = 5000
+        cuotaSocial.cuo_fecha_pago = datetime.today()
+        cuotaSocial.cuo_estado     = 'Pagado'
+        cuotaSocial.miembro_mie    = miembro
+        cuotaSocial.save()
+        contexto = {
+            'miembro': miembro,
+        }
+        return render(request, "principal/pago/pago.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
