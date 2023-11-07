@@ -64,6 +64,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'verEspacios' %}">Espacios</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'verActividades' %}">Actividades</a>
+                        </li>
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">Servicios</a>
@@ -95,6 +98,9 @@
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="{% url 'agregarProyecto' %}">Proponer Proyecto</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'agregarActividad' %}">Agregar Actividad</a>
                                         </li>
                                         {% endif %}
                                         <li>

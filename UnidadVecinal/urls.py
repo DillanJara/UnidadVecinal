@@ -58,11 +58,18 @@ urlpatterns = [
     #-------------------------------------------------------------------------
     path('agregarNoticia', agregarNoticia, name="agregarNoticia"),
     path('verNoticias', verNoticias, name="verNoticias"),
+    path('detalleNoticia/<int:not_id>', detalleNoticia, name="detalleNoticia"),
     #-------------------------------------------------------------------------
     path('verCuotas/', verCuotas, name="verCuotas"),
     path('procesar-pago/', procesarPago, name='procesar_pago'),
     path('stripe_webhook', stripe_webhook, name='stripe_webhook'),
     path('pagoRealizado/', pagoRealizado, name="pagoRealizado"),
+    #-------------------------------------------------------------------------
+    path('agregarActividad/', agregarActividades, name="agregarActividad"),
+    path('verActividades/', verActividades, name="verActividades"),
+    path('detalleActividad/<int:act_id>', detalleActividad, name="detalleActividad"),
+    #-------------------------------------------------------------------------
+    path('detalleAsistencia/<int:asis_id>', detalleAsistencia, name="detalleAsistencia")
 ]
 
 if settings.DEBUG:

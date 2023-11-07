@@ -1,20 +1,4 @@
-
 from django.db import models
-
-class Actividad(models.Model):
-    act_id                 = models.AutoField(primary_key=True)
-    act_fecha              = models.DateField()
-    act_descripcion        = models.CharField(max_length=30)
-    act_cupo               = models.IntegerField()
-    act_imagen             = models.CharField(max_length=300)
-    act_cuota              = models.IntegerField(default=0, null=True)
-    tipo_actividad_tip_act = models.ForeignKey('TipoActividad', models.PROTECT, db_column='TIPO_ACTIVIDAD_tip_act_id')
-
-
-class Asistencia(models.Model):
-    asis_id         = models.AutoField(primary_key=True)
-    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id')
-    miembro_mie     = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
 class Cargo(models.Model):
@@ -138,6 +122,9 @@ class TipoActividad(models.Model):
     tip_act_id     = models.AutoField(primary_key=True)
     tip_act_nombre = models.CharField(max_length=30)
 
+    def __str__(self) -> str:
+        return self.tip_act_nombre
+
 
 class Certificado(models.Model):
     cer_id     = models.AutoField(primary_key=True)
@@ -151,3 +138,19 @@ class SolicitudCertificado(models.Model):
     certificado_cer      = models.ForeignKey(Certificado, models.PROTECT, db_column='CERTIFICADO_cer_id')
     sol_cer_familiar     = models.BooleanField(default=False)
     sol_cer_rut_familiar = models.IntegerField(null=True)
+
+class Actividad(models.Model):
+    act_id                 = models.AutoField(primary_key=True)
+    act_fecha              = models.DateField()
+    act_descripcion        = models.CharField(max_length=30)
+    act_cupo               = models.IntegerField()
+    act_cuota              = models.IntegerField(default=0, null=True)
+    tipo_actividad_tip_act = models.ForeignKey('TipoActividad', models.PROTECT, db_column='TIPO_ACTIVIDAD_tip_act_id')
+    junta_vecinos_jun      = models.ForeignKey('JuntaVecinos', on_delete=models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
+
+
+class Asistencia(models.Model):
+    asis_id         = models.AutoField(primary_key=True)
+    asis_cantidad   = models.IntegerField(default=1)
+    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id')
+    miembro_mie     = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')

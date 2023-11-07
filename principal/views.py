@@ -6,6 +6,7 @@ from .forms.proyecto import *
 from .forms.espacios import *
 from .forms.reservas import *
 from .forms.noticias import *
+from .forms.actividades import *
 import hashlib
 import stripe
 from django.conf import settings
@@ -478,6 +479,18 @@ def agregarProyecto(request):
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
 
+# REALIZAR
+# REALIZAR
+# REALIZAR
+# REALIZAR
+# REALIZAR REALIZAR
+def verProyectos(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        proyectos = Proyecto.objects.filter(miembro_mie__junta_vecinos_jun=miembro.junta_vecinos_jun)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 
 # ------------------------------------------------------
 # seccion de espacios y reservas
@@ -605,7 +618,7 @@ def agregarNoticia(request):
             noticia.miembro_mie     = miembro
             noticia.save()
             # ------------------------------------------------------
-            return HttpResponse("N0ticia agregada")
+            return redirect("/verNoticias")
         return render(request, "principal/noticias/agregarNoticia.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
@@ -614,8 +627,8 @@ def agregarNoticia(request):
 
 def verNoticias(request):
     if request.session.get("correo"):
-        noticias = Noticia.objects.all()
         miembro  = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        noticias = Noticia.objects.filter(miembro_mie__junta_vecinos_jun=miembro.junta_vecinos_jun)
         # ------------------------------------------------------
         contexto = {
             "miembro": miembro,
@@ -623,6 +636,20 @@ def verNoticias(request):
         }
         # ------------------------------------------------------
         return render(request, "principal/noticias/verNoticias.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def detalleNoticia(request, not_id):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        noticia = Noticia.objects.get(not_id=not_id)
+        contexto = {
+            "miembro": miembro,
+            "noticia": noticia
+        }
+        return render(request, "principal/noticias/detalleNoticia.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
@@ -695,3 +722,86 @@ def pagoRealizado(request):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+# ------------------------------------------------------
+
+
+# ------------------------------------------------------
+# seccion de actividades
+def agregarActividades(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        form = AgregarActividad(request.POST or None)
+        contexto = {
+            "miembro": miembro,
+            "form": form
+        }
+        if request.method == 'POST':
+            if form.is_valid:
+                actividad = Actividad()
+                actividad.act_fecha = request.POST["act_fecha"]
+                actividad.act_descripcion = request.POST["act_descripcion"]
+                actividad.act_cupo = request.POST["act_cupo"]
+                if len(request.POST["act_cuota"]) == 0:
+                    actividad.act_cuota = 0
+                else:
+                    actividad.act_cuota = request.POST["act_cuota"]
+                actividad.tipo_actividad_tip_act = TipoActividad.objects.get(tip_act_id=request.POST["tipo_actividad_tip_act"])
+                actividad.junta_vecinos_jun = miembro.junta_vecinos_jun
+                actividad.save()
+                return HttpResponse("actividad guardada")
+        return render(request, "principal/actividades/registrarActividades.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+def verActividades(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        actividades = Actividad.objects.filter(junta_vecinos_jun=miembro.junta_vecinos_jun, act_fecha__gt=datetime.now())
+        contexto = {
+            "miembro": miembro,
+            "actividades": actividades
+        }
+        return render(request, "principal/actividades/verActividades.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def detalleActividad(request, act_id):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        actividad = Actividad.objects.get(act_id=act_id)
+        contexto = {
+            "miembro": miembro,
+            "actividad": actividad
+        }
+        if Asistencia.objects.filter(actividad_act=actividad, miembro_mie=miembro):
+            contexto["validacionAsistencia"] = True
+        if request.method == "POST":
+            actividad.act_cupo = actividad.act_cupo - int(request.POST["cantidad_asistentes"])
+            actividad.save()
+            asistencia = Asistencia()
+            asistencia.asis_cantidad = int(request.POST["cantidad_asistentes"])
+            asistencia.miembro_mie = miembro
+            asistencia.actividad_act = actividad
+            asistencia.save()
+            return redirect("detalleAsistencia/" + str(asistencia.asis_id))
+        return render(request, "principal/actividades/detalleActividad.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+def detalleAsistencia(request, asis_id):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        asistencia = Asistencia.objects.get(asis_id=asis_id)
+        contexto = { 
+            "miembro": miembro,
+            "asistencia": asistencia
+        }
+        return render(request, "principal/actividades/detalleasistencia.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+# ------------------------------------------------------
