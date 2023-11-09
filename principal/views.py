@@ -15,12 +15,14 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from datetime import datetime, time, timedelta
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import logout
 
 # Create your views here.
 
 # ------------------------------------------------------
 # seccion de inicio
 def verHome(request):
+    logout(request)
     if request.session.get("errorLogin"):
         del request.session["errorLogin"]
         request.session.modified = True
@@ -289,6 +291,7 @@ def verPerfil(request, mie_rut):
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
 
+
 def eliminarFamiliarMiembro(request, fam_mie_rut):
     if request.session.get("correo"):
         familiarMiembro = FamiliarMiembro.objects.get(fam_mie_rut=fam_mie_rut)
@@ -368,6 +371,22 @@ def cambiarCargo(request, mie_rut, car_id):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+
+
+def enviarAvisos(request):
+    miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+    if request.method == "POST":
+        asunto = request.POST["asunto"]
+        mensaje = request.POST["mensaje"]
+        destinatarios = Miembro.objects.filter(junta_vecinos_jun=miembro.junta_vecinos_jun)
+        for d in destinatarios:
+            encabezado = "Sr./Sra. " + d.mie_nombre + " " + d.mie_ap_paterno + " nuestro/a " + miembro.cargo_car.car_nombre + " " + miembro.mie_nombre + " " + miembro.mie_ap_paterno + " le informa lo siguiente:"
+
+            email = EmailMultiAlternatives(asunto, encabezado + "\n" + mensaje, settings.EMAIL_HOST_USER, [d.mie_correo])
+            email.send()
+        return redirect("/index/" + str(request.session.get("rut")))
+
+
 # ------------------------------------------------------
 
 
@@ -479,19 +498,29 @@ def agregarProyecto(request):
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
 
-# REALIZAR
-# REALIZAR
-# REALIZAR
-# REALIZAR
-# REALIZAR REALIZAR
+
 def verProyectos(request):
     if request.session.get("correo"):
         miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
         proyectos = Proyecto.objects.filter(miembro_mie__junta_vecinos_jun=miembro.junta_vecinos_jun)
+        estadoProyectos = EstadoProyecto.objects.all()
+        contexto = {
+            "miembro": miembro,
+            "proyectos": proyectos,
+            "estadoProyectos": estadoProyectos
+        }
+        return render(request, "principal/proyecto/verProyectos.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
 
+
+def cambiarEstadoProyecto(request, proy_id, est_proy_id):
+    proyecto = Proyecto.objects.get(proy_id=proy_id)
+    estadoProyecto = EstadoProyecto.objects.get(est_proy_id=est_proy_id)
+    proyecto.estado_proyecto_est_proy = estadoProyecto
+    proyecto.save()
+    return redirect("/verProyectos")
 # ------------------------------------------------------
 # seccion de espacios y reservas
 def agregarEspacios(request):
@@ -706,6 +735,7 @@ def stripe_webhook(request):
 		time.sleep(15)
 	return HttpResponse(status=200)
 
+
 def pagoRealizado(request):
     if request.session.get("correo"):
         miembro                    = Miembro.objects.get(mie_rut=request.session.get('rut'))
@@ -754,6 +784,7 @@ def agregarActividades(request):
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
 
+
 def verActividades(request):
     if request.session.get("correo"):
         miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
@@ -791,6 +822,7 @@ def detalleActividad(request, act_id):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+
 
 def detalleAsistencia(request, asis_id):
     if request.session.get("correo"):

@@ -118,6 +118,33 @@
                     </div>
                 </div>
             </div>
+            {% if miembro.cargo_car.car_id != 4 %}
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card-avisos">
+                        <div class="card-header text-center header-fam">
+                            <p class="card-fam-title">Dar Aviso</p>
+                        </div>
+                        <div class="card-body">
+                            <form action="{% url 'enviarAviso' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="asunto" class="form-label">Asunto</label>
+                                    <input type="text" class="form-control" id="asunto" name="asunto">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="mensaje" class="form-label">Mensaje</label>
+                                    <textarea class="form-control" id="mensaje" rows="3" name="mensaje"></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn-enviar-correo">Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </section>

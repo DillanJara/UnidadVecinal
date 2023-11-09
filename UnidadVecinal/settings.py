@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_browser_reload',
     'django_bootstrap5',
-    'principal'
+    'principal',
+    'administracion',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +151,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'principal')
 
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
+
+LOGIN_REDIRECT_URL = 'inicioAdministracion'
+LOGOUT_REDIRECT_URL = 'inicioAdministracion'

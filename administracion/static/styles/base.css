@@ -1,0 +1,177 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #D9D9D9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0F7585;
+    border-radius: 10px;
+}
+
+/* navbar start */
+
+#nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar {
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    padding: 0 !important;
+}
+
+.navbar-brand img {
+    height: 50px;
+    padding-left: 20px;
+}
+
+.navbar-nav li {
+    padding: 0 10px;
+}
+
+.navbar-nav .nav-link {
+    color: #fff !important;
+    font-weight: 600;
+    position: relative;
+    transition: all 0.4s;
+}
+
+.nav-item .nav-link::after {
+    content: '';
+    height: 2px;
+    width: 100%;
+    background: #212121;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: all 0.2s;
+    pointer-events: none;
+}
+
+.nav-item .nav-link:hover::after,
+.nav-item .nav-link:focus::after {
+    opacity: 1;
+}
+
+#nav-bar .btn-inicio-sesion {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-color: #114c55;
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#nav-bar .btn-inicio-sesion:hover {
+    background: #17285f;
+    color: #fff;
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#nav-bar .btn-cerrar-sesion {
+    box-shadow: none;
+    padding: 8px 25px;
+    background: #114c55;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 15px;
+    font-weight: 600;
+    margin: 2px;
+}
+
+#nav-bar .btn-crear-cuenta {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-color: #640888;
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#nav-bar .btn-crear-cuenta:hover {
+    background: #41049b;
+    color: #fff;
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+/* navbar end*/
+
+
+/* footer section start */
+
+#footer {
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    bottom: 0;
+}
+
+.footer-img {
+    width: 100%;
+    height: 70px;
+}
+
+.footer-box {
+    padding: 20px;
+}
+
+.footer-box img {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.footer-box .bi {
+    margin-right: 8px;
+    font-size: 18px;
+    text-align: center;
+    padding-top: 7px;
+    border-radius: 2px;
+}
+
+.footer-box a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.footer-box a:hover {
+    color: #D9D9D9;
+}
+
+.copyright {
+    color: #D9D9D9;
+    padding-bottom: 30px;
+}
+
+/* footer section end */
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

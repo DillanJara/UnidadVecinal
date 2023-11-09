@@ -75,3 +75,29 @@
     -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
 }
+
+#home-miembro .card-avisos {
+    box-shadow: 10px 10px 30px #bebebe;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    font-size: 18px;
+    width: 100%;
+}
+
+.btn-enviar-correo {
+    border: 0;
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 500;
+}
+
+.btn-.btn-enviar-correo:hover {
+    background: #41049b;
+    color: #fff;
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

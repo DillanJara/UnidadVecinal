@@ -1,0 +1,255 @@
+
+<head>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/logoNegro.png' %}">
+    <title>Juntas de Vecinos</title>
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- bootstrap links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- bootstrap links -->
+    <!-- fonts links -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <!-- fonts links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <section class="container">
+        <div class="d-flex justify-content-center">
+            <img src="{% static 'img/logoLogin.png' %}" class="img-login">
+        </div>
+        <div>
+            <h1 class="text-center">Bienvenido {{ user.username}}</h1>
+            <div style="overflow-x: auto;">
+                <table class="table" style="overflow-x: auto;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rut</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Correo</th>
+                            <th scope="col">Telefono</th>
+                            <th scope="col">Direccion</th>
+                            <th scope="col">Comuna</th>
+                            <th colspan="2">Junta de Vecinos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in miembro %}
+                        <tr>
+                            <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
+                            <td>{{ m.mie_nombre }} {{ m.mie_ap_paterno }} {{ m.mie_ap_materno }}</td>
+                            <td>{{ m.mie_correo }}</td>
+                            <td>{{ m.mie_telefono }}</td>
+                            <td>{{ m.mie_direccion }}</td>
+                            <td>{{ m.junta_vecinos_jun.comuna_com.com_nombre }}</td>
+                            <td>{{ m.junta_vecinos_jun.jun_nombre }}</td>
+                            <td>
+                                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_{{ m.mie_rut }}">
+                                    Más Informacion
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalToggle_{{ m.mie_rut }}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Datos del Presidente</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-5">Rut: </div>
+                                                <div class="col-7">
+                                                    {{ m.mie_rut }}-{{ m.mie_dv }}
+                                                </div>
+                                                <div class="col-5">Nombre Presidente: </div>
+                                                <div class="col-7">
+                                                    {{ m.mie_nombre }} {{ m.mie_ap_paterno }} {{ m.mie_ap_materno }}
+                                                </div>
+                                                <div class="col-5">Fecha Nacimiento: </div>
+                                                <div class="col-7">
+                                                    {{ m.mie_fecha_nacimiento }}
+                                                </div>
+                                                <div class="col-5">Telefono: </div>
+                                                <div class="col-7">
+                                                    {{ m.mie_telefono }}
+                                                </div>
+                                                <div class="col-5">Correo: </div>
+                                                <div class="col-7">
+                                                    {{ m.mie_correo }}
+                                                </div>
+                                                <div class="col-5">Estado: </div>
+                                                <div class="col-7">
+                                                    {% if m.mie_estado == 'Habilitado' %}
+                                                        {{ m.mie_estado }}✅
+                                                    {% else %}
+                                                        {{ m.mie_estado }}❌
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-5">Cargo: </div>
+                                                <div class="col-7">
+                                                    {{ m.cargo_car.car_nombre }}
+                                                </div>
+                                                <div class="col-5">Firma: </div>
+                                                <div class="col-7">
+                                                    <button class="btn btn-link" data-bs-target="#exampleModalToggle_firma_{{ m.mie_rut }}" data-bs-toggle="modal" data-bs-dismiss="modal">
+                                                        Ver Firma
+                                                    </button>
+                                                </div>
+                                                <div class="col-5">Documento: </div>
+                                                <div class="col-7">
+                                                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_documento_{{ m.mie_rut }}" data-bs-dismiss="modal">
+                                                        Ver Documento
+                                                    </button>
+                                                </div>
+                                                <hr class="dropdown-divider">
+                                                <h5 class="modal-title" id="exampleModalLabel">Datos de la Junta de Vecinos</h5>
+                                                <div class="col-5">Nombre de la Junta de Vecinos: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_nombre }}
+                                                </div>
+                                                <div class="col-5">Rol Municipal: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_rol_municipal }}
+                                                </div>
+                                                <div class="col-5">Directiva: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_directiva }}
+                                                </div>
+                                                <div class="col-5">Fecha Fundacion: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_fecha_fundacion }}
+                                                </div>
+                                                <div class="col-5">Unidad Territorial: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_nombre_villa }}
+                                                </div>
+                                                <div class="col-5">Rol Municipal: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_rol_municipal }}
+                                                </div>
+                                                <div class="col-5">Direccion Casa Central: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_direccion }}
+                                                </div>
+                                                <div class="col-5">Telefono de Contacto: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_telefono }}
+                                                </div>
+                                                <div class="col-5">Correo de Contacto: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.jun_correo }}
+                                                </div>
+                                                <div class="col-5">Habilitada: </div>
+                                                <div class="col-7">
+                                                    {% if m.junta_vecinos_jun.jun_habilitada %}
+                                                    ✅
+                                                    {% else %}
+                                                    ❌
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-5">Comuna: </div>
+                                                <div class="col-7">
+                                                    {{ m.junta_vecinos_jun.comuna_com.com_nombre }}
+                                                </div>
+                                                <div class="col-5">Certificado de Vigencia: </div>
+                                                <div class="col-7">
+                                                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModalToggle_certificado_{{ m.junta_vecinos_jun.jun_id }}" data-bs-dismiss="modal">
+                                                        Ver Certificado
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <hr class="dropdown-divider">
+                                            {% if m.junta_vecinos_jun.jun_habilitada and m.mie_estado == 'Habilitado' %}
+                                            <div class="text-end p-3">
+                                                <a class="btn btn-outline-danger" href="{% url 'deshabilitarJunta' m.mie_rut m.junta_vecinos_jun.jun_id %}">Deshabilitar</a>
+                                            </div>
+                                            {% else %}
+                                            <div class="text-end p-3">
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <a class="btn btn-outline-success" href="{% url 'habilitarJunta' m.mie_rut m.junta_vecinos_jun.jun_id %}">Habilitar</a>
+                                                    <a class="btn btn-outline-warning" href="{% url 'rechazarJunta' m.mie_rut m.junta_vecinos_jun.jun_id %}">Rechazar</a>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modals de imagenes-->
+                        <div class="modal fade" id="exampleModalToggle_firma_{{ m.mie_rut }}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+                            tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalToggleLabel">Firma</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img class="img-fluid" src="{{ m.mie_firma }}" alt="firma">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-bs-target="#exampleModalToggle_{{ m.mie_rut }}" data-bs-toggle="modal" data-bs-dismiss="modal">Volver</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="exampleModalToggle_documento_{{ m.mie_rut }}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+                            tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalToggleLabel">Firma</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img class="img-fluid" src="/media/{{ m.mie_documento }}" alt="firma">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-bs-target="#exampleModalToggle_{{ m.mie_rut }}" data-bs-toggle="modal" data-bs-dismiss="modal">Volver</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="exampleModalToggle_certificado_{{ m.junta_vecinos_jun.jun_id }}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+                            tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalToggleLabel">Firma</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img class="img-fluid" src="/media/{{ m.junta_vecinos_jun.jun_certificado_vigencia }}" alt="firma">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-bs-target="#exampleModalToggle_{{ m.mie_rut }}" data-bs-toggle="modal" data-bs-dismiss="modal">Volver</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-end p-3">
+                <a href="{% url 'salir' %}">Cerrar Sesion</a>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>

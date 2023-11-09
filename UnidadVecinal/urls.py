@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', verHome, name="home"),
     #-------------------------------------------------------------------------
+    path('administracion/', include('administracion.urls')),
+    #-------------------------------------------------------------------------
     path('login/', verLogin, name="login"),
     path('validarLogin', validarLogin, name="validarLogin"),
     path('cerrarSesion', cerrarSesion, name="cerrarSesion"),
@@ -43,10 +45,14 @@ urlpatterns = [
     path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros"),
     path('cambiarCargo/<int:mie_rut>/<int:car_id>', cambiarCargo, name="cambiarCargo"),
     #-------------------------------------------------------------------------
+    path('enviarAviso', enviarAvisos, name="enviarAviso"),
+    #-------------------------------------------------------------------------
     path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
     path('verSolicitudes/<int:mie_rut>', verSolicitudes, name="verSolicitudes"),
     #-------------------------------------------------------------------------
     path('agregarProyecto/', agregarProyecto, name="agregarProyecto"),
+    path('verProyectos/', verProyectos, name="verProyectos"),
+    path('cambiarEstadoProyecto/<int:proy_id>/<int:est_proy_id>', cambiarEstadoProyecto, name="cambiarEstadoProyecto"),
     #-------------------------------------------------------------------------
     path('agregarEspacios/', agregarEspacios, name="agregarEspacios"),
     path('verEspacios/', verEspacios, name="verEspacios"),
