@@ -752,6 +752,22 @@ def pagoRealizado(request):
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
+
+
+def verPagos(request):
+    if request.session.get('correo'):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        miembros = Miembro.objects.filter(junta_vecinos_jun=miembro.junta_vecinos_jun)
+        cuotas = CuotaSocial.objects.all()
+        contexto = {
+            "miembro": miembro,
+            "cuotas": cuotas,
+            "miembros": miembros
+        }
+        return render(request, "principal/pago/verPagos.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
 # ------------------------------------------------------
 
 

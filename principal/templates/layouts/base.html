@@ -106,6 +106,11 @@
                                             <a class="dropdown-item" href="{% url 'agregarActividad' %}">Agregar Actividad</a>
                                         </li>
                                         {% endif %}
+                                        {% if miembro.cargo_car.car_id == 3 %}
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'verPagos' %}">Ver Pagos</a>
+                                        </li>
+                                        {% endif %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'verSolicitudes' miembro.mie_rut %}">Solicitudes</a>
                                         </li>
