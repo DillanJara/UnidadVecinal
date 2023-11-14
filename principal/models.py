@@ -139,6 +139,7 @@ class SolicitudCertificado(models.Model):
     sol_cer_familiar     = models.BooleanField(default=False)
     sol_cer_rut_familiar = models.IntegerField(null=True)
 
+
 class Actividad(models.Model):
     act_id                 = models.AutoField(primary_key=True)
     act_fecha              = models.DateField()

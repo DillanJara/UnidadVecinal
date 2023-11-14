@@ -9,7 +9,7 @@ class AgregarEspacio(forms.ModelForm):
 
     esp_nombre = forms.CharField(max_length=30, label="Nombre Espacio")
     esp_direccion = forms.CharField(max_length=50, label="Direccion")
-    esp_telefono = forms.RegexField(regex=r'^\+569\d{8}$', max_length=12, label="Telefono", error_messages={
+    esp_telefono = forms.RegexField(regex=r'^\+569\d{8}$', max_length=12, label="Telefono de Contacto", error_messages={
             "formato": "El formato del numero debe ser +56912345678"
         })
 

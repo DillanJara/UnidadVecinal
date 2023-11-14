@@ -24,6 +24,7 @@ urlpatterns = [
     path('', verHome, name="home"),
     #-------------------------------------------------------------------------
     path('administracion/', include('administracion.urls')),
+    path('api/', include('rest_api.urls')),
     #-------------------------------------------------------------------------
     path('login/', verLogin, name="login"),
     path('validarLogin', validarLogin, name="validarLogin"),

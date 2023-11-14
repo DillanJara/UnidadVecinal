@@ -38,7 +38,9 @@
                     </div>
                 </div>
                 {% if validacionAsistencia %}
-                    <p class="text-form text-end">Ya confirmaste tu asistencia para este evento</p>
+                    <p class="form-text text-end">Ya confirmaste tu asistencia para este evento</p>
+                {% elif actividad.act_cupo == 0%}
+                    <p class="form-text text-end">Ya no quedan cupos disponibles para esta actividad</p>
                 {% else %}
                 <form method="POST">
                     {% csrf_token %}
@@ -52,6 +54,14 @@
                         </select>
                         <button class="btn btn-link" type="submit">Confirmar Asistencia</button>
                     </div>
+                    {% if validacionCupo %}
+                    <div>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            La cantidad seleccionada de asistentes  <strong>supera los cupos disponibles</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    {% endif %}
                 </form>
                 {% endif %}
             </div>

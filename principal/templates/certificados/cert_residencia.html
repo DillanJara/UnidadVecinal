@@ -38,9 +38,13 @@
 </style>
 
 <body>
-    <p id="nro_certificado">Nro Solicitud: {{ solicitud.sol_cer_id }}</p>
+    <p id="nro_certificado">
+        Nro Solicitud: {{ solicitud.sol_cer_id }}
+        <br>
+        Rut: {{ miembro.mie_rut }}-{{ miembro.mie_dv }}
+    </p>
     <div>
-        <img src="http://127.0.0.1:8000{% static 'img/icon.png' %}" alt="" width="80" height="90">
+        <img src="http://127.0.0.1:8000{% static 'img/logoNegro.png' %}" alt="" width="140" height="90">
     </div>
     <div class="certificado">
         <h1>{{ certificado.cer_nombre }}</h1>
@@ -51,7 +55,7 @@
             de la Comuna de <strong>{{ solicitante.junta_vecinos_jun.comuna_com.com_nombre }}</strong>, viene a través del
             presente instrumento en certificar que
             <br>
-            Don (ña) <strong>{{ solicitante.mie_nombre }} {{ solicitante.mie_ap_paterno }}</strong>, tiene Domicilio en calle
+            Don (ña) <strong>{{ solicitante.mie_nombre }} {{ solicitante.mie_ap_paterno }}</strong>, Rut N° <strong>{{ miembro.mie_rut }}-{{ miembro.mie_dv }}</strong>, tiene Domicilio en calle
             <strong>{{ solicitante.mie_direccion }}</strong>, Comuna de
             <strong>{{ solicitante.junta_vecinos_jun.comuna_com.com_nombre }}</strong>.
             <br>

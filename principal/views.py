@@ -9,6 +9,8 @@ from .forms.noticias import *
 from .forms.actividades import *
 import hashlib
 import stripe
+import tempfile
+import os
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -428,11 +430,6 @@ def obtenerCetificado(request, mie_rut, cer_id):
             "solicitud"   : solicitud
         }
         # ------------------------------------------------------
-        asunto = "Solicitud de " + certificado.cer_nombre
-        cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + ". El certificado se descargó directamente en el dispositivo."
-        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
-        message.send()
-        # ------------------------------------------------------
         html = template.render(context)
         # ------------------------------------------------------
         response = HttpResponse(content_type='application/pdf')
@@ -444,6 +441,20 @@ def obtenerCetificado(request, mie_rut, cer_id):
         pisa_status = pisa.CreatePDF(html, dest=response)
         if pisa_status.err:
             return HttpResponse('No se pudo descargar tu certificado')
+        # ------------------------------------------------------
+        asunto = "Solicitud de " + certificado.cer_nombre
+        cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + "."
+        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+        # ------------------------------------------------------
+        with tempfile.NamedTemporaryFile(delete=False) as pdf_file:
+            pdf_file.write(response.content)
+            pdf_file_path = pdf_file.name
+        # Adjuntar el archivo al correo electrónico
+        with open(pdf_file_path, 'rb') as attachment:
+            message.attach("Certificado.pdf", attachment.read(), 'application/pdf')
+        os.remove(pdf_file_path)
+        # ------------------------------------------------------
+        message.send()
         return response
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
@@ -782,7 +793,7 @@ def agregarActividades(request):
             "form": form
         }
         if request.method == 'POST':
-            if form.is_valid:
+            if form.is_valid():
                 actividad = Actividad()
                 actividad.act_fecha = request.POST["act_fecha"]
                 actividad.act_descripcion = request.POST["act_descripcion"]
@@ -794,7 +805,7 @@ def agregarActividades(request):
                 actividad.tipo_actividad_tip_act = TipoActividad.objects.get(tip_act_id=request.POST["tipo_actividad_tip_act"])
                 actividad.junta_vecinos_jun = miembro.junta_vecinos_jun
                 actividad.save()
-                return HttpResponse("actividad guardada")
+                return redirect("/detalleActividad/" + str(actividad.act_id))
         return render(request, "principal/actividades/registrarActividades.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
@@ -826,14 +837,17 @@ def detalleActividad(request, act_id):
         if Asistencia.objects.filter(actividad_act=actividad, miembro_mie=miembro):
             contexto["validacionAsistencia"] = True
         if request.method == "POST":
-            actividad.act_cupo = actividad.act_cupo - int(request.POST["cantidad_asistentes"])
-            actividad.save()
-            asistencia = Asistencia()
-            asistencia.asis_cantidad = int(request.POST["cantidad_asistentes"])
-            asistencia.miembro_mie = miembro
-            asistencia.actividad_act = actividad
-            asistencia.save()
-            return redirect("detalleAsistencia/" + str(asistencia.asis_id))
+            if actividad.act_cupo < int(request.POST["cantidad_asistentes"]):
+                contexto["validacionCupo"] = True
+            else:
+                actividad.act_cupo = actividad.act_cupo - int(request.POST["cantidad_asistentes"])
+                actividad.save()
+                asistencia = Asistencia()
+                asistencia.asis_cantidad = int(request.POST["cantidad_asistentes"])
+                asistencia.miembro_mie = miembro
+                asistencia.actividad_act = actividad
+                asistencia.save()
+                return redirect("/detalleAsistencia/" + str(asistencia.asis_id))
         return render(request, "principal/actividades/detalleActividad.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
@@ -844,7 +858,7 @@ def detalleAsistencia(request, asis_id):
     if request.session.get("correo"):
         miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
         asistencia = Asistencia.objects.get(asis_id=asis_id)
-        contexto = { 
+        contexto = {
             "miembro": miembro,
             "asistencia": asistencia
         }

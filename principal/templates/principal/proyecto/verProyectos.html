@@ -7,10 +7,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="contenedor-registro-junta container mt-5 bg-light p-5">
+<div class="contenedor-registro-junta container mt-5 p-5 border rounded-3">
     <div style="overflow-x: auto;">
-        <h1 class="text-center">Proyectos Postulados</h1>
-        <table class="table table-light table-hover">
+        <h1 class="text-center">Miembros de {{ miembro.junta_vecinos_jun.jun_nombre|title }}</h1>
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Postulado Por:</th>
@@ -33,11 +33,12 @@
                     </td>
                     {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
                     <td>
-                        <div class="btn-group">
-                            <button class="btn btn-outline-dark dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="btn-group dropup">
+                            <button class="btn btn-outline-dark btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ p.estado_proyecto_est_proy.est_proy_estado }}
                             </button>
-                            <ul class="dropdown-menu">
+                            <!-- Dropdown -->
+                            <ul class="dropdown-menu dropdown-menu-end">
                                 {% for e in estadoProyectos %}
                                     {% if p.estado_proyecto_est_proy.est_proy_estado == e.est_proy_estado %}
                                         <li><a class="dropdown-item disabled" href="#">{{ e.est_proy_estado }}</a></li>
@@ -48,6 +49,8 @@
                             </ul>
                         </div>
                     </td>
+                    {% else %}
+                    <td>{{ p.estado_proyecto_est_proy.est_proy_estado }}</td>
                     {% endif %}
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal_{{ p.proy_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -66,6 +69,7 @@
                             </div>
                         </div>
                     </div>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
