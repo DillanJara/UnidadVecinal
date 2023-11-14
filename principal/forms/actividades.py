@@ -16,9 +16,7 @@ class AgregarActividad(forms.ModelForm):
     def clean_act_fecha(self):
         act_fecha = self.cleaned_data.get('act_fecha')
         fecha_actual = timezone.now().date()
-        print(act_fecha)
         if act_fecha < fecha_actual:
             raise forms.ValidationError('La fecha seleccionada no es valida')
         else:
-            print(act_fecha)
             return act_fecha
