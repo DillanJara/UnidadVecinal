@@ -1,0 +1,34 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Noticias</title>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verNoticias.css' %}">
+{% endblock %}
+
+{% block content %}
+<section id="ver-noticias">
+    <div class="container text-center">
+        <p class="ver-noticias-title">Noticias</p>
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center">
+            {% for n in noticias %}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/media/{{ n.not_imagen }}" class="card-img-top img-fluid" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ n.not_titulo }}</h5>
+                        <p class="card-text">Fecha: {{ n.not_fecha }}</p>
+                        <div class="text-end">
+                            <a href="{% url 'detalleNoticia' n.not_id%}" class="btn btn-ver-noticia">Ver Noticia</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</section>
+{% endblock %}

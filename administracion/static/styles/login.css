@@ -1,0 +1,73 @@
+#login {
+    margin-top: -100px;
+}
+
+.img-login {
+    max-width: 100%;
+    height: auto;
+}
+
+.card-login {
+    margin: 0;
+    border-radius: 10px;
+    box-shadow: 20px 20px 60px #bebebe;
+    margin-bottom: 50px;
+}
+
+#login .btn-login {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#login .btn-login:hover {
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#login .btn-registrate-login {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-color: #114c55;
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 50%;
+}
+
+#login .btn-registrate-login:hover {
+    background-color: #114c55;
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+.btn-recuperar-password {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius:  15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    font-weight: 600;
+    margin: 2px;
+    margin-bottom: 10px;
+    width: 150px;
+    border: 0;
+}
+
+.btn-recuperar-password:hover {
+    background-color: #114c55;
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

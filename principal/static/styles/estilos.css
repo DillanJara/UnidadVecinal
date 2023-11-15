@@ -51,6 +51,7 @@
     color: white;
     border: 1px solid white;
 }
+
 /* navbar */
 
 
@@ -89,6 +90,7 @@
     background: #172D3D;
     color: white;
 }
+
 /* navbar 2*/
 
 /* carrusel */
@@ -147,6 +149,7 @@
     background: #0F75BD;
     color: white;
 }
+
 /* home content */
 
 /* Form */
@@ -180,13 +183,14 @@
 /* Form */
 
 /*Login*/
-.login-form{
+.login-form {
     width: 100%;
     height: 100vh;
     background-size: cover;
     background-position: 55%;
 }
-.login{
+
+.login {
     position: absolute;
     top: 60%;
     left: 50%;
@@ -199,9 +203,10 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.5px);
     border-right: 1px solid rgba(255, 255, 255, 0.5px);
     border-radius: 20px;
-    box-shadow: 0px 25px 50px rgba(0,0,0,0.1);
+    box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.1);
 }
-.login h2{
+
+.login h2 {
     width: 100%;
     margin-bottom: 30px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -210,7 +215,8 @@
     font-weight: 600;
     color: #0F75BD;
 }
-.login .inputbox input{
+
+.login .inputbox input {
     width: 100%;
     padding: 10px 20px;
     outline: none;
@@ -218,11 +224,13 @@
     color: black;
     margin-bottom: 30px;
 }
-.login .inputbox input::placeholder{
+
+.login .inputbox input::placeholder {
     color: black;
     font-size: 17px;
 }
-#btn-login{
+
+#btn-login {
     position: relative;
     border: none;
     outline: none;
@@ -233,19 +241,23 @@
     transition: 0.5s;
     cursor: pointer;
 }
-#btn-login:hover{
+
+#btn-login:hover {
     background-color: #172D3D;
 }
-.bottom-content{
+
+.bottom-content {
     display: flex;
     justify-content: space-between;
 }
-.bottom-content a{
+
+.bottom-content a {
     font-size: 1.25em;
     color: #172D3D;
     font-weight: 500;
     text-decoration: none;
 }
+
 /*Login*/
 
 /* about */
@@ -311,6 +323,7 @@
         height: 80vh;
     }
 }
+
 /* about */
 
 
@@ -412,6 +425,7 @@
     }
 
 }
+
 /* contact */
 
 /* noticias */
@@ -466,11 +480,7 @@
     cursor: pointer;
 }
 
-.copyright {
-    color: #D9D9D9;
-    padding-top: 20px;
-    padding-bottom: 30px;
-}
+
 /* footer */
 
 
@@ -488,14 +498,3 @@ html {
     border: #0F75BD solid 2px;
     text-align: center;
 }
-
-/* contenedor registro junta vecinos */
-
-.contenedor-registro-junta {
-    border-radius: 10px;
-    border: #0F75BD solid 2px; 
-    padding: 5%; 
-    width: 65%;
-}
-
-/* contenedor registro junta vecinos */

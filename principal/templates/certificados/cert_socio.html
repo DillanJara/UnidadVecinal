@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,19 +20,69 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <!-- fonts links -->
-
 </head>
 
+<style>
+    .certificado {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .certificado h2 {
+        font-weight: 600;
+    }
+
+    .certificado h5 {
+        font-weight: 600;
+    }
+
+    .linea {
+        border-top: 1px solid black;
+        height: 2px;
+        max-width: 300px;
+        padding: 0;
+        margin: 50px auto 0 auto;
+    }
+
+    @page {
+        size: letter portrait;
+        content_frame {
+            padding: 50px;
+            left: 50pt;
+            width: 512pt;
+            top: 50pt;
+            height: 500pt;
+            -pdf-frame-border: 1;
+            /* for debugging the layout */
+        }
+    }
+    #nro_certificado {
+        display: inline-flex;
+        text-align: right;
+        color: dimgrey;
+    }
+
+</style>
+
 <body>
-    <div class="certificado">
-        <h2>Certificado de Socio</h2>
+    <p id="nro_certificado">
+        Nro Solicitud: {{ solicitud.sol_cer_id }}
         <br>
-        <p>La Junta de Vecinos <strong>“Villa Independencia”</strong>, de la Comuna de <strong>Puente Alto</strong>,
-            <strong>CERTIFICA</strong> que Don
-            (ña) <strong>Mario Díaz</strong>,
+        Rut: {{ miembro.mie_rut }}-{{ miembro.mie_dv }}
+    </p>
+    <div>
+        <img src="http://127.0.0.1:8000{% static 'img/logoNegro.png' %}" alt="" width="140" height="90">
+    </div>
+    <div class="certificado">
+        <h2>{{ certificado.cer_nombre }}</h2>
+        <br>
+        <p>La Junta de Vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong>, de la Comuna de <strong>{{ miembro.junta_vecinos_jun.comuna_com.com_nombre }}</strong>,
             <br>
-            es socio activo de la junta de vecinos <strong>“Villa Independencia”</strong> con los derechos y
-            obligaciones que le confieren
+            <strong>CERTIFICA</strong> que Don
+            (ña) <strong>{{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}</strong>, Rut N° <strong>{{ miembro.mie_rut }}-{{ miembro.mie_dv }}</strong>,
+            <br>
+            es socio activo de la junta de vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong> con los derechos y
+            obligaciones que le confieren.
             <br>
             <br>
             Se extiende el presente certificado a petición del interesado.
@@ -39,18 +90,16 @@
         <br>
         <div class="linea"></div>
         <br>
-        <h5>María Herrera</h5>
+        <img src="{{ presidente.mie_firma }}" alt="..." width="100" height="80">
+        <h5>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</h5>
         <p>Presidente(a)
             <br>
-            Rut 14.756.123-0
+            Rut {{ presidente.mie_rut }}-{{ presidente.mie_dv }}
             <br>
-            Villa Independencia
+            {{ presidente.junta_vecinos_jun.jun_nombre }}
+            <br>
+            {{ solicitud.sol_cer_fecha }}
         </p>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-
 </body>
-
 </html>

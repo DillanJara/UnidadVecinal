@@ -1,0 +1,27 @@
+.card-mensaje-pago {
+    margin-top: 10%;
+    margin-bottom: 20%;
+}
+
+.mensaje-pago-parrafo {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+#mensaje-pago .btn-volver-cuotas {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    margin-top: 10px;
+    width: 30%;
+    border: none;
+}
+
+#mensaje-pago .btn-volver-cuotas:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

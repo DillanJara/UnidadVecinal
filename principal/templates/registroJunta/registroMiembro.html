@@ -1,67 +1,90 @@
 {% extends 'layouts/base.html' %}
-{% load django_bootstrap5 %}
+
 {% load static %}
+{% load django_bootstrap5 %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/registroMiembro.css' %}">
+{% endblock %}
+
+{% block title %}
+<title>Registro de Usuario</title>
+{% endblock %}
 
 {% block content %}
 <!-- form -->
 
-<section class="form" id="form">
-    <div class="heading"><span>Formulario de Registro</span></div>
+<section id="registroMiembro">
     <div class="container">
-        <form method="POST">
-            {% csrf_token %}
-            <!--Dos Input tipo Texto en 2 columnas de 6-->
-            <div class="row">
-                <div class="col-md-4  mb-3">
-                    {% bootstrap_field form.mie_rut %}
-                </div>
-                <div class="col-md-2  mb-3">
-                    {% bootstrap_field form.mie_dv %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_nombre %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_ap_paterno %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_ap_materno %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_telefono %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_direccion %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_correo %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_fecha_nacimiento %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_password %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_password_2 %}
-                </div>
-                <div class="col-md-6  mb-3">
-                    {% bootstrap_field form.mie_junta_vecinos %}
-                    <datalist id="opcionesJuntasVecinos">
-                        {% for jun in juntaVecinos %}
-                        <option value="{{ jun.jun_nombre }}"></option>
-                        {% endfor %}
-                    </datalist>
-                </div>
-                <div class="col-md-6  mb-3">
-                    <label class="form-label" for="cargo_car">Cargo</label>
-                    <input type="text" id="cargo_car" name="cargo_car" class="form-control" readonly value="{{ cargo.car_nombre}}">
-                </div>
-                <div class="text-end">
-                    <button id="form-btn">Enviar</button>
-                </div>
-        </form>
+        <p class="form-title">Crear Cuenta</p>
+        <div class="card-registroMiembro">
+            <form method="POST">
+                {% csrf_token %}
+                <!--Dos Input tipo Texto en 2 columnas de 6-->
+                <div class="row">
+                    <div class="col-md-4  mb-3">
+                        {% bootstrap_field form.mie_rut %}
+                    </div>
+                    <div class="col-md-2  mb-3">
+                        {% bootstrap_field form.mie_dv %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_nombre %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_ap_paterno %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_ap_materno %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_telefono %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_direccion %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_correo %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_fecha_nacimiento %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_password %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_password_2 %}
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        {% bootstrap_field form.mie_junta_vecinos %}
+                        <datalist id="opcionesJuntasVecinos">
+                            {% for jun in juntaVecinos %}
+                            <option value="{{ jun.jun_nombre }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div class="col-md-6  mb-3">
+                        <label class="form-label" for="cargo_car">Cargo</label>
+                        <input type="text" id="cargo_car" name="cargo_car" class="form-control" readonly
+                            value="{{ cargo.car_nombre}}">
+                    </div>
+                    <div class="mb-3" id="agregarImg">
+                        <label for="input-btn">Suba una imagen de un documento a su nombre <em>(boleta de agua, luz, etc.)</em></label>
+                        <div id="input-archivo">
+                            <p><img src="{% static 'img/icono_input.png' %}"></p>
+                            <input class="form-control" type="file" name="mie_documento" id="input-btn" required>
+                        </div>
+                        <div id="previewImagen" class="mx-auto" style="max-width: 20rem;">
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button class="form-btn">Enviar</button>
+                    </div>
+            </form>
+        </div>
     </div>
 </section>
 <!-- form -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="{% static 'scripts\registroMiembro.js' %}"></script>
 {% endblock %}

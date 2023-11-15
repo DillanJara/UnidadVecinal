@@ -1,0 +1,256 @@
+.img-home-miembro {
+    max-width: 40%;
+    height: auto;
+}
+
+.home-miembro-title {
+    font-size: 50px;
+    font-weight: 500;
+    margin-top: 10%;
+    margin-bottom: 50px;
+}
+
+#home-miembro .card-header-familiares {
+    background-color: #0F75BD;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    padding-bottom: 0;
+    font-size: 20px;
+    font-weight: 450;
+    height: 64px;
+}
+
+.p-fam {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+#home-miembro .btn-modificar-fam {
+    box-shadow: none;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 3px;
+    margin-top: -7px;
+    width: 100%;
+    margin-left: 10px;
+}
+
+#home-miembro .btn-modificar-fam:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#home-miembro .btn-eliminar-fam {
+    box-shadow: none;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin-left: 5px;
+    margin-top: -7px;
+    width: 100%;
+}
+
+#home-miembro .btn-eliminar-fam:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#home-miembro .btn-cert-fam {
+    box-shadow: none;
+    border-radius: 15px;
+    background: #114c55;
+    padding: 8px;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    font-weight: 600;
+    font-size: medium;
+    margin-top: -9px;
+}
+
+#home-miembro .btn-agregar-fam {
+    box-shadow: none;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin-left: 5px;
+    width: 50%;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+#home-miembro .btn-agregar-fam:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#home-miembro .card-header-cert {
+    background-color: #0F75BD;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    padding-bottom: 0;
+    font-size: 20px;
+    font-weight: 450;
+    height: 65px;
+}
+
+#home-miembro .card-certificados {
+    box-shadow: 10px 10px 30px #bebebe;
+    margin-bottom: 50px;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+#home-miembro .btn-obt-cert {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    width: 100%;
+}
+
+#home-miembro .btn-obt-cert:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#home-miembro .btn-registro-firma {
+    box-shadow: none;
+    padding: 8px 15px 8px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    position: absolute;
+    bottom: 0;
+    justify-content: end;
+}
+
+#home-miembro .btn-registro-firma:hover {
+    background: #114c55;
+    transition: 0s;
+}
+
+#home-miembro .card-header-miembros-totales {
+    background-color: #0F75BD;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    padding-bottom: 0;
+    font-size: 20px;
+    font-weight: 450;
+    height: 65px;
+    margin-top: -50px;
+}
+
+#home-miembro .card-miembros-totales {
+    box-shadow: 10px 10px 30px #bebebe;
+    margin-bottom: 50px;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    font-size: medium;
+}
+
+#home-miembro .card-header-miembros-registrados {
+    background-color: #0F75BD;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    padding-bottom: 0;
+    font-size: 20px;
+    font-weight: 450;
+    height: 65px;
+    margin-top: -50px;
+}
+
+#home-miembro .card-miembros-registrados {
+    box-shadow: 10px 10px 30px #bebebe;
+    margin-bottom: 50px;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    font-size: medium;
+}
+
+#home-miembro .table th {
+    font-weight: 450;
+}
+
+#home-miembro .btn-ver-miembros {
+    box-shadow: none;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin-left: 5px;
+    width: 50%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+#home-miembro .btn-ver-miembros:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#home-miembro .btn-activar-cuenta {
+    box-shadow: none;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin-left: 5px;
+    width: 90%;
+    margin-bottom: 15px;
+}
+
+#home-miembro .btn-activar-cuenta:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+.card-header-enviar-correo {
+    background-color: #0F75BD;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    padding-bottom: 0;
+    font-size: 20px;
+    font-weight: 450;
+    height: 65px;
+    margin-top: -50px;
+}
+
+.card-enviar-correo {
+    box-shadow: 10px 10px 30px #bebebe;
+    margin-bottom: 50px;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    font-size: medium;
+}
+
+.btn-enviar-correo {
+    border: 0;
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 500;
+}
+
+.btn-.btn-enviar-correo:hover {
+    background: #41049b;
+    color: #fff;
+    font-weight: 600;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+{% load static %}
+
+<style>
+    .certificado {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .linea {
+        border-top: 1px solid black;
+        height: 2px;
+        max-width: 300px;
+        padding: 0;
+        margin: 50px auto 0 auto;
+    }
+
+    @page {
+        size: letter portrait;
+        content_frame {
+            padding: 50px;
+            left: 50pt;
+            width: 512pt;
+            top: 50pt;
+            height: 500pt;
+            -pdf-frame-border: 1;
+        }
+    }
+    #nro_certificado {
+        display: inline-flex;
+        text-align: right;
+        color: dimgrey;
+    }
+
+</style>
+
+<body>
+    <p id="nro_certificado">
+        Nro Solicitud: {{ solicitud.sol_cer_id }}
+        <br>
+        Rut: {{ miembro.mie_rut }}-{{ miembro.mie_dv }}
+    </p>
+    <div>
+        <img src="http://127.0.0.1:8000{% static 'img/logoNegro.png' %}" alt="" width="140" height="90">
+    </div>
+    <div class="certificado">
+        <h1>{{ certificado.cer_nombre }}</h1>
+        <br>
+        <p>Don (ña) <strong>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</strong>, Presidente(a) de la
+            Junta de Vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong>,
+            <br>
+            de la Comuna de <strong>{{ presidente.junta_vecinos_jun.comuna_com.com_nombre }}</strong>, viene a través del
+            presente instrumento en certificar que
+            <br>
+            Don (ña) <strong>{{ solicitante.fam_mie_nombre }} {{ solicitante.fam_mie_ap_paterno }}</strong>, Rut N°<strong>{{ solicitante.fam_mie_rut }}-{{ solicitante.fam_mie_dv }}</strong>, familiar del {{ miembro.cargo_car.car_nombre }} <strong>{{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}</strong>, Rut N° <strong>{{ miembro.mie_rut }}-{{ miembro.mie_dv }}</strong>,
+            <br>
+            tiene Domicilio en calle
+            <strong>{{ miembro.mie_direccion }}</strong>, Comuna de
+            <strong>{{ presidente.junta_vecinos_jun.comuna_com.com_nombre }}</strong>.
+            <br>
+            <br>
+            <br>
+            Se extiende el presente certificado a petición del interesado.
+        </p>
+        <img src="{{ presidente.mie_firma }}" alt="..." width="100" height="80">
+        <h3>{{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</h3>
+        <p>
+            Presidente(a)
+            <br>
+            Rut: {{ presidente.mie_rut }}-{{ presidente.mie_dv }}
+            <br>
+            {{ presidente.junta_vecinos_jun.jun_nombre }}
+            <br>
+            {{ solicitud.sol_cer_fecha }}
+        </p>
+    </div>
+</body>
+</html>

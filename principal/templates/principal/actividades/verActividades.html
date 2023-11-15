@@ -1,0 +1,36 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verActividades.css' %}">
+{% endblock %}
+
+{% block title %}
+<title>Ver Actividades</title>
+{% endblock %}
+
+{% block content %}
+<section id="ver-actividad">
+    <div class="container">
+        <p class="ver-actividad-title">Actividades</p>
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center">
+            {% for a in actividades %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header">Actividad {{ a.tipo_actividad_tip_act }}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ a.act_descripcion }}</h5>
+                        <p class="card-text">Fecha: {{ a.act_fecha }}</p>
+                        <div class="text-end">
+                            <a href="{% url 'detalleActividad' a.act_id %}" class="btn btn-inscribirse">Inscribirme</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

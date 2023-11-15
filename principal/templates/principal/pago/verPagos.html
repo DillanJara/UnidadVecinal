@@ -1,0 +1,52 @@
+{% extends 'layouts/base.html' %}
+
+{% load humanize %}
+
+{% block title %}
+<title>Pagos</title>
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <div class="m-3">
+        <h1 class="text-center">Cuotas Sociales</h1>
+        <div class="accordion" id="accordionExample">
+            {% for m in miembros %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ m.mie_rut }}">
+                        {{ m.mie_nombre }} {{ m.mie_ap_paterno }} {{ m.mie_ap_materno }}
+                    </button>
+                </h2>
+                <div id="collapse{{ m.mie_rut }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in cuotas %}
+                                    {% if c.miembro_mie == m %}
+                                    <tr>
+                                        <td>{{ c.cuo_id }}</td>
+                                        <td>{{ c.cuo_fecha_pago|date:'d/M/Y' }}</td>
+                                        <td>${{ c.cuo_monto|intcomma }}</td>
+                                        <td>{{ c.cuo_estado }}</td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

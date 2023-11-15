@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Espacios</title>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verEspacios.css' %}">
+{% endblock %}
+
+{% block content %}
+<section id="ver-espacio">
+    <div class="container text-center">
+        <p class="ver-espacio-title">Espacios</p>
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center">
+            {% for e in espacios %}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/media/{{ e.esp_imagen }}" class="card-img-top img-fluid" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ e.esp_nombre }}</h5>
+                        <p class="card-text">Direccion: {{ e.esp_direccion }} <br>
+                            Telefono: {{ e.esp_telefono }}</p>
+                        <div class="text-end">
+                            <a href="{% url 'agregarReserva' e.esp_id %}" class="btn btn-ver-espacio">Reservar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</section>
+{% endblock %}

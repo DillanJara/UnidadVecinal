@@ -3,8 +3,11 @@
 {% load static %}
 {% load django_bootstrap5 %}
 
-{% block content %}
+{% block title %}
+<title>Modificar Familiar</title>
+{% endblock %}
 
+{% block content %}
 <div class="mt-5 row">
     <div class="col-12 col-md-6 offset-md-3 rounded-3">
         <div class="card">
@@ -14,11 +17,10 @@
                     {% csrf_token %}
                     {% bootstrap_form form %}
                     <input class="visually-hidden-focusable" id="familiar_miembro_mie_rut" type="text" value="{{ miembro.mie_rut }}" name="miembro_rut" readonly>
-                    <button class="mb-3" id="contact-btn">Registrar</button>
+                    <button class="mb-3">Registrar</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
