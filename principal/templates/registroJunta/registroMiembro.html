@@ -1,6 +1,11 @@
 {% extends 'layouts/base.html' %}
-{% load django_bootstrap5 %}
+
 {% load static %}
+{% load django_bootstrap5 %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/registroMiembro.css' %}">
+{% endblock %}
 
 {% block title %}
 <title>Registro de Usuario</title>
@@ -67,7 +72,7 @@
                         <label for="input-btn">Suba una imagen de un documento a su nombre <em>(boleta de agua, luz, etc.)</em></label>
                         <div id="input-archivo">
                             <p><img src="{% static 'img/icono_input.png' %}"></p>
-                            <input class="form-control" type="file" name="esp_imagen" id="input-btn" required>
+                            <input class="form-control" type="file" name="mie_documento" id="input-btn" required>
                         </div>
                         <div id="previewImagen" class="mx-auto" style="max-width: 20rem;">
                         </div>

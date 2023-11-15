@@ -1,0 +1,17 @@
+#visualizarMiembros .visualizarMiembros-title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 600;
+    margin-top: 50px;
+}
+
+#visualizarMiembros .card-visualizar-miembros {
+    margin-bottom: 20%;
+    border: none;
+}
+
+
+#visualizarMiembros .card-visualizar-miembros th {
+    text-decoration: none;
+    font-size: medium;
+}

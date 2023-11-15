@@ -4,3 +4,5 @@ PyMySQL==1.1.0
 xhtml2pdf==0.2.11
 django_bootstrap5==23.3
 python-decouple==3.8
+stripe==7.1.0
+djangorestframework==3.13.1

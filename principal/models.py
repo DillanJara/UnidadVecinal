@@ -1,22 +1,6 @@
 from django.db import models
 
 
-class Actividad(models.Model):
-    act_id                 = models.AutoField(primary_key=True)
-    act_fecha              = models.DateField()
-    act_descripcion        = models.CharField(max_length=30)
-    act_cupo               = models.IntegerField()
-    act_imagen             = models.CharField(max_length=300)
-    act_cuota              = models.IntegerField(default=0, null=True)
-    tipo_actividad_tip_act = models.ForeignKey('TipoActividad', models.PROTECT, db_column='TIPO_ACTIVIDAD_tip_act_id')
-
-
-class Asistencia(models.Model):
-    asis_id         = models.AutoField(primary_key=True)
-    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id')
-    miembro_mie     = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')
-
-
 class Cargo(models.Model):
     car_id     = models.AutoField(primary_key=True)
     car_nombre = models.CharField(max_length=30)
@@ -68,45 +52,46 @@ class FamiliarMiembro(models.Model):
 
 
 class JuntaVecinos(models.Model):
-    jun_id              = models.AutoField(primary_key=True)
-    jun_nombre          = models.CharField(max_length=50)
-    jun_fecha_fundacion = models.DateField()
-    jun_nombre_villa    = models.CharField(max_length=30)
-    jun_telefono        = models.CharField(unique=True, max_length=12)
-    jun_correo          = models.CharField(unique=True, max_length=50)
-    jun_direccion       = models.CharField(max_length=50)
-    jun_mision          = models.CharField(max_length=300)
-    comuna_com          = models.ForeignKey(Comuna, models.PROTECT, db_column='COMUNA_com_id')
+    jun_id                   = models.AutoField(primary_key=True)
+    jun_rol_municipal        = models.PositiveIntegerField()
+    jun_nombre               = models.CharField(max_length=50)
+    jun_fecha_fundacion      = models.DateField()
+    jun_nombre_villa         = models.CharField(max_length=30)
+    jun_telefono             = models.CharField(unique=True, max_length=12)
+    jun_correo               = models.CharField(unique=True, max_length=254)
+    jun_direccion            = models.CharField(max_length=50)
+    jun_mision               = models.CharField(max_length=300, null=True)
+    jun_habilitada           = models.BooleanField(default=False)
+    jun_certificado_vigencia = models.ImageField(upload_to="media/juntaVecinos/", blank=True)
+    jun_directiva            = models.CharField(max_length=300)
+    comuna_com               = models.ForeignKey(Comuna, models.PROTECT, db_column='COMUNA_com_id')
 
 
 class Miembro(models.Model):
-    mie_rut              = models.IntegerField(primary_key=True)
+    mie_rut              = models.IntegerField(primary_key=True,)
     mie_dv               = models.CharField(max_length=1)
     mie_nombre           = models.CharField(max_length=30)
     mie_ap_paterno       = models.CharField(max_length=30)
     mie_ap_materno       = models.CharField(max_length=30)
     mie_fecha_nacimiento = models.DateField()
     mie_telefono         = models.CharField(unique=True, max_length=12)
-    mie_correo           = models.CharField(unique=True, max_length=50)
+    mie_correo           = models.CharField(unique=True, max_length=254)
     mie_password         = models.CharField(max_length=150)
     mie_direccion        = models.CharField(max_length=50)
-    junta_vecinos_jun    = models.ForeignKey(JuntaVecinos, models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
-    mie_estado           = models.CharField(max_length=30)
-    cargo_car            = models.ForeignKey(Cargo, models.PROTECT, db_column='CARGO_car_id')
+    mie_estado           = models.CharField(max_length=30, default="Deshabilitado")
+    junta_vecinos_jun    = models.ForeignKey(JuntaVecinos, on_delete=models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
+    cargo_car            = models.ForeignKey(Cargo, on_delete=models.PROTECT, db_column='CARGO_car_id')
     mie_firma            = models.CharField(max_length=50000, null=True)
     mie_documento        = models.ImageField(upload_to="media/miembro/")
-
 
 
 class Noticia(models.Model):
     not_id          = models.AutoField(primary_key=True)
     not_titulo      = models.CharField(max_length=50)
     not_subtitulo   = models.CharField(max_length=100)
-    not_fecha       = models.DateField()
+    not_fecha       = models.DateField(auto_now_add=True)
     not_descripcion = models.CharField(max_length=300)
-    not_imagen      = models.ImageField(upload_to="media/noticia/")
-    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id', blank=True, null=True)
-    proyecto_proy   = models.ForeignKey('Proyecto', models.PROTECT, db_column='PROYECTO_proy_id', blank=True, null=True)
+    not_imagen      = models.ImageField(upload_to="media/noticia/", null=True)
     miembro_mie     = models.ForeignKey(Miembro, models.PROTECT, db_column='MIEMBRO_mie_rut')
 
 
@@ -137,6 +122,9 @@ class TipoActividad(models.Model):
     tip_act_id     = models.AutoField(primary_key=True)
     tip_act_nombre = models.CharField(max_length=30)
 
+    def __str__(self) -> str:
+        return self.tip_act_nombre
+
 
 class Certificado(models.Model):
     cer_id     = models.AutoField(primary_key=True)
@@ -150,3 +138,20 @@ class SolicitudCertificado(models.Model):
     certificado_cer      = models.ForeignKey(Certificado, models.PROTECT, db_column='CERTIFICADO_cer_id')
     sol_cer_familiar     = models.BooleanField(default=False)
     sol_cer_rut_familiar = models.IntegerField(null=True)
+
+
+class Actividad(models.Model):
+    act_id                 = models.AutoField(primary_key=True)
+    act_fecha              = models.DateField()
+    act_descripcion        = models.CharField(max_length=30)
+    act_cupo               = models.IntegerField()
+    act_cuota              = models.IntegerField(default=0, null=True)
+    tipo_actividad_tip_act = models.ForeignKey('TipoActividad', models.PROTECT, db_column='TIPO_ACTIVIDAD_tip_act_id')
+    junta_vecinos_jun      = models.ForeignKey('JuntaVecinos', on_delete=models.PROTECT, db_column='JUNTA_VECINOS_jun_id')
+
+
+class Asistencia(models.Model):
+    asis_id         = models.AutoField(primary_key=True)
+    asis_cantidad   = models.IntegerField(default=1)
+    actividad_act   = models.ForeignKey(Actividad, models.PROTECT, db_column='ACTIVIDAD_act_id')
+    miembro_mie     = models.ForeignKey('Miembro', models.PROTECT, db_column='MIEMBRO_mie_rut')

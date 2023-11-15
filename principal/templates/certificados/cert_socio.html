@@ -65,19 +65,24 @@
 </style>
 
 <body>
-    <p id="nro_certificado">Nro Solicitud: {{ solicitud.sol_cer_id }}</p>
+    <p id="nro_certificado">
+        Nro Solicitud: {{ solicitud.sol_cer_id }}
+        <br>
+        Rut: {{ miembro.mie_rut }}-{{ miembro.mie_dv }}
+    </p>
     <div>
-        <img src="http://127.0.0.1:8000{% static 'img/icon.png' %}" alt="" width="80" height="90">
+        <img src="http://127.0.0.1:8000{% static 'img/logoNegro.png' %}" alt="" width="140" height="90">
     </div>
     <div class="certificado">
         <h2>{{ certificado.cer_nombre }}</h2>
         <br>
         <p>La Junta de Vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong>, de la Comuna de <strong>{{ miembro.junta_vecinos_jun.comuna_com.com_nombre }}</strong>,
+            <br>
             <strong>CERTIFICA</strong> que Don
-            (ña) <strong>{{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}</strong>,
+            (ña) <strong>{{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}</strong>, Rut N° <strong>{{ miembro.mie_rut }}-{{ miembro.mie_dv }}</strong>,
             <br>
             es socio activo de la junta de vecinos <strong>“{{ presidente.junta_vecinos_jun.jun_nombre }}”</strong> con los derechos y
-            obligaciones que le confieren
+            obligaciones que le confieren.
             <br>
             <br>
             Se extiende el presente certificado a petición del interesado.

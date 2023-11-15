@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/mensajePago.css' %}">
+{% endblock %}
+
+{% block title %}
+<title>Pago Realizado</title>
+{% endblock %}
+
+{% block content %}
+<section id="mensaje-pago">
+    <div class="container">
+        <div class="d-flex justify-content-center card-mensaje-pago">
+            <div class="card border-light mt-3" style="max-width: 30rem;">
+                <div class="card-body">
+                    <p class="mensaje-pago-parrafo">Se ha realizado correctamente el pago de tu cuota</p>
+                    <div class="text-end mt-3">
+                        <a href="{% url 'verCuotas' %}" class="btn btn-volver-cuotas">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

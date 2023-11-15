@@ -6,31 +6,30 @@
 <title>Espacios</title>
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verEspacios.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 100rem;">
-        <div class="card-header text-white" style="background-color: #0F75BD;">Espacios</div>
-        <div class="card-body">
+<section id="ver-espacio">
+    <div class="container text-center">
+        <p class="ver-espacio-title">Espacios</p>
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center">
             {% for e in espacios %}
-            <div class="card mb-3" style="max-width: 540px;">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="/media/{{ e.esp_imagen }}" class="img-fluid rounded-start" alt="{{ e.esp_nombre }}">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ e.esp_nombre }}</h5>
-                            <p class="card-text">
-                                Direccion: {{ e.esp_direccion }} <br>
-                                Telefono: {{ e.esp_telefono }}
-                            </p>
-                            <p class="card-text text-end"><a href="{% url 'agregarReserva' e.esp_id %}" class="text-muted">Reservar Hora</a></p>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/media/{{ e.esp_imagen }}" class="card-img-top img-fluid" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ e.esp_nombre }}</h5>
+                        <p class="card-text">Direccion: {{ e.esp_direccion }} <br>
+                            Telefono: {{ e.esp_telefono }}</p>
+                        <div class="text-end">
+                            <a href="{% url 'agregarReserva' e.esp_id %}" class="btn btn-ver-espacio">Reservar</a>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-    </div>
-</div>
+</section>
 {% endblock %}

@@ -1,26 +1,32 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/solicitudesCertificados.css' %}">
+{% endblock %}
+
+
 {% block content %}
-<div class="contenedor-registro-junta container mt-5 bg-light p-5">
-    <div style="overflow-x: scroll;">
-        <h1 class="text-center">Solicitudes realizadas</h1>
-        <table class="table table-light table-hover">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Nro. Solicitud</th>
-                    <th>Fecha</th>
-                    <th>Certificado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for s in solicitudes %}
+<section id="verSolicitudes">
+    <div class="container">
+        <p class="solicitudes-realizadas-title">Solicitudes Realizadas</p>
+        <div class="card-ver-solicitudes">
+            <table class="table" style="overflow-x: auto;">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Nro. Solicitud</th>
+                        <th>Fecha</th>
+                        <th>Certificado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in solicitudes %}
                     <tr>
                         {% if s.sol_cer_familiar %}
                             {% for f in familiares %}
                                 {% if s.sol_cer_rut_familiar == f.fam_mie_rut %}
-                                    <td>{{ f.fam_mie_nombre }} {{ f.fam_mie_ap_paterno }}</td>
+                                <td>{{ f.fam_mie_nombre }} {{ f.fam_mie_ap_paterno }}</td>
                                 {% endif %}
                             {% endfor %}
                         {% else %}
@@ -30,9 +36,10 @@
                         <td>{{ s.sol_cer_fecha }}</td>
                         <td>{{ s.certificado_cer.cer_nombre }}</td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

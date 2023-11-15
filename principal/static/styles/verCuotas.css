@@ -1,0 +1,29 @@
+.ver-cuotas-title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 600;
+    margin-top: 50px;
+}
+
+.card-ver-cuotas {
+    margin-bottom: 20%;
+    border: none;
+}
+
+#ver-cuotas .btn-pagar {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    margin-top: 10px;
+    width: 30%;
+    border: none;
+}
+
+#ver-cuotas .btn-pagar:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

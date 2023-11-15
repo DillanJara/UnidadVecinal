@@ -1,0 +1,29 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/agregarActividad.css' %}">
+{% endblock %}
+
+{% block title %}
+<title>Agregar Actividad</title>
+{% endblock %}
+
+{% block content %}
+<section id="agregar-actividad">
+    <div class="container">
+        <p class="agregar-actividad-title">Agregar Actividad</p>
+        <div class="card-agregar-actividad">
+            <form method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div>
+                    <button type="submit" class="btn btn-agregar-actividad">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

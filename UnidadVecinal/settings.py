@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'django_browser_reload',
     'django_bootstrap5',
-    'principal'
+    'principal',
+    'administracion',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +148,11 @@ EMAIL_USE_TLS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'principal')
+
+# -------------------------------------------------------------------------
+
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
+
+LOGIN_REDIRECT_URL = 'inicioAdministracion'
+LOGOUT_REDIRECT_URL = 'inicioAdministracion'

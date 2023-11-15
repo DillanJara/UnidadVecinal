@@ -1,0 +1,93 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/registrarFirma.css' %}">
+{% endblock %}
+
+{% block title %}
+<title>Registrar Firma</title>
+{% endblock %}
+
+{% block content %}
+
+<section id="registroFirma">
+    <div class="container text-center">
+        <p class="registro-firma-title">Registro de Firma</p>
+        <div class="login-form">
+            <form class="login" method="POST" onsubmit="prepareImg();">
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb"
+                    class="d-flex justify-content-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item text-success">Registra a tu Junta ✓</li>
+                        <li class="breadcrumb-item text-success">Registrate</li>
+                        <li class="breadcrumb-item active">Registra tu firma</li>
+                        <li class="breadcrumb-item active">⌛</li>
+                    </ol>
+                </nav>
+                <p class="titulo-canvas-firma">Dibuja tu firma</p>
+                <canvas id="canvas" width="315" height="200"></canvas>
+                {% csrf_token %}
+                <div class="inputbox">
+                    <input id="inp_img" name="img" type="hidden" value="">
+                    <input type="submit" value="Registrar Firma" class="btn btn-registro-firma" required>
+                    <button class="btn-limpiar-canvas" id="limpiarCanvas" type="button">Borrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<style>
+    #canvas {
+        border: 2px #0F75BD solid;
+        cursor: crosshair;
+    }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    let drawing = false;
+
+    canvas.addEventListener('mousedown', () => {
+        drawing = true;
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        drawing = false;
+        context.beginPath();
+    });
+
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+        if (!drawing) return;
+
+        context.lineWidth = 3;
+        context.lineCap = 'round';
+        context.strokeStyle = 'black';
+
+        context.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+    }
+
+    function prepareImg() {
+        var canvas = document.getElementById('canvas');
+        document.getElementById('inp_img').value = canvas.toDataURL();
+    }
+
+    // Limpia el lienzo
+    function limpiarCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Ejemplo de cómo usar la función para limpiar el canvas
+    document.getElementById('limpiarCanvas').addEventListener('click', limpiarCanvas)
+</script>
+
+{% endblock %}

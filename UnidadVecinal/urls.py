@@ -23,6 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', verHome, name="home"),
     #-------------------------------------------------------------------------
+    path('administracion/', include('administracion.urls')),
+    path('api/', include('rest_api.urls')),
+    #-------------------------------------------------------------------------
     path('login/', verLogin, name="login"),
     path('validarLogin', validarLogin, name="validarLogin"),
     path('cerrarSesion', cerrarSesion, name="cerrarSesion"),
@@ -36,24 +39,46 @@ urlpatterns = [
     path('registrarPresidente/<int:jun_id>', registrarPresidente, name="registrarPresidente"),
     #-------------------------------------------------------------------------
     path('index/<int:rut>', verIndex, name="index"),
+    path('verPerfil/<int:mie_rut>', verPerfil, name="verPerfil"),
+    path('agregarFamiliar/', agregarFamiliarMiembro, name="agregarFamiliar"),
     path('eliminarFamiliarMiembro/<int:fam_mie_rut>', eliminarFamiliarMiembro, name="eliminarFamiliarMiembro"),
     path('modificarFamiliarMiembro/<int:fam_mie_rut>', modificarFamiliarMiembro, name="modificarFamiliarMiembro"),
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
     path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros"),
     path('cambiarCargo/<int:mie_rut>/<int:car_id>', cambiarCargo, name="cambiarCargo"),
     #-------------------------------------------------------------------------
+    path('enviarAviso', enviarAvisos, name="enviarAviso"),
+    #-------------------------------------------------------------------------
     path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
     path('verSolicitudes/<int:mie_rut>', verSolicitudes, name="verSolicitudes"),
     #-------------------------------------------------------------------------
-    path("agregarProyecto/", agregarProyecto, name="agregarProyecto"),
+    path('agregarProyecto/', agregarProyecto, name="agregarProyecto"),
+    path('verProyectos/', verProyectos, name="verProyectos"),
+    path('cambiarEstadoProyecto/<int:proy_id>/<int:est_proy_id>', cambiarEstadoProyecto, name="cambiarEstadoProyecto"),
     #-------------------------------------------------------------------------
-    path("agregarEspacios/", agregarEspacios, name="agregarEspacios"),
-    path("verEspacios/", verEspacios, name="verEspacios"),
+    path('agregarEspacios/', agregarEspacios, name="agregarEspacios"),
+    path('verEspacios/', verEspacios, name="verEspacios"),
     #-------------------------------------------------------------------------
-    path("agregarReserva/<int:esp_id>", agregarReserva, name="agregarReserva"),
+    path('agregarReserva/<int:esp_id>', agregarReserva, name="agregarReserva"),
     path('detalleReserva/<int:res_id>', detalleReserva, name="detalleReserva"),
     #-------------------------------------------------------------------------
-    path("registrarFirma/", firma, name="registraFirma"),
+    path('registrarFirma/<int:mie_rut>', firma, name="registraFirma"),
+    #-------------------------------------------------------------------------
+    path('agregarNoticia/', agregarNoticia, name="agregarNoticia"),
+    path('verNoticias/', verNoticias, name="verNoticias"),
+    path('detalleNoticia/<int:not_id>', detalleNoticia, name="detalleNoticia"),
+    #-------------------------------------------------------------------------
+    path('verCuotas/', verCuotas, name="verCuotas"),
+    path('procesar-pago/', procesarPago, name='procesar_pago'),
+    path('stripe_webhook', stripe_webhook, name='stripe_webhook'),
+    path('pagoRealizado/', pagoRealizado, name="pagoRealizado"),
+    path('verPagos/', verPagos, name='verPagos'),
+    #-------------------------------------------------------------------------
+    path('agregarActividad/', agregarActividades, name="agregarActividad"),
+    path('verActividades/', verActividades, name="verActividades"),
+    path('detalleActividad/<int:act_id>', detalleActividad, name="detalleActividad"),
+    #-------------------------------------------------------------------------
+    path('detalleAsistencia/<int:asis_id>', detalleAsistencia, name="detalleAsistencia")
 ]
 
 if settings.DEBUG:
