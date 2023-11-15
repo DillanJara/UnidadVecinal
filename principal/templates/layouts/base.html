@@ -106,7 +106,7 @@
                                             <a class="dropdown-item" href="{% url 'agregarActividad' %}">Agregar Actividad</a>
                                         </li>
                                         {% endif %}
-                                        {% if miembro.cargo_car.car_id == 3 %}
+                                        {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 3 %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'verPagos' %}">Ver Pagos</a>
                                         </li>
@@ -135,66 +135,6 @@
             </div>
         </nav>
     </section>
-    <!-- navbar end -->
-
-    <!--
-    <nav class="navbar navbar-expand-lg" id="navbar">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span><i class="fa-solid fa-bars" style="color: white; font-size: 23px;"></i></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Noticias</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Proyectos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Cuota Social</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Certificados</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
-    <nav class="navbar navbar-expand-lg" id="navbar_2">
-        <div class="container-fluid">
-            {% if request.session.correo %}
-            <a class="navbar-brand" href="{% url 'index' request.session.rut %}" id="logo"><img
-                    src="{% static 'img/Logo_UnidadVecinal-removebg-preview-removebg-preview.png' %}" alt="">
-            </a>
-            {% else %}
-            <a class="navbar-brand" href="{% url 'home' %}" id="logo"><img
-                    src="{% static 'img/Logo_UnidadVecinal-removebg-preview-removebg-preview.png' %}" alt="">
-            </a>
-            {% endif %}
-            <div>
-                <ul class="navbar-nav me-auto mb-2 mb-sm-0">
-                    {% if request.session.correo %}
-                    <form class="d-flex">
-                        <a href="{% url 'cerrarSesion' %}" id="btn_navbar">Cerrar Sesión</a>
-                    </form>
-                    {% else %}
-                    <form class="d-flex">
-                        <a href="{% url 'login' %}" id="btn_navbar">Iniciar Sesión</a>
-                    </form>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
-    -->
 
     {% block content %}
     {% endblock %}

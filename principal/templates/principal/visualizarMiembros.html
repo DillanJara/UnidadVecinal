@@ -2,97 +2,113 @@
 
 {% load static %}
 
-{% block title %}
-<title>Miembros de {{ miembro.junta_vecinos_jun.jun_nombre|title }}</title>
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/visualizarMiembros.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="contenedor-registro-junta container mt-5 bg-light p-5">
-    <div style="overflow-x: auto;">
-        <h1 class="text-center">Miembros de {{ miembro.junta_vecinos_jun.jun_nombre|title }}</h1>
-        <table class="table table-light table-hover">
-            <thead>
-                <tr>
-                    <th>Rut</th>
-                    <th>Nombre</th>
-                    <th>Fecha nacimiento</th>
-                    <th>Telefono</th>
-                    <th>Correo</th>
-                    <th>Direccion</th>
-                    <th>Estado</th>
-                    <th colspan="2">Cargo</th>
-                    <th>Documento Adjunto</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for m in miembros %}
-                <tr>
-                    <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
-                    <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }} {{ m.mie_ap_materno|title }}</td>
-                    <td>{{ m.mie_fecha_nacimiento }}</td>
-                    <td>{{ m.mie_telefono }}</td>
-                    <td>{{ m.mie_correo }}</td>
-                    <td>{{ m.mie_direccion }}</td>
-                    <td>
-                        {{ m.mie_estado }}
-                        {% if m.mie_estado == 'Deshabilitado' %}
-                            <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+<section id="visualizarMiembros">
+    <div class="container">
+        <p class="visualizarMiembros-title">Miembros de {{ miembro.junta_vecinos_jun.jun_nombre|title }}</p>
+        <div class="card card-visualizar-miembros" style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Rut</th>
+                        <th>Nombre</th>
+                        <th>Fecha nacimiento</th>
+                        <th>Telefono</th>
+                        <th>Correo</th>
+                        <th>Direccion</th>
+                        <th>Estado</th>
+                        <th colspan="2">Cargo</th>
+                        <th>Documento Adjunto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in miembros %}
+                    <tr>
+                        <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
+                        <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }} {{ m.mie_ap_materno|title }}
+                        </td>
+                        <td>{{ m.mie_fecha_nacimiento }}</td>
+                        <td>{{ m.mie_telefono }}</td>
+                        <td>{{ m.mie_correo }}</td>
+                        <td>{{ m.mie_direccion }}</td>
+                        <td>
+                            {{ m.mie_estado }}
+                            {% if m.mie_estado == 'Deshabilitado' %}
+                            <button type="button"
+                                class="btn btn-sm btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/activarCuenta/{{ m.mie_rut }}">Activar</a></li>
+                                <li><a class="dropdown-item" href="/activarCuenta/{{ m.mie_rut }}">Activar</a>
+                                </li>
                             </ul>
-                        {% endif %}
-                    </td>
-                    <td>{{ m.cargo_car.car_nombre }}</td>
-                    {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
-                    <td>
-                        <div class="btn-group">
-                            {% if m.cargo_car.car_id == 1 %}
-                                <button class="btn btn-outline-primary btn-sm dropdown-toggle disabled" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Cambiar Cargo
-                                </button>
-                            {% else %}
-                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Cambiar Cargo
-                                </button>
                             {% endif %}
-                            <ul class="dropdown-menu">
-                                {% for c in cargos %}
+                        </td>
+                        <td>{{ m.cargo_car.car_nombre }}</td>
+                        {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
+                        <td>
+                            <div class="btn-group">
+                                {% if m.cargo_car.car_id == 1 %}
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle disabled" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Cambiar Cargo
+                                </button>
+                                {% else %}
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Cambiar Cargo
+                                </button>
+                                {% endif %}
+                                <ul class="dropdown-menu">
+                                    {% for c in cargos %}
                                     {% if c.car_id == m.cargo_car.car_id %}
-                                        <li><a class="dropdown-item disabled" href="#">{{ c.car_nombre }}</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">{{ c.car_nombre }}</a></li>
                                     {% else %}
-                                        <li><a class="dropdown-item" href="{% url 'cambiarCargo' m.mie_rut c.car_id %}">{{ c.car_nombre }}</a></li>
+                                    <li><a class="dropdown-item"
+                                            href="{% url 'cambiarCargo' m.mie_rut c.car_id %}">{{c.car_nombre }}</a>
+                                    </li>
                                     {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </td>
-                    {% endif %}
-                    <td>
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Ver
-                        </button>
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Documento Adjunto</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <img class="img-fluid" src="/media/{{ m.mie_documento }}" alt="documento">
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                </div>
+                                    {% endfor %}
+                                </ul>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+                        {% endif %}
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
+                                Ver
+                            </button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Documento Adjunto
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ...
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</section>
+
 {% endblock %}

@@ -6,30 +6,29 @@
 <title>Noticias</title>
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verNoticias.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 100rem;">
-        <div class="card-header text-white" style="background-color: #0F75BD;">Noticias</div>
-        <div class="card-body">
+<section id="ver-noticias">
+    <div class="container text-center">
+        <p class="ver-noticias-title">Noticias</p>
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center">
             {% for n in noticias %}
-            <div class="card mb-3" style="max-width: 540px;">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="/media/{{ n.not_imagen }}" class="img-fluid rounded-start" alt="{{ n.not_titulo }}">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ n.not_titulo }}</h5>
-                            <p class="card-text">
-                                Fecha: {{ n.not_fecha }}
-                            </p>
-                            <p class="card-text text-end"><a href="{% url 'detalleNoticia' n.not_id%}" class="text-muted">Ver Detalle</a></p>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/media/{{ n.not_imagen }}" class="card-img-top img-fluid" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ n.not_titulo }}</h5>
+                        <p class="card-text">Fecha: {{ n.not_fecha }}</p>
+                        <div class="text-end">
+                            <a href="{% url 'detalleNoticia' n.not_id%}" class="btn btn-ver-noticia">Ver Noticia</a>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-    </div>
-</div>
+</section>
 {% endblock %}

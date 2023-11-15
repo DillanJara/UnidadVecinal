@@ -192,3 +192,22 @@ class AgregarMiembro(forms.ModelForm):
         else:
             raise forms.ValidationError(
                 "La junta de vecinos ingresada no existe. Ingrese una valida")
+
+
+class ActualizarPasswordMiembro(forms.ModelForm):
+    mie_password = forms.CharField(
+        max_length=150, min_length=8, label="Contraseña", widget=forms.PasswordInput())
+    mie_password_2 = forms.CharField(
+        max_length=150, label="Confirmar Contraseña", widget=forms.PasswordInput())
+
+    class Meta:
+        model = Miembro
+        fields = ["mie_password",]
+
+    def clean_mie_password_2(self):
+        mie_password = self.cleaned_data.get('mie_password')
+        mie_password_2 = self.cleaned_data.get('mie_password_2')
+        if mie_password == mie_password_2:
+            return mie_password_2
+        else:
+            raise forms.ValidationError("Las contraseñas no coinciden")

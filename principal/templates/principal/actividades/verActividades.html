@@ -4,6 +4,7 @@
 {% load django_bootstrap5 %}
 
 {% block style %}
+<link rel="stylesheet" href="{% static 'styles/verActividades.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -11,29 +12,25 @@
 {% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 100rem;">
-        <div class="card-header text-white" style="background-image: linear-gradient(to right, #0F75BD, #0F7585);">Proximas Actividades</div>
-        <div class="card-body">
-            <div class="mb-3" style="max-width: 540px;">
-                {% for a in actividades %}
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <h3 class="card-title">{{ a.act_descripcion }}</h3>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <p class="card-text">
-                                Fecha: {{ a.act_fecha }}
-                            </p>
-                            <p class="card-text text-end"><a href="{% url 'detalleActividad' a.act_id %}" class="text-muted">Ver Detalle</a></p>
+<section id="ver-actividad">
+    <div class="container">
+        <p class="ver-actividad-title">Actividades</p>
+        <div class="row row-cols-1 row-cols-md-3 justify-content-center">
+            {% for a in actividades %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header">Actividad {{ a.tipo_actividad_tip_act }}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ a.act_descripcion }}</h5>
+                        <p class="card-text">Fecha: {{ a.act_fecha }}</p>
+                        <div class="text-end">
+                            <a href="{% url 'detalleActividad' a.act_id %}" class="btn btn-inscribirse">Inscribirme</a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
-</div>
-
+</section>
 {% endblock %}

@@ -68,20 +68,22 @@ def cambiarPassword(request, mie_rut):
         del request.session["errorLogin"]
         request.session.modified = True
     miembro = Miembro.objects.get(mie_rut=mie_rut)
+    form = ActualizarPasswordMiembro(request.POST or None)
     contexto = {
         "miembro": miembro,
-        "form": AgregarMiembro(request.POST or None)
+        "form": form
     }
     if request.method == "POST":
-        password = hashlib.sha256(request.POST.get('mie_password').encode())
-        password_encriptada = password.hexdigest()
-        miembro.mie_password = password_encriptada
-        miembro.save()
-        asunto = "Cambio de contraseña"
-        cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_paterno + " le informamos que su en cuenta se ha realizado una actualizacion de la contraseña"
-        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
-        message.send()
-        return redirect('/login')
+        if form.is_valid():
+            password = hashlib.sha256(request.POST.get('mie_password').encode())
+            password_encriptada = password.hexdigest()
+            miembro.mie_password = password_encriptada
+            miembro.save()
+            asunto = "Cambio de contraseña"
+            cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_paterno + " le informamos que su en cuenta se ha realizado una actualizacion de la contraseña"
+            message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+            message.send()
+            return redirect('/login')
     return render(request, "recuperarPassword/cambiarPassword.html", contexto)
 
 
@@ -235,15 +237,11 @@ def registrarMiembro(request):
 # seccion principal
 def verIndex(request, rut):
     if request.session.get("correo"):
-        if request.session.get("errorValidarRut"):
-            del request.session["errorValidarRut"]
-            request.session.modified = True
         # ------------------------------------------------------
         miembro                = Miembro.objects.get(mie_rut=rut)
         miembrosDeshabilitados = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Deshabilitado")
         familiarMiembro        = FamiliarMiembro.objects.filter(miembro_mie_id=rut)
         proyectos              = Proyecto.objects.filter(miembro_mie_id=miembro.mie_rut)
-        form                   = agregarFamiliarMiembro(request.POST or None)
         miembrosRegistrados    = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id).count()
         miembrosActivos        = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Habilitado").count()
         # ------------------------------------------------------
@@ -251,12 +249,40 @@ def verIndex(request, rut):
             "miembro"                : miembro,
             "miembrosDeshabilitados" : miembrosDeshabilitados,
             "familiarMiembro"        : familiarMiembro,
-            "form"                   : form,
             "proyectos"              : proyectos,
             "miembrosRegistrados": miembrosRegistrados,
             "miembrosActivos": miembrosActivos
         }
         # ------------------------------------------------------
+        return render(request, "principal/index.html", context)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def verPerfil(request, mie_rut):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=mie_rut)
+        contexto = {
+            "miembro": miembro
+        }
+        return render(request, "principal/verPerfil.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def agregarFamiliarMiembro(request):
+    if request.session.get("correo"):
+        if request.session.get("errorValidarRut"):
+            del request.session["errorValidarRut"]
+            request.session.modified = True
+        form = AgregarFamiliarMiembro(request.POST or None)
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        contexto = {
+            "form" : form,
+            "miembro" : miembro
+        }
         if form.is_valid():
             if validar_rut(request.POST["fam_mie_rut"], request.POST["fam_mie_dv"]):
                 if request.session.get("errorValidarRut"):
@@ -276,19 +302,7 @@ def verIndex(request, rut):
                 return redirect('/index/' + str(miembro.mie_rut))
             else:
                 request.session["errorValidarRut"] = "El digito verificador del Rut ingresado no es valido"
-        return render(request, "principal/index.html", context)
-    else:
-        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
-        return redirect("/login")
-
-
-def verPerfil(request, mie_rut):
-    if request.session.get("correo"):
-        miembro = Miembro.objects.get(mie_rut=mie_rut)
-        contexto = {
-            "miembro": miembro
-        }
-        return render(request, "principal/verPerfil.html", contexto)
+        return render(request, "principal/registrarFamiliar.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
@@ -532,6 +546,8 @@ def cambiarEstadoProyecto(request, proy_id, est_proy_id):
     proyecto.estado_proyecto_est_proy = estadoProyecto
     proyecto.save()
     return redirect("/verProyectos")
+
+
 # ------------------------------------------------------
 # seccion de espacios y reservas
 def agregarEspacios(request):

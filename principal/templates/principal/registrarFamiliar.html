@@ -1,0 +1,24 @@
+{% extends 'layouts/base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/registrarFamiliar.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section id="agregar-familiar">
+    <div class="container">
+        <p class="agregar-familiar-title">Agrega un Familiar</p>
+        <div class="card-agregar-familiar">
+            <form method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-agregar-familiar">Guardar</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -34,10 +34,11 @@
                 <img src="{% static 'img/welcome.png' %}" class="img-home-miembro">
             </div>
         </div>
+
         <div class="row">
             <div class="col-lg-4">
                 <div class="card-certificados">
-                    <div class="card-header text-center">
+                    <div class="card-header card-header-cert text-center">
                         <p class="card-cert-title">Certificados</p>
                     </div>
                     <div class="card-body">
@@ -46,101 +47,171 @@
                                 <td>
                                     <p class="cert-title">Certificado de Residencia</p>
                                 </td>
-                                <td>
-                                    <a href="{% url 'obtenerCertificado' miembro.mie_rut 1 %}" class="btn btn-obt-cert">Obtener</a>
-                                </td>
+                                <td><a href="{% url 'obtenerCertificado' miembro.mie_rut 1 %}"
+                                        class="btn btn-obt-cert">Obtener</a></td>
                             </tr>
                             <tr>
                                 <td>
                                     <p class="cert-title">Certificado de Socio</p>
                                 </td>
                                 <td>
-                                    <a href="{% url 'obtenerCertificado' miembro.mie_rut 2 %}" class="btn btn-obt-cert">Obtener</a>
+                                    <a href="{% url 'obtenerCertificado' miembro.mie_rut 2 %}"
+                                        class="btn btn-obt-cert">Obtener</a>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6">
+
+            <div class="col-lg-8">
                 <div class="card-certificados">
-                    <div class="card-header text-center header-fam">
+                    <div class="card-header card-header-familiares text-center">
                         <p class="card-fam-title">Familiares</p>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="overflow-x: auto;">
                         <table class="table">
                             <tbody>
                                 {% for fm in familiarMiembro %}
                                 <tr>
-                                    <th class="">{{ fm.fam_mie_nombre }} {{ fm.fam_mie_ap_paterno }}
-                                    <th class="">{{ fm.fam_mie_parentesco }}
-                                        <div class="modal fade" id="staticBackdrop{{ fm.fam_mie_rut }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="staticBackdropLabel">Eliminar
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        ¿Esta seguro que desea eliminar a {{ fm.fam_mie_nombre }}
-                                                        {{ fm.fam_mie_ap_paterno }} de tus familiares?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="/eliminarFamiliarMiembro/{{ fm.fam_mie_rut }}" class="btn btn-danger">Eliminar</a>
-                                                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
-                                                    </div>
+                                    <td class="p-fam">{{ fm.fam_mie_nombre }} {{ fm.fam_mie_ap_paterno }}</td>
+                                    <td class="p-fam">{{ fm.fam_mie_parentesco }}</td>
+                                    <div class="modal fade" id="staticBackdrop{{ fm.fam_mie_rut }}"
+                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Eliminar</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Esta seguro que desea eliminar a {{ fm.fam_mie_nombre }} {{ fm.fam_mie_ap_paterno }} de tus familiares?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="/eliminarFamiliarMiembro/{{ fm.fam_mie_rut }}" class="btn btn-danger">Eliminar</a>
+                                                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    <td class="">
+                                    </div>
+                                    <td>
                                         <a class="btn btn-modificar-fam" href="{% url 'modificarFamiliarMiembro' fm.fam_mie_rut %}">Modificar</a>
                                     </td>
-                                    <td class="">
+                                    <td>
                                         <button class="btn btn-eliminar-fam" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ fm.fam_mie_rut }}">Eliminar</button>
                                     </td>
                                     <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-obt-cert-familiar dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Solicitar Certificado
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="{% url 'obtenerCertificado' fm.fam_mie_rut 1 %}" class="dropdown-item">Cert. de Residencia</a></li>
-                                            </ul>
-                                        </div>
+                                        <button class="btn-cert-fam dropdown-toggle" type="button" id="btn_navbar" data-bs-toggle="dropdown" aria-expanded="false">Obtener Certificado</button>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item">
+                                                <a href="{% url 'obtenerCertificado' fm.fam_mie_rut 1 %}" class="dropdown-item">Cert. de Residencia</a>
+                                            </li>
+                                        </ul>
                                     </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+                    <div class="text-center">
+                        <a class="btn btn-agregar-fam mt-3" href="{% url 'agregarFamiliar' %}">Agregar</a>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+            {% if miembro.cargo_car.car_id == 4 %}
+            <div class="col-md-4">
+                <div class="card-miembros-totales">
+                    <div class="card-header card-header-miembros-totales text-center">
+                        <p class="card-fam-title">Miembros Totales</p>
+                    </div>
+                    <div class="card-miembros-totales text-center">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <br>
+                                <h6>Miembros Totales </h6>
+                                <h2>→ {{ miembrosRegistrados }}</h2>
+                                <br>
+                            </div>
+                            <div class="col-md-6">
+                                <br>
+                                <h6>Miembros Activos</h6>
+                                <h2>→ {{ miembrosActivos }}</h2>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-12">
+                        <div class="card-miembros-registrados">
+                            <div class="card-header card-header-miembros-registrados text-center">
+                                <p class="card-fam-title">Nuevos Miembros Registrados</p>
+                            </div>
+                            <div style="overflow-x: auto;">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>RUT</th>
+                                            <th>Nombre</th>
+                                            <th>Correo</th>
+                                            <th>Estado de cuenta</th>
+                                            {% if miembro.cargo_car.car_id == 1 %}
+                                            <th>Activar cuenta</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for m in miembrosDeshabilitados %}
+                                        <tr class="text-center">
+                                            <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
+                                            <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }}</td>
+                                            <td>{{ m.mie_correo }}</td>
+                                            <td>{{ m.mie_estado }}</td>
+                                            <th>
+                                                <a href="/activarCuenta/{{ m.mie_rut }}"
+                                                    class="btn btn-activar-cuenta">Activar</a>
+                                            </th>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center">
+                                <a class="btn btn-ver-miembros" href="{% url 'visualizarMiembros' %}">Ver Todos</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
             {% if miembro.cargo_car.car_id != 4 %}
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card-avisos">
-                        <div class="card-header text-center header-fam">
-                            <p class="card-fam-title">Dar Aviso</p>
-                        </div>
-                        <div class="card-body">
-                            <form action="{% url 'enviarAviso' %}" method="POST">
-                                {% csrf_token %}
-                                <div class="mb-3">
-                                    <label for="asunto" class="form-label">Asunto</label>
-                                    <input type="text" class="form-control" id="asunto" name="asunto">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="mensaje" class="form-label">Mensaje</label>
-                                    <textarea class="form-control" id="mensaje" rows="3" name="mensaje"></textarea>
-                                </div>
-                                <div class="text-end">
-                                    <button type="submit" class="btn-enviar-correo">Enviar</button>
-                                </div>
-                            </form>
-                        </div>
+            <div class="col-md-12">
+                <div class="card-enviar-correo">
+                    <div class="card-header-enviar-correo text-center">
+                        <p class="card-fam-title">Dar Aviso</p>
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'enviarAviso' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="asunto" class="form-label">Asunto</label>
+                                <input type="text" class="form-control" id="asunto" name="asunto" maxlength="50">
+                            </div>
+                            <div class="mb-3">
+                                <label for="mensaje" class="form-label">Mensaje</label>
+                                <textarea class="form-control" id="mensaje" rows="3" name="mensaje" maxlength="300"></textarea>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn-enviar-correo">Enviar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -148,134 +219,4 @@
         </div>
     </div>
 </section>
-
-<!--
-
-<div class="about" id="about">
-    <div class="container">
-        <div class="">
-            <div class="heading"><span>{{ miembro.junta_vecinos_jun.jun_nombre|upper }}</span></div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="{% static 'img/SobreNosotros.jpg' %}" alt="">
-                </div>
-            </div>
-            <div class="col-md-6">
-                {% if miembro.cargo_car.car_id == 4 %}
-                    <h3>Miembros Totales </h3>
-                    <h1 class="display-1">→ {{ miembrosRegistrados }}</h1>
-                    <h3>Miembros Activos</h3>
-                    <h1 class="display-3">→ {{ miembrosActivos }}</h1>
-                
-                {% else %}
-                    <h3>Nuevos Miembros Registrados</h3>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>RUT</th>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Estado de cuenta</th>
-                                {% if miembro.cargo_car.car_id == 1 %}
-                                <th>Activar cuenta</th>
-                                {% endif %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for m in miembrosDeshabilitados %}
-                            <tr>
-                                <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
-                                <td>{{ m.mie_nombre|title }} {{ m.mie_ap_paterno|title }}</td>
-                                <td class="col-2 text-truncate" style="max-width: 150px;">{{ m.mie_correo }}</td>
-                                <td>{{ m.mie_estado }}</td>
-                                <th><a href="/activarCuenta/{{ m.mie_rut }}" class="btn btn-outline-primary">Activar</a></th>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <a href="{% url 'visualizarMiembros' %}"><button id="about-btn">Ver Todos</button></a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div> 
-
-
-<section class="contact" id="contact">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-7">
-                <div class="heading6"><span>Registra</span> a tus familiares <span>aqui!</span></div>
-                <p>Puedes registrar aqui a las personas que vivan contigo y puedan ser parte de esta comunidad</p>
-                <form method="POST">
-                    {% if request.session.errorValidarRut %}
-                    <div class="alert alert-danger d-flex align-items-center" role="alert">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img"
-                            aria-label="Warning:">
-                            <path
-                                d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                        </svg>
-                        <div>
-                            {{ request.session.errorValidarRut }}
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
-                    <input class="visually-hidden-focusable" id="familiar_miembro_mie_rut" type="text"
-                        value="{{ miembro.mie_rut }}" name="miembro_rut" readonly>
-                    <button class="mb-3" id="contact-btn">Registrar</button>
-                </form>
-            </div>
-            <div class="col-md-5" id="col">
-                <h1>Familiares</h1>
-                <table class="table table-hover table-borderless">
-                    <tbody>
-                        {% for fm in familiarMiembro %}
-                        <tr>
-                            <th class="text-white">{{ fm.fam_mie_nombre }} {{ fm.fam_mie_ap_paterno }}</td>
-                            <th class="text-white text-end">{{ fm.fam_mie_parentesco }}</td>
-                            <td><button class="badge rounded-pill bg-danger" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop{{ fm.fam_mie_rut }}">Eliminar</button></td>
-                            <div class="modal fade" id="staticBackdrop{{ fm.fam_mie_rut }}" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header" style="background-color: #0B558A;">
-                                            <h5 class="modal-title text-white" id="staticBackdropLabel">Eliminar</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ¿Esta seguro que desea eliminar a {{ fm.fam_mie_nombre }} {{
-                                            fm.fam_mie_ap_paterno }} de tus familiares?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="/eliminarFamiliarMiembro/{{ fm.fam_mie_rut }}"
-                                                class="btn btn-danger">Eliminar</a>
-                                            <button type="button" class="btn btn-outline-primary"
-                                                data-bs-dismiss="modal">Cancelar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <td><a href="{% url 'modificarFamiliarMiembro' fm.fam_mie_rut %}"><button
-                                        class="badge rounded-pill bg-secondary">Modificar</button></a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
--->
 {% endblock %}

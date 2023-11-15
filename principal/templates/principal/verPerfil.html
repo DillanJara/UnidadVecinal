@@ -2,65 +2,79 @@
 
 {% load static %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verPerfil.css' %}">
+{% endblock %}
+
 {% block title %}
 <title>Perfil</title>
 {% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-center m-5">
-    <div class="card" style="width: 30em;">
-        <div class="card-header text-center">
-            <div class="heading"><span>Mis Datos</span></div>
-        </div>
-        <div class="card-body">
-            <div class="input-group mb-3">
-                <span class="input-group-text">Rut</span>
-                <input readonly type="text" class="form-control" value="{{ miembro.mie_rut }}-{{ miembro.mie_dv }}">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Nombre</span>
-                <input readonly type="text" class="form-control" value="{{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }} {{ miembro.mie_ap_materno }}">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Fecha de Nacimiento</span>
-                <input readonly type="text" class="form-control" value="{{ miembro.mie_fecha_nacimiento }}">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Telefono</span>
-                <input readonly type="text" class="form-control" value="{{ miembro.mie_telefono }}">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Correo</span>
-                <input readonly type="text" class="form-control" value="{{ miembro.mie_correo }}">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Cargo</span>
-                <input readonly type="text" class="form-control" value="{{ miembro.cargo_car.car_nombre }}">
-            </div>
-            <div class="mb-3">
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Ver Documento Adjuntado
-                </button>
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Documento Adjunto</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <img class="img-fluid" src="/media/{{ miembro.mie_documento }}" alt="documento">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+<section id="ver-perfil">
+    <div class="container container-ver-perfil">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <p class="title-ver-perfil">Mis Datos</p>
+                <div class="card-body card-ver-perfil">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Rut</span>
+                        <input readonly type="text" class="form-control"
+                            value="{{ miembro.mie_rut }}-{{ miembro.mie_dv }}">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Nombre</span>
+                        <input readonly type="text" class="form-control"
+                            value="{{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }} {{ miembro.mie_ap_materno }}">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Fecha de Nacimiento</span>
+                        <input readonly type="text" class="form-control" value="{{ miembro.mie_fecha_nacimiento }}">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Telefono</span>
+                        <input readonly type="text" class="form-control" value="{{ miembro.mie_telefono }}">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Correo</span>
+                        <input readonly type="text" class="form-control" value="{{ miembro.mie_correo }}">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Cargo</span>
+                        <input readonly type="text" class="form-control" value="{{ miembro.cargo_car.car_nombre }}">
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-ver-documento" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Ver Documento Adjunto
+                        </button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Documento Adjunto</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img class="img-fluid" src="/media/{{ miembro.mie_documento }}" alt="documento">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-md-3"></div>
         </div>
     </div>
-</div>
+</section>
 
 {% endblock %}

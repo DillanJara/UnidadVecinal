@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'styles/vercuotas.css' %}">
+<link rel="stylesheet" href="{% static 'styles/verCuotas.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -11,33 +11,38 @@
 {% endblock %}
 
 {% block content %}
-<div class="contenedor-ver-cuotas container">
-    <div style="overflow-x: auto;">
-        <h1 class="text-center">Cuotas Pagadas</h1>
-        <table class="table table-light table-hover">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha de Pago</th>
-                    <th>Monto</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for c in cuotas %}
-                <tr>
-                    <td>{{ c.cuo_id }}</td>
-                    <td>{{ c.cuo_fecha_pago }}</td>
-                    <td>{{ c.cuo_monto }}</td>
-                    <td>{{ c.cuo_estado }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<section id="ver-cuotas">
+    <div class="container">
+        <p class="ver-cuotas-title">Cuotas Pagadas</p>
+        <div class="card-ver-cuotas">
+            <div style="overflow-x: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha de Pago</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in cuotas %}
+                        <tr>
+                            <td>{{ c.cuo_id }}</td>
+                            <td>{{ c.cuo_fecha_pago }}</td>
+                            <td>{{ c.cuo_monto }}</td>
+                            <td>{{ c.cuo_estado }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-end">
+                <a href="{% url 'procesar_pago' %}" class="btn btn-pagar">Pagar Cuota</a>
+            </div>
+        </div>
     </div>
-    <div class="text-end mt-3">
-        <a href="{% url 'procesar_pago' %}" class="btn-pagar">Pagar</a>
-    </div>
-</div>
-{% endblock %}
+</section>
 
+
+{% endblock %}

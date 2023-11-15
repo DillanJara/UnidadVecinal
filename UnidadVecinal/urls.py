@@ -40,6 +40,7 @@ urlpatterns = [
     #-------------------------------------------------------------------------
     path('index/<int:rut>', verIndex, name="index"),
     path('verPerfil/<int:mie_rut>', verPerfil, name="verPerfil"),
+    path('agregarFamiliar/', agregarFamiliarMiembro, name="agregarFamiliar"),
     path('eliminarFamiliarMiembro/<int:fam_mie_rut>', eliminarFamiliarMiembro, name="eliminarFamiliarMiembro"),
     path('modificarFamiliarMiembro/<int:fam_mie_rut>', modificarFamiliarMiembro, name="modificarFamiliarMiembro"),
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
