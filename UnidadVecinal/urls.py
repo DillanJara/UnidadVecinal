@@ -61,6 +61,7 @@ urlpatterns = [
     #-------------------------------------------------------------------------
     path('agregarReserva/<int:esp_id>', agregarReserva, name="agregarReserva"),
     path('detalleReserva/<int:res_id>', detalleReserva, name="detalleReserva"),
+    path('verReservas/<int:mie_rut>', verReservas, name="verReservas"),
     #-------------------------------------------------------------------------
     path('registrarFirma/<int:mie_rut>', firma, name="registraFirma"),
     #-------------------------------------------------------------------------

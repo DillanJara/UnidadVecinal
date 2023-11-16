@@ -3,6 +3,11 @@
     font-size: 40px;
     font-weight: 600;
     margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.table {
+    width: 100%;
 }
 
 #visualizarMiembros .card-visualizar-miembros {
@@ -14,4 +19,27 @@
 #visualizarMiembros .card-visualizar-miembros th {
     text-decoration: none;
     font-size: medium;
+}
+
+#visualizarMiembros .btn-ver-documento {
+    box-shadow: none;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    width: 80px;
+    border: none;
+}
+
+#visualizarMiembros .btn-ver-documento:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+#visualizarMiembros .btn-cambiar-cargo {
+    box-shadow: none;
+    border-radius: 15px;
+    background-color: #114c55;
+    color: #fff;
+    width: 150px;
+    border: none;
 }

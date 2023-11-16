@@ -34,51 +34,27 @@
     <img src="{% static 'img/wave1.png' %}" class="bottom-img">
 </section>
 <!-- banner section end -->
-<div class="container">
-    <div class="row g-3">
-        <div class="col-sm-6">
-            <div class="input-group">
-                <input type="number" id="rut" class="form-control" placeholder="Rut" style="width: max-content;" maxlength="99999999" minlength="1">
-                <span class="input-group-text">-</span>
-                <input placeholder="Dv" type="text" class="form-control">
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <input type="number" id="nroSolicitud" class="form-control" placeholder="N° de Solicitud" minlength="1">
-        </div>
-        <div class="col-sm-2">
-            <button id="validarCertificado" class="btn-validar-certificado">Validar</button>
-        </div>
-    </div>
-</div>
-<!--
-<div class="contenedor mx-auto">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <img src="{% static 'img/logo_registrar_junta.png' %}" class="img-fluid card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Registrar Junta de Vecinos</h5>
-                    <p class="card-text">Para acceder a sistema primero debes agregar tu junta de vecinos</p>
-                    <a href="{% url 'registrarJuntaVecinos' %}" class="btn btn-primary">Ir</a>
+<section id="validar-certificado">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <input type="number" id="rut" class="form-control" placeholder="Rut" style="width: max-content;"
+                        maxlength="99999999" minlength="1">
+                    <span class="input-group-text">-</span>
+                    <input placeholder="Dv" type="text" class="form-control">
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="card">
-                <img src="{% static 'img/logo_login.png' %}" class="img-fluid card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Ingresar</h5>
-                    <p class="card-text">Accede a la aplicacion de gestion de tu junta de vecinos</p>
-                    <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesion</a>
-                    <br>
-                    <a href="{% url 'registrarMiembro' %}" >¿No tienes una cuenta? Registrate</a>
-                </div>
+            <div class="col-sm-4">
+                <input type="number" id="nroSolicitud" class="form-control" placeholder="N° de Solicitud" minlength="1">
+            </div>
+            <div class="col-sm-2">
+                <button id="validarCertificado" class="btn-validar-certificado">Validar</button>
             </div>
         </div>
     </div>
-</div>
--->
+</section>
+
 <script>
 
     document.getElementById('validarCertificado').onclick = validarCertificado;
@@ -86,46 +62,45 @@
     function validarCertificado() {
         let rut = document.getElementById('rut').value;
         let nroSolicitud = document.getElementById('nroSolicitud').value;
-        fetch('http://127.0.0.1:8000/api/validarCertificado/'+nroSolicitud+'/'+rut)
-        .then(response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response.json();
-        })
-        .then(responseAsJson  => {
-            Swal.fire({
-                title: "Enhorabuena!",
-                footer: "El documento ha sido validado correctamente",
-                icon: "success",
-                html: "<table class='table table-striped'>" +
-                    "<tr>" +
+        fetch('http://127.0.0.1:8000/api/validarCertificado/' + nroSolicitud + '/' + rut)
+            .then(response => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(responseAsJson => {
+                Swal.fire({
+                    title: "Enhorabuena!",
+                    footer: "El documento ha sido validado correctamente",
+                    icon: "success",
+                    html: "<table class='table table-striped'>" +
+                        "<tr>" +
                         "<td>N° Solicitud</td>" +
-                        "<td>"+responseAsJson.sol_cer_id+"</td>" +
-                    "</tr>" +
-                    "<tr>" +
+                        "<td>" + responseAsJson.sol_cer_id + "</td>" +
+                        "</tr>" +
+                        "<tr>" +
                         "<td>Rut</td>" +
-                        "<td>"+responseAsJson.miembro_mie.mie_rut+"-"+responseAsJson.miembro_mie.mie_dv+"</td>" +
-                    "</tr>" +
-                    "<tr>" +
+                        "<td>" + responseAsJson.miembro_mie.mie_rut + "-" + responseAsJson.miembro_mie.mie_dv + "</td>" +
+                        "</tr>" +
+                        "<tr>" +
                         "<td>Nombre</td>" +
-                        "<td>"+responseAsJson.miembro_mie.mie_nombre+ " "+responseAsJson.miembro_mie.mie_ap_paterno+" "+responseAsJson.miembro_mie.mie_ap_materno+"</td>" +
-                    "</tr>" +
-                    "<tr>" +
+                        "<td>" + responseAsJson.miembro_mie.mie_nombre + " " + responseAsJson.miembro_mie.mie_ap_paterno + " " + responseAsJson.miembro_mie.mie_ap_materno + "</td>" +
+                        "</tr>" +
+                        "<tr>" +
                         "<td>Documento</td>" +
-                        "<td>"+responseAsJson.certificado_cer.cer_nombre+"</td>" +
-                    "</tr>" +
-                "</table>"
+                        "<td>" + responseAsJson.certificado_cer.cer_nombre + "</td>" +
+                        "</tr>" +
+                        "</table>"
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Lamentablamente el documento ingresado no ha sido emitido desde nuestra aplicacion",
+                });
             });
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Lamentablamente el documento ingresado no ha sido emitido desde nuestra aplicacion",
-            });
-        });
     }
 </script>
 {% endblock %}
-

@@ -1,0 +1,49 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Mis reservas</title>
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container m-5">
+        <h1 class="text-center mb-3">Mis Reservas</h1>
+        <div class="accordion">
+        {% for e in espacios %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ e.esp_id }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ e.esp_id }}">
+                        {{ e.esp_nombre }}
+                    </button>
+                </h2>
+                <div id="collapse{{ e.esp_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ e.esp_id }}">
+                    <div class="accordion-body">
+                        {% for r in reservas %}
+                            {% if r.espacio_esp == e %}
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>{{ r.res_fecha }}</td>
+                                        <td>{{ r.res_hora_inicio }} - {{ r.res_hora_fin }}</td>
+                                        <td>
+                                            <a class="link-secondary" href="{% url 'detalleReserva' r.res_id %}">Ver detalle</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p class="text-muted">
+                                No tienes reservas en este espacio
+                            </p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

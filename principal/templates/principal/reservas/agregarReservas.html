@@ -19,7 +19,7 @@
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 <div class="inputbox mb-3">
-                    <button id="btn_navbar">Reservar</button>
+                    <button class="btn-agregar-actividad">Reservar</button>
                 </div>
                 {% if error %}
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -37,4 +37,24 @@
         </div>
     </div>
 </div>
+
+<style>
+    .btn-agregar-actividad {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    margin-top: 10px;
+    width: 100%;
+    border: none;
+}
+
+    .btn-agregar-actividad:hover {
+        -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+        box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    }
+</style>
 {% endblock %}
