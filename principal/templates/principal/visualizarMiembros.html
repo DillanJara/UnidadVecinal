@@ -6,15 +6,19 @@
 <link rel="stylesheet" href="{% static 'styles/visualizarMiembros.css' %}">
 {% endblock %}
 
+{% block title %}
+<title>Miembros</title>
+{% endblock %}
+
 {% block content %}
 <section id="visualizarMiembros">
     <div class="container">
         <p class="visualizarMiembros-title">Miembros de {{ miembro.junta_vecinos_jun.jun_nombre|title }}</p>
         <div class="card card-visualizar-miembros" style="overflow-x: auto;">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Rut</th>
+            <table class="table table-responsive table-bordered">
+                <thead class="table-secondary align-middle">
+                    <tr class="text-center">
+                        <th style="min-width: 110px;">Rut</th>
                         <th>Nombre</th>
                         <th>Fecha nacimiento</th>
                         <th>Telefono</th>
@@ -25,7 +29,7 @@
                         <th>Documento Adjunto</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="tabla-ver-miembros align-middle text-center">
                     {% for m in miembros %}
                     <tr>
                         <td>{{ m.mie_rut }}-{{ m.mie_dv }}</td>
@@ -54,32 +58,34 @@
                         <td>
                             <div class="btn-group">
                                 {% if m.cargo_car.car_id == 1 %}
-                                <button class="btn btn-outline-primary btn-sm dropdown-toggle disabled" type="button"
+                                <button class="btn btn-cambiar-cargo dropdown-toggle disabled" type="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     Cambiar Cargo
                                 </button>
                                 {% else %}
-                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                <button class="btn btn-cambiar-cargo dropdown-toggle" type="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     Cambiar Cargo
                                 </button>
                                 {% endif %}
                                 <ul class="dropdown-menu">
                                     {% for c in cargos %}
-                                    {% if c.car_id == m.cargo_car.car_id %}
-                                    <li><a class="dropdown-item disabled" href="#">{{ c.car_nombre }}</a></li>
-                                    {% else %}
-                                    <li><a class="dropdown-item"
-                                            href="{% url 'cambiarCargo' m.mie_rut c.car_id %}">{{c.car_nombre }}</a>
-                                    </li>
-                                    {% endif %}
+                                        {% if c.car_id == m.cargo_car.car_id %}
+                                        <li>
+                                            <a class="dropdown-item disabled" href="#">{{ c.car_nombre }}</a>
+                                        </li>
+                                        {% else %}
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'cambiarCargo' m.mie_rut c.car_id %}">{{c.car_nombre }}</a>
+                                        </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </div>
                         </td>
                         {% endif %}
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                        <td class="text-center">
+                            <button type="button" class="btn btn-ver-documento" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 Ver
                             </button>
@@ -94,7 +100,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            ...
+                                            <img src="/media/{{ m.mie_documento }}" alt="{{ m.mie_documento }}" class="img-fluid">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"

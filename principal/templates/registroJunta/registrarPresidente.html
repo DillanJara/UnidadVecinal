@@ -4,7 +4,7 @@
 {% load django_bootstrap5 %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'styles/registroMiembro.css' %}">
+<link rel="stylesheet" href="{% static 'styles/registroPresidente.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -12,9 +12,9 @@
 {% endblock %}
 
 {% block content %}
-<section class="form" id="form">
-    <div class="heading"><span>Formulario de Registro de Presidente</span></div>
+<section id="registroPresidente">
     <div class="container">
+        <p class="form-title">Registro Presidente</p>
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item text-success">Registra a tu Junta ✓</li>
@@ -62,14 +62,17 @@
                 </div>
                 <div class="col-md-6  mb-3">
                     <label class="form-label" for="junta_vecinos_jun">Junta de vecinos</label>
-                    <input type="text" id="junta_vecinos_jun" name="junta_vecinos_jun" class="form-control" readonly value="{{ juntaVecinos.jun_nombre }}">
+                    <input type="text" id="junta_vecinos_jun" name="junta_vecinos_jun" class="form-control" readonly
+                        value="{{ juntaVecinos.jun_nombre }}">
                 </div>
                 <div class="col-md-6  mb-3">
                     <label class="form-label" for="cargo_car">Cargo</label>
-                    <input type="text" id="cargo_car" name="cargo_car" class="form-control" readonly value="{{ cargo.car_nombre}}">
+                    <input type="text" id="cargo_car" name="cargo_car" class="form-control" readonly
+                        value="{{ cargo.car_nombre}}">
                 </div>
                 <div class="mb-3" id="agregarImg">
-                    <label for="input-btn">Suba una imagen de un documento a su nombre <em>(boleta de agua, luz, etc.)</em></label>
+                    <label for="input-btn">Suba una imagen de un documento a su nombre <em>(boleta de agua, luz,
+                            etc.)</em></label>
                     <div id="input-archivo">
                         <p><img src="{% static 'img/icono_input.png' %}"></p>
                         <input class="form-control" type="file" name="mie_documento" id="input-btn" required>
@@ -78,11 +81,12 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <button id="form-btn">Enviar</button>
+                    <button class="btn form-btn">Enviar</button>
                 </div>
         </form>
     </div>
 </section>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="{% static 'scripts\registroMiembro.js' %}"></script>
 {% endblock %}

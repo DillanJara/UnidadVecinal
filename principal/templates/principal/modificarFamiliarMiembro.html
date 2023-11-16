@@ -3,24 +3,31 @@
 {% load static %}
 {% load django_bootstrap5 %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/modificarFamiliar.css' %}">
+{% endblock %}
+
 {% block title %}
 <title>Modificar Familiar</title>
 {% endblock %}
 
 {% block content %}
-<div class="mt-5 row">
-    <div class="col-12 col-md-6 offset-md-3 rounded-3">
-        <div class="card">
+<section id="modificar-familiar">
+    <div class="container">
+        <div class="text-center">
+            <p class="modificar-familiar-title">Editar Datos Familiar</p>
+        </div>
+        <div class="card-modificar-familiar">
             <div class="card-body">
-                <h2>Editar Datos de Familiar</h2>
                 <form method="POST">
                     {% csrf_token %}
                     {% bootstrap_form form %}
-                    <input class="visually-hidden-focusable" id="familiar_miembro_mie_rut" type="text" value="{{ miembro.mie_rut }}" name="miembro_rut" readonly>
-                    <button class="mb-3">Registrar</button>
+                    <input class="visually-hidden-focusable" id="familiar_miembro_mie_rut" type="text"
+                        value="{{ miembro.mie_rut }}" name="miembro_rut" readonly>
+                    <button class="btn btn-modificar-familiar">Registrar</button>
                 </form>
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

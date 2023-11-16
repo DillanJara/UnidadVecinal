@@ -1,16 +1,16 @@
-.ver-cuotas-title {
+.modificar-familiar-title {
     text-align: center;
     font-size: 40px;
     font-weight: 600;
     margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.card-modificar-familiar {
     margin-bottom: 50px;
 }
 
-.card-ver-cuotas {
-    margin-bottom: 15%;
-}
-
-#ver-cuotas .btn-pagar {
+#modificar-familiar .btn-modificar-familiar {
     box-shadow: none;
     padding: 8px 25px;
     border-radius: 15px;
@@ -18,13 +18,12 @@
     color: #fff;
     font-weight: 600;
     margin: 2px;
-    margin-bottom: 15px;
-    margin-right: 10px;
-    width: 90%;
+    margin-top: 10px;
+    width: 100%;
     border: none;
 }
 
-#ver-cuotas .btn-pagar:hover {
+#modificar-familiar .btn-modificar-familiar:hover {
     -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
 }
