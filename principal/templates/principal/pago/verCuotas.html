@@ -14,20 +14,20 @@
 <section id="ver-cuotas">
     <div class="container">
         <p class="ver-cuotas-title">Cuotas Pagadas</p>
-        <div class="card-ver-cuotas">
+        <div class="card card-ver-cuotas">
             <div style="overflow-x: auto;">
-                <table class="table">
-                    <thead>
-                        <tr>
+                <table class="table table-bordered">
+                    <thead class="table-secondary align-middle">
+                        <tr class="text-center">
                             <th>ID</th>
                             <th>Fecha de Pago</th>
                             <th>Monto</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                         {% for c in cuotas %}
-                        <tr>
+                        <tr class="text-center">
                             <td>{{ c.cuo_id }}</td>
                             <td>{{ c.cuo_fecha_pago }}</td>
                             <td>{{ c.cuo_monto }}</td>
@@ -36,9 +36,9 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
-            <div class="text-end">
-                <a href="{% url 'procesar_pago' %}" class="btn btn-pagar">Pagar Cuota</a>
+                <div class="text-center">
+                    <a href="{% url 'procesar_pago' %}" class="btn btn-pagar">Pagar Cuota</a>
+                </div>
             </div>
         </div>
     </div>

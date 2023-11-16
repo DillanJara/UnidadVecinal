@@ -11,7 +11,7 @@ from principal.models import JuntaVecinos, Miembro
 def inicio(request):
     contexto = {
         'juntaVecinos': JuntaVecinos.objects.all(),
-        'miembro': Miembro.objects.all()
+        'miembro': Miembro.objects.filter(cargo_car_id=1)
     }
     return render(request, 'inicio.html', contexto)
 

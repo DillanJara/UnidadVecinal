@@ -92,15 +92,15 @@
                                         <li>
                                             <a class="dropdown-item" href="{% url 'verPerfil' miembro.mie_rut %} ">Mi perfil</a>
                                         </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'agregarProyecto' %}">Proponer Proyecto</a>
+                                        </li>
                                         {% if miembro.cargo_car.car_id != 4 %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'agregarEspacios' %}">Agregar Espacios</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="{% url 'agregarNoticia' %}">Agregar Noticia</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{% url 'agregarProyecto' %}">Proponer Proyecto</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="{% url 'agregarActividad' %}">Agregar Actividad</a>
@@ -113,6 +113,9 @@
                                         {% endif %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'verSolicitudes' miembro.mie_rut %}">Solicitudes</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'verReservas' miembro.mie_rut %}">Mis Reservas</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="{% url 'cerrarSesion' %}">Cerrar Sesión</a>
