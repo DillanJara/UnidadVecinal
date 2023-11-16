@@ -115,10 +115,13 @@ def validarLogin(request):
 
 
 def cerrarSesion(request):
-    del request.session['correo']
-    del request.session['rut']
-    request.session.modified = True
-    return redirect('/')
+    try:
+        del request.session['correo']
+        del request.session['rut']
+        request.session.modified = True
+        return redirect('/')
+    except:
+        return redirect('/')
 # ------------------------------------------------------
 
 
@@ -401,8 +404,6 @@ def enviarAvisos(request):
             email = EmailMultiAlternatives(asunto, encabezado + "\n" + mensaje, settings.EMAIL_HOST_USER, [d.mie_correo])
             email.send()
         return redirect("/index/" + str(request.session.get("rut")))
-
-
 # ------------------------------------------------------
 
 
@@ -414,7 +415,7 @@ def obtenerCetificado(request, mie_rut, cer_id):
         certificado = Certificado.objects.get(cer_id=cer_id)
         presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
         # ------------------------------------------------------
-        if SolicitudCertificado.objects.filter(sol_cer_fecha=timezone.now().date(), miembro_mie=miembro).count() > 3:
+        if SolicitudCertificado.objects.filter(sol_cer_fecha=timezone.now().date(), miembro_mie=miembro).count() == 3:
             return render(request, "certificados/error_solicitud.html")
         # ------------------------------------------------------
         solicitud = SolicitudCertificado()
@@ -592,7 +593,7 @@ def verEspacios(request):
         return redirect("/login")
 
 
-def agregarReserva(request,  esp_id):
+def agregarReserva(request, esp_id):
     if request.session.get("correo"):
         miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
         espacio = Espacio.objects.get(esp_id=esp_id)
@@ -633,6 +634,22 @@ def agregarReserva(request,  esp_id):
                     reserva.save()
                     return redirect("/detalleReserva/" + str(reserva.res_id))
         return render(request, "principal/reservas/agregarReservas.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def verReservas(request, mie_rut):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=mie_rut)
+        espacios = Espacio.objects.filter(junta_vecinos_jun=miembro.junta_vecinos_jun)
+        reservas = Reserva.objects.filter(miembro_mie=miembro)
+        contexto = {
+            "miembro": miembro,
+            "espacios": espacios,
+            "reservas": reservas
+        }
+        return render(request, "principal/reservas/verReservas.html", contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")

@@ -2,77 +2,93 @@
 
 {% load static %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verProyectos.css' %}">
+{% endblock %}
+
 {% block title %}
 <title>Proyectos</title>
 {% endblock %}
 
 {% block content %}
-<div class="contenedor-registro-junta container mt-5 p-5 border rounded-3">
-    <div style="overflow-x: auto;">
-        <h1 class="text-center">Proyectos Postulados</h1>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Postulado Por:</th>
-                    <th>Proyecto</th>
-                    <th>Descripcion</th>
-                    <th>Imagen</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in proyectos %}
-                <tr>
-                    <td>{{ p.miembro_mie.mie_nombre }} {{ p.miembro_mie.mie_ap_paterno }}</td>
-                    <td>{{ p.proy_nombre }}</td>
-                    <td>{{ p.proy_descripcion }}</td>
-                    <td>
-                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal_{{ p.proy_id }}">
-                            Ver
-                        </button>
-                    </td>
-                    {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
-                    <td>
-                        <div class="btn-group dropup">
-                            <button class="btn btn-outline-dark btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ p.estado_proyecto_est_proy.est_proy_estado }}
+<section id="ver-proyectos">
+    <div class="container">
+        <div class="card-ver-proyectos" style="overflow-x: auto;">
+            <p class="ver-proyectos-title">Proyectos Propuestos</p>
+            <table class="table table-bordered">
+                <thead class="table-secondary align-middle">
+                    <tr class="text-center">
+                        <th>Postulado Por:</th>
+                        <th>Proyecto</th>
+                        <th>Descripcion</th>
+                        <th>Imagen</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody class="tabla-ver-miembros align-middle text-center">
+                    {% for p in proyectos %}
+                    <tr>
+                        <td>{{ p.miembro_mie.mie_nombre }} {{ p.miembro_mie.mie_ap_paterno }}</td>
+                        <td>{{ p.proy_nombre }}</td>
+                        <td>{{ p.proy_descripcion }}</td>
+                        <td>
+                            <button type="button" class="btn btn-ver-img" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal_{{ p.proy_id }}">
+                                Ver
                             </button>
-                            <!-- Dropdown -->
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                {% for e in estadoProyectos %}
+                        </td>
+                        {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
+                        <td>
+                            <div class="btn-group dropup">
+                                <button class="btn btn-estado-proyecto dropdown-toggle " type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ p.estado_proyecto_est_proy.est_proy_estado }}
+                                </button>
+                                <!-- Dropdown -->
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    {% for e in estadoProyectos %}
                                     {% if p.estado_proyecto_est_proy.est_proy_estado == e.est_proy_estado %}
-                                        <li><a class="dropdown-item disabled" href="#">{{ e.est_proy_estado }}</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">{{ e.est_proy_estado }}</a></li>
                                     {% else %}
-                                        <li><a class="dropdown-item" href="{% url 'cambiarEstadoProyecto' p.proy_id e.est_proy_id %}">{{ e.est_proy_estado }}</a></li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{% url 'cambiarEstadoProyecto' p.proy_id e.est_proy_id %}">{{e.est_proy_estado}}
+                                        </a>
+                                    </li>
                                     {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </td>
-                    {% else %}
-                    <td>{{ p.estado_proyecto_est_proy.est_proy_estado }}</td>
-                    {% endif %}
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal_{{ p.proy_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">{{ p.proy_nombre }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <img class="img-fluid" src="/media/{{ p.proy_imagen }}" alt="{{ p.proy_nombre }}">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
+                        {% else %}
+                        <td>{{ p.estado_proyecto_est_proy.est_proy_estado }}</td>
+                        {% endif %}
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal_{{ p.proy_id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">{{ p.proy_nombre }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img class="img-fluid" src="/media/{{ p.proy_imagen }}"
+                                            alt="{{ p.proy_nombre }}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'styles/registrarFirma.css' %}">
+<link rel="stylesheet" href="{% static 'styles/registroFirma.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -11,7 +11,6 @@
 {% endblock %}
 
 {% block content %}
-
 <section id="registroFirma">
     <div class="container text-center">
         <p class="registro-firma-title">Registro de Firma</p>
@@ -32,20 +31,15 @@
                 <div class="inputbox">
                     <input id="inp_img" name="img" type="hidden" value="">
                     <input type="submit" value="Registrar Firma" class="btn btn-registro-firma" required>
-                    <button class="btn-limpiar-canvas" id="limpiarCanvas" type="button">Borrar</button>
+                    <button class="btn btn-limpiar-canvas" id="limpiarCanvas" type="button">Borrar</button>
                 </div>
             </form>
         </div>
     </div>
 </section>
-<style>
-    #canvas {
-        border: 2px #0F75BD solid;
-        cursor: crosshair;
-    }
 
-</style>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
@@ -89,5 +83,4 @@
     // Ejemplo de cómo usar la función para limpiar el canvas
     document.getElementById('limpiarCanvas').addEventListener('click', limpiarCanvas)
 </script>
-
 {% endblock %}
