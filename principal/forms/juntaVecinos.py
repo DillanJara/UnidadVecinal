@@ -4,7 +4,7 @@ from django.utils import timezone
 import re
 
 class AgregarJuntaVecinos(forms.ModelForm):
-    jun_rol_municipal   = forms.IntegerField(label="Rol Municipal")
+    jun_rol_municipal   = forms.IntegerField(label="Rol Municipal", min_value=1, max_value=5000)
     jun_nombre          = forms.CharField(label="Nombre de la Junta de Vecinos", max_length=50)
     jun_fecha_fundacion = forms.DateField(widget=forms.TextInput(attrs={"type": "date"}), label="Fecha de fundacion", help_text="Personalidad Juridica")
     jun_nombre_villa    = forms.CharField(label="Nombre de la Unidad Territorial", max_length=50)

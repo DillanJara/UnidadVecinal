@@ -31,8 +31,8 @@
                         <div class="card-body">
                             <form class="login" method="POST" action="/validarLogin">
                                 {% csrf_token %}
-                                <input type="email" class="form-control my-4 py-2" placeholder="Correo electronico" required name="correo">
-                                <input type="password" class="form-control my-4 py-2" placeholder="Contraseña" required name="password">
+                                <input type="email" class="form-control my-4 py-2" placeholder="Correo electronico" required name="correo" maxlength="254">
+                                <input type="password" class="form-control my-4 py-2" placeholder="Contraseña" required name="password" maxlength="30">
                                 {% if request.session.errorLogin %}
                                 <div class="alert alert-danger" role="alert">
                                     {{ request.session.errorLogin }}
