@@ -59,6 +59,17 @@
                                         class="btn btn-obt-cert">Obtener</a>
                                 </td>
                             </tr>
+                            {% if miembro.cargo_car.car_id != 4 %}
+                            <tr>
+                                <td>
+                                    <p class="cert-title">Certificado de Existencia de Junta de Vecinos</p>
+                                </td>
+                                <td>
+                                    <a href="{% url 'obtenerCertificado' miembro.mie_rut 3 %}"
+                                        class="btn btn-obt-cert">Obtener</a>
+                                </td>
+                            </tr>
+                            {% endif %}
                         </table>
                     </div>
                 </div>

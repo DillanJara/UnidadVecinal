@@ -27,6 +27,9 @@
                         <th>Estado</th>
                         <th colspan="2">Cargo</th>
                         <th>Documento Adjunto</th>
+                        {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
+                        <th>Eliminar</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody class="tabla-ver-miembros align-middle text-center">
@@ -109,6 +112,13 @@
                                     </div>
                                 </div>
                         </td>
+                        {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
+                        <td>
+                            <a href="#" class="btn-eliminar-miembro">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

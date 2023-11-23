@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+{% load static %}
+
+<style>
+    .certificado {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .linea {
+        border-top: 1px solid black;
+        height: 2px;
+        max-width: 300px;
+        padding: 0;
+        margin: 50px auto 0 auto;
+    }
+
+    @page {
+        size: letter portrait;
+        content_frame {
+            padding: 50px;
+            left: 50pt;
+            width: 512pt;
+            top: 50pt;
+            height: 650pt;
+            -pdf-frame-border: 1;
+        }
+    }
+
+    #nro_certificado {
+        display: inline-flex;
+        text-align: right;
+        color: dimgrey;
+    }
+
+</style>
+
+<body>
+    <p id="nro_certificado">
+        Nro Solicitud: {{ solicitud.sol_cer_id }}
+        <br>
+        Rut: {{ miembro.mie_rut }}-{{ miembro.mie_dv }}
+    </p>
+    <div>
+        <img src="http://127.0.0.1:8000{% static 'img/logoNegro.png' %}" alt="" width="140" height="90">
+    </div>
+    <div class="certificado">
+        <h1>{{ certificado.cer_nombre }}</h1>
+    </div>
+    <div>
+        <em>
+            Nombre: {{ miembro.junta_vecinos_jun.jun_nombre }} <br>
+            Rol Municipal: {{ miembro.junta_vecinos_jun.jun_rol_municipal }} <br>
+            Fecha de Fundacion: {{ miembro.junta_vecinos_jun.jun_fecha_fundacion }} <br>
+            Unidad Territorial: {{ miembro.junta_vecinos_jun.jun_nombre_villa }} <br>
+            Telefono de Contacto: {{ miembro.junta_vecinos_jun.jun_telefono }} <br>
+            Correo de Contacto: {{ miembro.junta_vecinos_jun.jun_rol_correo }} <br>
+            Direccion Casa Central: {{ miembro.junta_vecinos_jun.jun_direccion }} <br>
+            Comuna: {{ miembro.junta_vecinos_jun.comuna_com.com_nombre }}
+        </em>
+    </div>
+    <div class="certificado">
+        <h4>Certifica</h4>
+        <p>
+            Por medio del documento  el dia {{ fecha }} se certifica la existencia de la Junta de Vecinos {{ miembro.junta_vecinos_jun.jun_nombre }}
+        </p>
+        <p>
+            Este certificado se expide a solicitud de la Junta de Vecinos para los fines que estime conveniente.
+        </p>
+    </div>
+    <div>
+        <em>
+            Cargo: {{ miembro.cargo_car.car_nombre }} <br>
+            Rut: {{ miembro.mie_rut }}-{{ miembro.mie_dv }} <br>
+            Nombre: {{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }} {{ miembro.mie_ap_materno }} <br>
+            Telefono: {{ miembro.mie_telefono }} <br>
+            Correo: {{ miembro.mie_correo }} <br>
+            Direccion: {{ miembro.mie_direccion }}
+        </em>
+    </div>
+    <div class="certificado">
+        <img src="{{ presidente.mie_firma }}" alt="..." width="100" height="80">
+        <h3>Presidente: {{ presidente.mie_nombre }} {{ presidente.mie_ap_paterno }}</h3>
+        <p>Presidente(a)
+            <br>
+            Rut {{ presidente.mie_rut }}-{{ presidente.mie_dv }}
+            <br>
+            {{ presidente.junta_vecinos_jun.jun_nombre }}
+            <br>
+            {{ solicitud.sol_cer_fecha }}
+        </p>
+    </div>
+</body>
+</html>
