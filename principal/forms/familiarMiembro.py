@@ -3,7 +3,7 @@ from ..models import *
 import re
 
 class AgregarFamiliarMiembro(forms.ModelForm):
-    fam_mie_rut        = forms.IntegerField(label="Rut", max_value=99999999, min_value=1,)
+    fam_mie_rut        = forms.IntegerField(label="Rut", max_value=99999999, min_value=1)
     fam_mie_dv         = forms.CharField(max_length=1, label="DV")
     fam_mie_nombre     = forms.CharField(max_length=30, label="Nombre")
     fam_mie_ap_paterno = forms.CharField(max_length=30, label="Apellido Paterno")

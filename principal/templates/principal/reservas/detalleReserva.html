@@ -35,7 +35,7 @@
                 <div class="col-sm-8">
                     <input type="text" readonly class="form-control-plaintext" value="{{ miembro.mie_nombre }} {{ miembro.mie_ap_paterno }}">
                 </div>
-                <a class="text-end" href="{% url 'index' miembro.mie_rut %}">Volver a Inicio</a>
+                <a class="text-end" href="javascript:history.back()">Volver</a>
             </div>
         </div>
     </div>

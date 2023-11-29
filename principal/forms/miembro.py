@@ -40,7 +40,7 @@ class AgregarPresidente(forms.ModelForm):
     mie_password = forms.CharField(
         max_length=150, min_length=8, label="Contraseña", widget=forms.PasswordInput())
     mie_password_2 = forms.CharField(
-        max_length=150, label="Confirmar Contraseña", widget=forms.PasswordInput())
+        max_length=150, min_length=8, label="Confirmar Contraseña", widget=forms.PasswordInput())
 
     class Meta:
         model = Miembro
@@ -119,7 +119,7 @@ class AgregarMiembro(forms.ModelForm):
     mie_password = forms.CharField(
         max_length=150, min_length=8, label="Contraseña", widget=forms.PasswordInput())
     mie_password_2 = forms.CharField(
-        max_length=150, label="Confirmar Contraseña", widget=forms.PasswordInput())
+        max_length=150, min_length=8, label="Confirmar Contraseña", widget=forms.PasswordInput())
     mie_junta_vecinos = forms.CharField(label="Junta de Vecinos", max_length=50, widget=forms.TextInput(attrs={
         "list": "opcionesJuntasVecinos"}))
 

@@ -59,6 +59,17 @@
                                         class="btn btn-obt-cert">Obtener</a>
                                 </td>
                             </tr>
+                            {% if miembro.cargo_car.car_id != 4 %}
+                            <tr>
+                                <td>
+                                    <p class="cert-title">Certificado de Existencia de Junta de Vecinos</p>
+                                </td>
+                                <td>
+                                    <a href="{% url 'obtenerCertificado' miembro.mie_rut 3 %}"
+                                        class="btn btn-obt-cert">Obtener</a>
+                                </td>
+                            </tr>
+                            {% endif %}
                         </table>
                     </div>
                 </div>
@@ -115,7 +126,13 @@
                         </table>
                     </div>
                     <div class="text-center">
-                        <a class="btn btn-agregar-fam mt-3" href="{% url 'agregarFamiliar' %}">Agregar</a>
+                        {% if puedeAgregarFamiliares %}
+                            <a class="btn btn-agregar-fam mt-3" href="{% url 'agregarFamiliar' %}">Agregar</a>
+                        {% else %}
+                            <div class="p-1">
+                                <p class="form-text">Solo puedes agregar 4 familiares como maximo</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

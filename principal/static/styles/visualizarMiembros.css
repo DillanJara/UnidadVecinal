@@ -43,3 +43,20 @@
     width: 150px;
     border: none;
 }
+
+.btn-eliminar-miembro {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-color: #640888;
+    color: #fff;
+    font-weight: 600;
+    margin: 2px;
+    text-decoration: none;
+}
+
+.btn-eliminar-miembro:hover {
+    color: #fff;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

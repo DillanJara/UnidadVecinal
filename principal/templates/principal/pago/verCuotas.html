@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% load static %}
+{% load humanize %}
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'styles/verCuotas.css' %}">
@@ -30,7 +31,7 @@
                         <tr class="text-center">
                             <td>{{ c.cuo_id }}</td>
                             <td>{{ c.cuo_fecha_pago }}</td>
-                            <td>{{ c.cuo_monto }}</td>
+                            <td>${{ c.cuo_monto|intcomma }}</td>
                             <td>{{ c.cuo_estado }}</td>
                         </tr>
                         {% endfor %}

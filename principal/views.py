@@ -247,14 +247,19 @@ def verIndex(request, rut):
         proyectos              = Proyecto.objects.filter(miembro_mie_id=miembro.mie_rut)
         miembrosRegistrados    = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id).count()
         miembrosActivos        = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Habilitado").count()
+        if FamiliarMiembro.objects.filter(miembro_mie=miembro).count() == 4:
+            puedeAgregarFamiliares = False
+        else:
+            puedeAgregarFamiliares = True
         # ------------------------------------------------------
         context = {
             "miembro"                : miembro,
             "miembrosDeshabilitados" : miembrosDeshabilitados,
             "familiarMiembro"        : familiarMiembro,
             "proyectos"              : proyectos,
-            "miembrosRegistrados": miembrosRegistrados,
-            "miembrosActivos": miembrosActivos
+            "miembrosRegistrados"    : miembrosRegistrados,
+            "miembrosActivos"        : miembrosActivos,
+            "puedeAgregarFamiliares" : puedeAgregarFamiliares
         }
         # ------------------------------------------------------
         return render(request, "principal/index.html", context)
@@ -370,11 +375,26 @@ def visualizarMiembros(request):
         miembros       = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
         cargos         = Cargo.objects.exclude(car_id=1)
         contexto = {
-            "miembro" : miembro,
-            "miembros"       : miembros,
-            "cargos"         : cargos
+            "miembro"  : miembro,
+            "miembros" : miembros,
+            "cargos"   : cargos
         }
         return render(request, "principal/visualizarMiembros.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def eliminarMiembro(request, mie_rut):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        miembroEliminado = Miembro.objects.get(mie_rut=mie_rut)
+        asunto = "Eliminacion de cuenta " + miembro.junta_vecinos_jun.jun_nombre
+        cuerpo = "Don/ña " + miembroEliminado.mie_nombre + " " + miembroEliminado.mie_nombre + " " + " le informamos que su cuenta iniciada en Unidad Vecinal fue eliminada por un miembro de la directiva, para mas informacion pongase en contacto con su junta de vecinos."
+        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembroEliminado.mie_correo])
+        message.send()
+        miembroEliminado.delete()
+        return redirect("/visualizarMiembros")
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")
@@ -431,9 +451,12 @@ def obtenerCetificado(request, mie_rut, cer_id):
                 solicitud.sol_cer_familiar = True
                 solicitud.sol_cer_rut_familiar = solicitante.fam_mie_rut
                 template = get_template("certificados/cert_residencia_familiar.html")
-        else:
+        elif certificado.cer_id == 2:
             solicitante = miembro
             template = get_template("certificados/cert_socio.html")
+        elif certificado.cer_id == 3:
+            solicitante = miembro
+            template = get_template("certificados/cert_existencia.html")
         # ------------------------------------------------------
         solicitud.save()
         # ------------------------------------------------------
@@ -450,8 +473,65 @@ def obtenerCetificado(request, mie_rut, cer_id):
         response = HttpResponse(content_type='application/pdf')
         if certificado.cer_id == 1:
             response['Content-Disposition'] = 'attachment; filename="Certificado_Residencia.pdf"'
-        else:
+        elif certificado.cer_id == 2:
             response['Content-Disposition'] = 'attachment; filename="Certificado_Socio.pdf"'
+        elif certificado.cer_id == 3:
+            response['Content-Disposition'] = 'attachment; filename="Certificado_Existencia.pdf"'
+        else:
+            response['Content-Disposition'] = 'attachment; filename="Certificado_Asistencia.pdf"'
+        # ------------------------------------------------------
+        pisa_status = pisa.CreatePDF(html, dest=response)
+        if pisa_status.err:
+            return HttpResponse('No se pudo descargar tu certificado')
+        # ------------------------------------------------------
+        asunto = "Solicitud de " + certificado.cer_nombre
+        cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + "."
+        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+        # ------------------------------------------------------
+        with tempfile.NamedTemporaryFile(delete=False) as pdf_file:
+            pdf_file.write(response.content)
+            pdf_file_path = pdf_file.name
+        # Adjuntar el archivo al correo electrónico
+        with open(pdf_file_path, 'rb') as attachment:
+            message.attach("Certificado.pdf", attachment.read(), 'application/pdf')
+        os.remove(pdf_file_path)
+        # ------------------------------------------------------
+        message.send()
+        return response
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def obtenerCertificadoAsistencia(request, asis_id):
+    if request.session.get("correo"):
+        miembro     = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        certificado = Certificado.objects.get(cer_id=4)
+        presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
+        asistencia  = Asistencia.objects.get(asis_id=asis_id)
+        # ------------------------------------------------------
+        if SolicitudCertificado.objects.filter(sol_cer_fecha=timezone.now().date(), miembro_mie=miembro).count() == 3:
+            return render(request, "certificados/error_solicitud.html")
+        # ------------------------------------------------------
+        solicitud = SolicitudCertificado()
+        solicitud.certificado_cer = certificado
+        solicitud.miembro_mie = miembro
+        # ------------------------------------------------------
+        solicitud.save()
+        # ------------------------------------------------------
+        context = {
+            "miembro"     : miembro,
+            "presidente"  : presidente,
+            "certificado" : certificado,
+            "solicitud"   : solicitud,
+            "asistencia"  : asistencia
+        }
+        # ------------------------------------------------------
+        template = get_template("certificados/cert_asistencia.html")
+        html = template.render(context)
+        # ------------------------------------------------------
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Certificado_Asistencia.pdf"'
         # ------------------------------------------------------
         pisa_status = pisa.CreatePDF(html, dest=response)
         if pisa_status.err:
@@ -896,6 +976,20 @@ def detalleAsistencia(request, asis_id):
             "asistencia": asistencia
         }
         return render(request, "principal/actividades/detalleasistencia.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def verAsistencias(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        asistencias = Asistencia.objects.filter(miembro_mie=miembro)
+        contexto = {
+            "miembro": miembro,
+            "asistencias": asistencias,
+        }
+        return render(request, 'principal/actividades/verAsistencias.html', contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")

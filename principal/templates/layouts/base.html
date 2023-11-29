@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <!-- fonts links -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <!-- swal links -->
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" rel="stylesheet">
     <!-- swal links -->
@@ -90,35 +90,74 @@
                                         data-bs-toggle="dropdown" aria-expanded="false">Opciones</button>
                                     <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="btn_navbar">
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'verPerfil' miembro.mie_rut %} ">Mi perfil</a>
+                                            <a class="dropdown-item" href="{% url 'verPerfil' miembro.mie_rut %} ">
+                                                <i class="fa-solid fa-user"></i>
+                                                Mi perfil
+                                            </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'agregarProyecto' %}">Proponer Proyecto</a>
+                                            <a class="dropdown-item" href="{% url 'agregarProyecto' %}">
+                                                <i class="fa-solid fa-file-signature"></i>
+                                                Proponer Proyecto
+                                            </a>
                                         </li>
                                         {% if miembro.cargo_car.car_id != 4 %}
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'agregarEspacios' %}">Agregar Espacios</a>
+                                            <hr class="dropdown-divider">
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'agregarNoticia' %}">Agregar Noticia</a>
+                                            <a class="dropdown-item" href="{% url 'agregarEspacios' %}">
+                                                <i class="fa-solid fa-warehouse"></i>
+                                                Agregar Espacios
+                                            </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'agregarActividad' %}">Agregar Actividad</a>
+                                            <a class="dropdown-item" href="{% url 'agregarNoticia' %}">
+                                                <i class="fa-solid fa-newspaper"></i>
+                                                Agregar Noticia
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'agregarActividad' %}">
+                                                <i class="fa-solid fa-calendar"></i>
+                                                Agregar Actividad
+                                            </a>
                                         </li>
                                         {% endif %}
                                         {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 3 %}
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'verPagos' %}">Ver Pagos</a>
+                                            <a class="dropdown-item" href="{% url 'verPagos' %}">
+                                                <i class="fa-solid fa-credit-card"></i>
+                                                Ver Pagos
+                                            </a>
                                         </li>
                                         {% endif %}
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'verSolicitudes' miembro.mie_rut %}">Solicitudes</a>
+                                            <hr class="dropdown-divider">
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'verReservas' miembro.mie_rut %}">Mis Reservas</a>
+                                            <a class="dropdown-item" href="{% url 'verAsistencias' %}">
+                                                <i class="fa-solid fa-shoe-prints"></i>
+                                                Asistencias
+                                            </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{% url 'cerrarSesion' %}">Cerrar Sesión</a>
+                                            <a class="dropdown-item" href="{% url 'verSolicitudes' miembro.mie_rut %}">
+                                                <i class="fa-solid fa-folder-plus"></i>
+                                                Solicitudes
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'verReservas' miembro.mie_rut %}">
+                                                <i class="fa-solid fa-clock"></i>
+                                                Mis Reservas
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'cerrarSesion' %}">
+                                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                                Cerrar Sesión
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>

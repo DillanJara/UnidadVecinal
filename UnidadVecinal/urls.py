@@ -40,16 +40,20 @@ urlpatterns = [
     #-------------------------------------------------------------------------
     path('index/<int:rut>', verIndex, name="index"),
     path('verPerfil/<int:mie_rut>', verPerfil, name="verPerfil"),
+    #-------------------------------------------------------------------------
     path('agregarFamiliar/', agregarFamiliarMiembro, name="agregarFamiliar"),
     path('eliminarFamiliarMiembro/<int:fam_mie_rut>', eliminarFamiliarMiembro, name="eliminarFamiliarMiembro"),
     path('modificarFamiliarMiembro/<int:fam_mie_rut>', modificarFamiliarMiembro, name="modificarFamiliarMiembro"),
+    #-------------------------------------------------------------------------
     path('activarCuenta/<int:mie_rut>', activarCuenta, name="activarCuenta"),
     path('visualizarMiembros/', visualizarMiembros, name="visualizarMiembros"),
     path('cambiarCargo/<int:mie_rut>/<int:car_id>', cambiarCargo, name="cambiarCargo"),
+    path('eliminarMiembro/<int:mie_rut>', eliminarMiembro, name="eliminarMiembro"),
     #-------------------------------------------------------------------------
     path('enviarAviso', enviarAvisos, name="enviarAviso"),
     #-------------------------------------------------------------------------
     path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
+    path("obtenerCertificadoAsistencia/<int:asis_id>", obtenerCertificadoAsistencia, name="obtenerCertificadoAsistencia"),
     path('verSolicitudes/<int:mie_rut>', verSolicitudes, name="verSolicitudes"),
     #-------------------------------------------------------------------------
     path('agregarProyecto/', agregarProyecto, name="agregarProyecto"),
@@ -79,7 +83,8 @@ urlpatterns = [
     path('verActividades/', verActividades, name="verActividades"),
     path('detalleActividad/<int:act_id>', detalleActividad, name="detalleActividad"),
     #-------------------------------------------------------------------------
-    path('detalleAsistencia/<int:asis_id>', detalleAsistencia, name="detalleAsistencia")
+    path('detalleAsistencia/<int:asis_id>', detalleAsistencia, name="detalleAsistencia"),
+    path('verAsistencias/', verAsistencias, name="verAsistencias")
 ]
 
 if settings.DEBUG:
