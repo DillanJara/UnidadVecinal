@@ -1,0 +1,44 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verAsistencias.css' %}">
+{% endblock %}
+
+{% block title %}
+<title>Asistencias</title>
+{% endblock %}
+
+{% block content %}
+<section id="ver-asistencias">
+    <div class="container">
+        <div class="card-ver-asistencias" style="overflow-x: auto;">
+            <h1 class="text-center m-4">Mis Asistencias</h1>
+            <table class="table table-bordered mb-5">
+                <thead class="table-secondary align-middle">
+                    <tr class="text-center">
+                        <th>Fecha</th>
+                        <th>Actividad</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                        <th colspan="2">Detalles</th>
+                    </tr>
+                </thead>
+                <tbody class="tabla-ver-miembros align-middle text-center">
+                    {% for a in asistencias %}
+                        <tr>
+                            <td>{{ a.actividad_act.act_fecha }}</td>
+                            <td>{{ a.actividad_act.act_descripcion }}</td>
+                            <td>{{ a.actividad_act.tipo_actividad_tip_act.tip_act_nombre }}</td>
+                            <td>{{ a.asis_cantidad }}</td>
+                            <td><a href="{% url 'detalleAsistencia' a.asis_id %}" class="btn btn-link">Ver</a></td>
+                            <td><a href="{% url 'obtenerCertificadoAsistencia' a.asis_id %}" class="btn-obt-cert">Certificado</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -53,6 +53,7 @@ urlpatterns = [
     path('enviarAviso', enviarAvisos, name="enviarAviso"),
     #-------------------------------------------------------------------------
     path('obtenerCertificado/<int:mie_rut>/<int:cer_id>', obtenerCetificado, name="obtenerCertificado"),
+    path("obtenerCertificadoAsistencia/<int:asis_id>", obtenerCertificadoAsistencia, name="obtenerCertificadoAsistencia"),
     path('verSolicitudes/<int:mie_rut>', verSolicitudes, name="verSolicitudes"),
     #-------------------------------------------------------------------------
     path('agregarProyecto/', agregarProyecto, name="agregarProyecto"),
@@ -82,7 +83,8 @@ urlpatterns = [
     path('verActividades/', verActividades, name="verActividades"),
     path('detalleActividad/<int:act_id>', detalleActividad, name="detalleActividad"),
     #-------------------------------------------------------------------------
-    path('detalleAsistencia/<int:asis_id>', detalleAsistencia, name="detalleAsistencia")
+    path('detalleAsistencia/<int:asis_id>', detalleAsistencia, name="detalleAsistencia"),
+    path('verAsistencias/', verAsistencias, name="verAsistencias")
 ]
 
 if settings.DEBUG:

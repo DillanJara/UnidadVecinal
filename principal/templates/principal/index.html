@@ -126,7 +126,13 @@
                         </table>
                     </div>
                     <div class="text-center">
-                        <a class="btn btn-agregar-fam mt-3" href="{% url 'agregarFamiliar' %}">Agregar</a>
+                        {% if puedeAgregarFamiliares %}
+                            <a class="btn btn-agregar-fam mt-3" href="{% url 'agregarFamiliar' %}">Agregar</a>
+                        {% else %}
+                            <div class="p-1">
+                                <p class="form-text">Solo puedes agregar 4 familiares como maximo</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

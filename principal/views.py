@@ -247,14 +247,19 @@ def verIndex(request, rut):
         proyectos              = Proyecto.objects.filter(miembro_mie_id=miembro.mie_rut)
         miembrosRegistrados    = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id).count()
         miembrosActivos        = Miembro.objects.filter(junta_vecinos_jun_id=miembro.junta_vecinos_jun_id, mie_estado="Habilitado").count()
+        if FamiliarMiembro.objects.filter(miembro_mie=miembro).count() == 4:
+            puedeAgregarFamiliares = False
+        else:
+            puedeAgregarFamiliares = True
         # ------------------------------------------------------
         context = {
             "miembro"                : miembro,
             "miembrosDeshabilitados" : miembrosDeshabilitados,
             "familiarMiembro"        : familiarMiembro,
             "proyectos"              : proyectos,
-            "miembrosRegistrados": miembrosRegistrados,
-            "miembrosActivos": miembrosActivos
+            "miembrosRegistrados"    : miembrosRegistrados,
+            "miembrosActivos"        : miembrosActivos,
+            "puedeAgregarFamiliares" : puedeAgregarFamiliares
         }
         # ------------------------------------------------------
         return render(request, "principal/index.html", context)
@@ -474,6 +479,59 @@ def obtenerCetificado(request, mie_rut, cer_id):
             response['Content-Disposition'] = 'attachment; filename="Certificado_Existencia.pdf"'
         else:
             response['Content-Disposition'] = 'attachment; filename="Certificado_Asistencia.pdf"'
+        # ------------------------------------------------------
+        pisa_status = pisa.CreatePDF(html, dest=response)
+        if pisa_status.err:
+            return HttpResponse('No se pudo descargar tu certificado')
+        # ------------------------------------------------------
+        asunto = "Solicitud de " + certificado.cer_nombre
+        cuerpo = miembro.mie_nombre + " " + miembro.mie_ap_materno + " le informamos que en su cuenta se ha realizado la solicitud de un " + certificado.cer_nombre + "."
+        message = EmailMultiAlternatives(asunto, cuerpo, settings.EMAIL_HOST_USER, [miembro.mie_correo])
+        # ------------------------------------------------------
+        with tempfile.NamedTemporaryFile(delete=False) as pdf_file:
+            pdf_file.write(response.content)
+            pdf_file_path = pdf_file.name
+        # Adjuntar el archivo al correo electrónico
+        with open(pdf_file_path, 'rb') as attachment:
+            message.attach("Certificado.pdf", attachment.read(), 'application/pdf')
+        os.remove(pdf_file_path)
+        # ------------------------------------------------------
+        message.send()
+        return response
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def obtenerCertificadoAsistencia(request, asis_id):
+    if request.session.get("correo"):
+        miembro     = Miembro.objects.get(mie_rut=request.session.get("rut"))
+        certificado = Certificado.objects.get(cer_id=4)
+        presidente  = Miembro.objects.get(cargo_car_id=1, junta_vecinos_jun_id=miembro.junta_vecinos_jun_id)
+        asistencia  = Asistencia.objects.get(asis_id=asis_id)
+        # ------------------------------------------------------
+        if SolicitudCertificado.objects.filter(sol_cer_fecha=timezone.now().date(), miembro_mie=miembro).count() == 3:
+            return render(request, "certificados/error_solicitud.html")
+        # ------------------------------------------------------
+        solicitud = SolicitudCertificado()
+        solicitud.certificado_cer = certificado
+        solicitud.miembro_mie = miembro
+        # ------------------------------------------------------
+        solicitud.save()
+        # ------------------------------------------------------
+        context = {
+            "miembro"     : miembro,
+            "presidente"  : presidente,
+            "certificado" : certificado,
+            "solicitud"   : solicitud,
+            "asistencia"  : asistencia
+        }
+        # ------------------------------------------------------
+        template = get_template("certificados/cert_asistencia.html")
+        html = template.render(context)
+        # ------------------------------------------------------
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Certificado_Asistencia.pdf"'
         # ------------------------------------------------------
         pisa_status = pisa.CreatePDF(html, dest=response)
         if pisa_status.err:
@@ -918,6 +976,20 @@ def detalleAsistencia(request, asis_id):
             "asistencia": asistencia
         }
         return render(request, "principal/actividades/detalleasistencia.html", contexto)
+    else:
+        request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
+        return redirect("/login")
+
+
+def verAsistencias(request):
+    if request.session.get("correo"):
+        miembro = Miembro.objects.get(mie_rut=request.session.get('rut'))
+        asistencias = Asistencia.objects.filter(miembro_mie=miembro)
+        contexto = {
+            "miembro": miembro,
+            "asistencias": asistencias,
+        }
+        return render(request, 'principal/actividades/verAsistencias.html', contexto)
     else:
         request.session["alertaLogin"] = "Debes iniciar sesion para usar la aplicacion"
         return redirect("/login")

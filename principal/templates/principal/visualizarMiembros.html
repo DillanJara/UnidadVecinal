@@ -114,8 +114,8 @@
                         </td>
                         {% if miembro.cargo_car.car_id == 1 or miembro.cargo_car.car_id == 2 %}
                         <td>
-                            <a href="#" class="btn-eliminar-miembro">
-                                <i class="bi bi-x-lg"></i>
+                            <a href="{% url 'eliminarMiembro' m.mie_rut %}" class="btn-eliminar-miembro">
+                                &#10005
                             </a>
                         </td>
                         {% endif %}
