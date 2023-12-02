@@ -6,15 +6,25 @@
 <title>Pago Exitoso</title>
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/pagoExitoso.css' %}">
+{% endblock %}
+
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 30rem;">
-        <div class="card-body">
-            Se ha realizado correctamente el pago de tu cuota
-            <div class="text-end mt-3">
-                <a href="javascript:history.back()" class="btn-pagar">Volver</a>
+<section id="pago-exitoso">
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="card-pago-exitoso" style="max-width: 30rem;">
+                <div class="card-body">
+                    Se ha realizado correctamente el pago de tu cuota
+                    <div class="text-end mt-3">
+                        <a href="javascript:history.back()" class="btn btn-pago-exitoso">Volver</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
 {% endblock %}
