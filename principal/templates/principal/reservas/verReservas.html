@@ -6,10 +6,15 @@
 <title>Mis reservas</title>
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verReservas.css' %}">
+{% endblock %}
+
 {% block content %}
 <section>
     <div class="container m-5">
-        <h1 class="text-center mb-3">Mis Reservas</h1>
+        <h1 class="ver-reservas-title">Mis Reservas</h1>
+        <div class="linea-azul"></div>
         <div class="accordion">
         {% for e in espacios %}
             <div class="accordion-item">

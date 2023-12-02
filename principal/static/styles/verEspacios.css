@@ -6,6 +6,18 @@
     margin-bottom: 50px;
 }
 
+.linea-azul {
+    content: '';
+    background: #0F75BD;
+    height: 5px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: -45px;
+    margin-bottom: 60px;
+}
+
 .card {
     -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
@@ -15,7 +27,7 @@
     margin-bottom: 50px;
 }
 
-.img-fluid {
+.card-img-top {
     min-height: 250px;
     max-height: 250px;
     width: auto;

@@ -1,0 +1,17 @@
+.ver-reservas-title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 600;
+    margin-top: 50px;
+}
+
+.linea-azul {
+    background: #0F75BD;
+    height: 5px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}

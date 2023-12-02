@@ -7,29 +7,37 @@
 <title>Detalle Noticia</title>
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/detalleNoticia.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 100rem;">
-        <div class="card-header text-white" style="background-color: #0F75BD;">Noticias</div>
-        <div class="card-body">
-            <p class="form-text text-end">{{ noticia.not_subtitulo }}</p>
-            <div class="card mb-3" style="max-width: 540px;">
-                <div class="row g-0">
-                    <img src="/media/{{ noticia.not_imagen }}" class="img-fluid rounded-start" alt="{{ n.not_titulo }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ noticia.not_titulo }}</h5>
-                        <em class="card-text">
-                            Fecha: {{ noticia.not_fecha }}
-                        </em>
-                        <p>{{ noticia.not_descripcion }}</p>
-                        <p class="card-text text-end"><a href="{% url 'verNoticias' %}" class="text-muted">Volver</a></p>
+<section id="detalle-noticia">
+    <div class="container">
+        <div class="card-detalle-noticia text-center">
+            <p class="detalle-noticia-title">{{ noticia.not_titulo }}</p>
+            <div class="linea-azul"></div>
+            <div class="card-body">
+                <p class="form-text">{{ noticia.not_subtitulo }}</p>
+                <div class="card" style="max-width: 700px;">
+                    <div class="row g-0">
+                        <img src="/media/{{ noticia.not_imagen }}" class="img-fluid" alt="{{ n.not_titulo }}">
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <em class="card-text">
+                                Fecha: {{ noticia.not_fecha }}
+                            </em>
+                            <p> <br> {{ noticia.not_descripcion }}</p>
+                            <p class="card-text text-end"><a href="{% url 'verNoticias' %}"
+                                    class="btn btn-volver-noticia">Volver</a></p>
+                        </div>
                     </div>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Subido por: {{ noticia.miembro_mie.mie_nombre }} {{ noticia.miembro_mie.mie_ap_paterno }}</small>
+                    <div class="card-footer">
+                        <small class="text-muted">Subido por: {{ noticia.miembro_mie.mie_nombre }} {{noticia.miembro_mie.mie_ap_paterno }}</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

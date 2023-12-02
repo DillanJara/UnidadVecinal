@@ -2,14 +2,21 @@
 
 {% load humanize %}
 
+{% load static %}
+
 {% block title %}
 <title>Pagos</title>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/verPagos.css' %}">
 {% endblock %}
 
 {% block content %}
 <section class="container">
     <div class="m-3">
-        <h1 class="text-center">Cuotas Sociales</h1>
+        <h1 class="ver-pagos-title">Cuotas Sociales</h1>
+        <div class="linea-azul"></div>
         <div class="accordion" id="accordionExample">
             {% for m in miembros %}
             <div class="accordion-item">

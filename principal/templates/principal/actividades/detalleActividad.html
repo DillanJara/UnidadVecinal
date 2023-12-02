@@ -6,66 +6,74 @@
 <title>Detalle Actividad</title>
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/detalleActividad.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 35rem;">
-        <div class="card-header text-white" style="background-image: linear-gradient(to right, #0F75BD, #0F7585);">
-            <h2 class="text-center">Detalle de Actividad</h2>
-        </div>
-        <div class="card-body">
-            <div class="mb-3 row">
-                <label class="col-sm-4 col-form-label">Tipo: </label>
-                <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value="{{ actividad.tipo_actividad_tip_act }}">
-                </div>
-                <label class="col-sm-4 col-form-label">Descripcion: </label>
-                <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value="{{ actividad.act_descripcion }}">
-                </div>
-                <label class="col-sm-4 col-form-label">Fecha: </label>
-                <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value="{{ actividad.act_fecha }}">
-                </div>
-                <label class="col-sm-4 col-form-label">Cupos restantes: </label>
-                <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value="{{ actividad.act_cupo }}">
-                </div>
-                <label class="col-sm-4 col-form-label">Cuota: </label>
-                <div class="col-sm-8">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">$</span>
-                        <input type="text" readonly class="form-control" value="{{ actividad.act_cuota }}">
+<section id="detalle-actividad">
+    <div class="container">
+        <div class="card-detalle-actividad">
+            <h2 class="detalle-actividad-title">Detalle de Actividad</h2>
+            <div class="linea-azul"></div>
+            <div class="card-body">
+                <div class="mb-3 row">
+                    <label class="col-4 col-form-label">Tipo: </label>
+                    <div class="col-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ actividad.tipo_actividad_tip_act }}">
                     </div>
-                </div>
-                {% if validacionAsistencia %}
-                    <p class="form-text text-end">Ya confirmaste tu asistencia para este evento</p>
-                {% elif actividad.act_cupo == 0%}
-                    <p class="form-text text-end">Ya no quedan cupos disponibles para esta actividad</p>
-                {% else %}
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="inputGroupSelect01">Cantidad de Entradas: </label>
-                        <select class="form-select" id="inputGroupSelect01" name="cantidad_asistentes">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                        <button class="btn btn-link" type="submit">Confirmar Asistencia</button>
+                    <label class="col-4 col-form-label">Descripcion: </label>
+                    <div class="col-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ actividad.act_descripcion }}">
                     </div>
-                    {% if validacionCupo %}
-                    <div>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            La cantidad seleccionada de asistentes  <strong>supera los cupos disponibles</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <label class="col-4 col-form-label">Fecha: </label>
+                    <div class="col-8">
+                        <input type="text" readonly class="form-control-plaintext" value="{{ actividad.act_fecha }}">
+                    </div>
+                    <label class="col-4 col-form-label">Cupos restantes: </label>
+                    <div class="col-8">
+                        <input type="text" readonly class="form-control-plaintext" value="{{ actividad.act_cupo }}">
+                    </div>
+                    <label class="col-4 col-form-label">Cuota: </label>
+                    <div class="col-8">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">$</span>
+                            <input type="text" readonly class="form-control" value="{{ actividad.act_cuota }}">
                         </div>
                     </div>
+                    {% if validacionAsistencia %}
+                    <p class="form-text text-end">Ya confirmaste tu asistencia para este evento</p>
+                    {% elif actividad.act_cupo == 0%}
+                    <p class="form-text text-end">Ya no quedan cupos disponibles para esta actividad</p>
+                    {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Cantidad de Entradas: </label>
+                            <select class="form-select" id="inputGroupSelect01" name="cantidad_asistentes">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                            <button class="btn btn-confirmar-asistencia" type="submit">Confirmar Asistencia</button>
+                        </div>
+                        {% if validacionCupo %}
+                        <div>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                La cantidad seleccionada de asistentes <strong>supera los cupos disponibles</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </form>
                     {% endif %}
-                </form>
-                {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-</div>
+</section>
+
 {% endblock %}

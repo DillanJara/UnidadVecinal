@@ -1,0 +1,63 @@
+#detalle-actividad .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detalle-actividad-title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 600;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.linea-azul {
+    content: '';
+    background: #0F75BD;
+    height: 5px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: -45px;
+    margin-bottom: 50px;
+}
+
+.card-body {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    margin-bottom: 60px;
+    max-width: 700px;
+}
+
+@media(min-width: 480px) {
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+#detalle-actividad .btn-confirmar-asistencia {
+    box-shadow: none;
+    padding: 8px 25px;
+    border-radius: 15px;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    color: #fff;
+    font-weight: 600;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: fit-content;
+    border: none;
+}
+
+#detalle-actividad .btn-confirmar-asistencia:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}

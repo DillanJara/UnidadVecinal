@@ -32,8 +32,6 @@
     background-image: linear-gradient(to right, #0F75BD, #0F7585);
     color: #fff;
     font-weight: 600;
-    margin-bottom: 3px;
-    margin-top: -7px;
     width: 100%;
     margin-left: 10px;
 }
@@ -46,11 +44,10 @@
 #home-miembro .btn-eliminar-fam {
     box-shadow: none;
     border-radius: 15px;
-    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    background-color: #BD760F;
     color: #fff;
     font-weight: 600;
     margin-left: 5px;
-    margin-top: -7px;
     width: 100%;
 }
 
@@ -62,14 +59,18 @@
 #home-miembro .btn-cert-fam {
     box-shadow: none;
     border-radius: 15px;
-    background: #114c55;
+    background-image: linear-gradient(to right, #0F75BD, #0F7585);
     padding: 8px;
     color: #fff;
     text-decoration: none;
     border: none;
     font-weight: 600;
     font-size: medium;
-    margin-top: -9px;
+}
+
+#home-miembro .btn-cert-fam:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
 }
 
 #home-miembro .btn-agregar-fam {
@@ -80,7 +81,6 @@
     font-weight: 600;
     margin-left: 5px;
     width: 50%;
-    margin-top: -10px;
     margin-bottom: 15px;
 }
 
@@ -204,12 +204,11 @@
 #home-miembro .btn-activar-cuenta {
     box-shadow: none;
     border-radius: 15px;
-    background-image: linear-gradient(to right, #0F75BD, #0F7585);
+    background: #23323D;
     color: #fff;
     font-weight: 600;
     margin-left: 5px;
     width: 90%;
-    margin-bottom: 15px;
 }
 
 #home-miembro .btn-activar-cuenta:hover {
@@ -245,12 +244,10 @@
     background-image: linear-gradient(to right, #0F75BD, #0F7585);
     color: #fff;
     font-weight: 500;
+    width: 25%;
 }
 
-.btn-.btn-enviar-correo:hover {
-    background: #41049b;
-    color: #fff;
-    font-weight: 600;
+.btn-enviar-correo:hover {
     -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
 }

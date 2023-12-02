@@ -6,6 +6,18 @@
     margin-bottom: 50px;
 }
 
+.linea-azul {
+    content: '';
+    background: #0F75BD;
+    height: 5px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: -45px;
+    margin-bottom: 60px;
+}
+
 #ver-proyectos .btn-ver-img {
     box-shadow: none;
     border-radius: 15px;

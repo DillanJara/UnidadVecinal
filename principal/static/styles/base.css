@@ -90,13 +90,18 @@ body {
 #nav-bar .btn-cerrar-sesion {
     box-shadow: none;
     padding: 8px 25px;
-    background: #114c55;
+    background: #23323D;
     color: #fff;
     text-decoration: none;
     border: none;
     border-radius: 15px;
     font-weight: 600;
     margin: 2px;
+}
+
+#nav-bar .btn-cerrar-sesion:hover {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
 }
 
 #nav-bar .btn-crear-cuenta {

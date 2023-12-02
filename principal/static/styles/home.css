@@ -71,6 +71,12 @@
     width: 100%;
 }
 
+.img-responsivo {
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    background-color: #fff;
+}
+
 /* banner end */
 
 .btn-validar-certificado {
@@ -93,6 +99,60 @@
 }
 
 #validar-certificado {
-    margin-top: 50px;
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+#servicios {
+    padding: 80px 0;
+}
+
+.img-servicio {
+    width: 300px;
+    margin-top: 40px;
+}
+
+.servicios {
+    padding: 20px;
+}
+
+.servicios h4 {
+    padding: 5px;
+    margin-top: 25px;
+    text-transform: capitalize;
+}
+
+.titulo-servicios::before {
+    content: '';
+    background: #0F75BD;
+    height: 5px;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    transform: translateY(63px);
+    margin-bottom: -20px;
+}
+
+.titulo-verificar-cert::before {
+    content: '';
+    background: #0F75BD;
+    height: 5px;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    transform: translateY(63px);
+}
+
+.linea-azul {
+    content: '';
+    background: #0F75BD;
+    height: 5px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: px;
     margin-bottom: 50px;
 }

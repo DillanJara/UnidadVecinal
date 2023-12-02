@@ -1,3 +1,15 @@
+.linea-azul {
+    content: '';
+    background: #0F75BD;
+    height: 5px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: -5px;
+    margin-bottom: 50px;
+}
+
 #ver-asistencias .btn-obt-cert {
     box-shadow: none;
     padding: 8px 25px;
@@ -12,4 +24,8 @@
 #ver-asistencias .btn-obt-cert:hover {
     -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+}
+
+.tabla-ver-miembros {
+    margin-bottom: 50px;
 }

@@ -7,14 +7,19 @@
 <title>Reservar Hora</title>
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/agregarReserva.css' %}">
+{% endblock %}
+
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <div class="card border-light mt-3" style="max-width: 30rem;">
-        <div class="card-header text-white" style="background-color: #0F75BD;">
-            <h2 class="text-center">Reservar Hora en {{ espacio.esp_nombre }}</h2>
-        </div>
-        <div class="card-body">
-            <img src="/media/{{ espacio.esp_imagen }}" class="img-fluid rounded-start" alt="{{ espacio.esp_nombre }}">
+<section id="agregar-reserva">
+    <div class="container">
+        <div class="card-agregar-reserva">
+            <p class="agregar-reserva-title">Reservar Hora en {{ espacio.esp_nombre }}</p>
+            <div class="linea-azul"></div>
+            <div class="card-body">
+                <img src="/media/{{ espacio.esp_imagen }}" class="img-fluid img-agregar-reserva" alt="{{ espacio.esp_nombre }}">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form %}
@@ -34,27 +39,9 @@
                     </div>
                 {% endif %}
             </form>
+            </div>
         </div>
     </div>
-</div>
+</section>
 
-<style>
-    .btn-agregar-actividad {
-    box-shadow: none;
-    padding: 8px 25px;
-    border-radius: 15px;
-    background-image: linear-gradient(to right, #0F75BD, #0F7585);
-    color: #fff;
-    font-weight: 600;
-    margin: 2px;
-    margin-top: 10px;
-    width: 100%;
-    border: none;
-}
-
-    .btn-agregar-actividad:hover {
-        -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-        box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-    }
-</style>
 {% endblock %}
